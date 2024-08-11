@@ -13,10 +13,23 @@ const columns = useMemo(
       })),
     [],
   );
+  // const table = useMaterialReactTable({
+  //   columns,
+  //   data:props.data,
+  // });
+
   const table = useMaterialReactTable({
     columns,
-    data:props.data,
+    data: props.data,
+    muiTableHeadCellProps: {
+      sx: {
+        backgroundColor: '#818589	', // Header background color
+        color: '#ffffff', // Header text color
+        fontWeight: 'bold',
+      },
+    },
   });
+
   return <MaterialReactTable table={table} />;
 };
 

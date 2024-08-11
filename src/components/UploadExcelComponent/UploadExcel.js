@@ -1,4 +1,4 @@
-      import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import * as XLSX from "xlsx";
 import TableComponent from "../TableComponent/TableComponent";
@@ -40,8 +40,6 @@ const UploadExcel = () => {
       setExcelData(data.slice(0, 10));
     }
   };
- 
-  console.log('excelData',excelData)
   return (
     <Box>
       <Box
@@ -65,41 +63,14 @@ const UploadExcel = () => {
               UPLOAD
             </Button>
             {typeError && <Box>{typeError}</Box>}
-            {/* <Box sx={{fontSize:'12px',height:'18px', color:'red'}}> {typeError?{typeError}:''} </Box> */}
           </form>
         </Box>
       </Box>
-      {/* <Box>
-        {excelData ? (
-          <Box>
-            <table>
-              <thead>
-                <tr>
-                  {Object.keys(excelData[0]).map((key) => (
-                    <th key={key}>{key}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {excelData.map((inBoxidualExcelData, index) => (
-                  <tr key={index}>
-                    {Object.keys(inBoxidualExcelData).map((key) => (
-                      <td key={key}>{inBoxidualExcelData[key]}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Box>
-        ) : (
-          <Box>No File is uploaded yet!</Box>
-        )}
-      </Box>  */}
-      
-       {excelData?
-      <TableComponent data={excelData}/>:
-          <Box>No File is uploaded yet!</Box>
-      } 
+      {excelData ? (
+        <TableComponent data={excelData} />
+      ) : (
+        <Box sx={{height:'40px', background:'#D3D3D3', marginTop:"3px"}}>No File is uploaded yet!</Box>
+      )}
     </Box>
   );
 };
