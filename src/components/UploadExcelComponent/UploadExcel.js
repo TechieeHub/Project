@@ -67,9 +67,25 @@ const UploadExcel = () => {
         </Box>
       </Box>
       {excelData ? (
-        <TableComponent data={excelData} />
+        <Box>
+          <TableComponent data={excelData} />
+          <Button
+            // type="submit"
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              margin: "30px 0px 100px 0px",
+              alignContent: "center",
+              left: "50%",
+            }}
+          >
+            Add New Row
+          </Button>
+        </Box>
       ) : (
-        <Box sx={{height:'40px', background:'#D3D3D3', marginTop:"3px"}}>No File is uploaded yet!</Box>
+        <Box sx={{ height: "40px", background: "#D3D3D3", marginTop: "3px" }}>
+          No File is uploaded yet!
+        </Box>
       )}
     </Box>
   );
