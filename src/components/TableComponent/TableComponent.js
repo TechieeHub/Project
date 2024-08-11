@@ -11,13 +11,8 @@ const columns = useMemo(
         header: key,
         size: 50,
       })),
-    [],
+    [props],
   );
-  // const table = useMaterialReactTable({
-  //   columns,
-  //   data:props.data,
-  // });
-
   const table = useMaterialReactTable({
     columns,
     data: props.data,
