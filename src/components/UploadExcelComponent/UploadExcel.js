@@ -58,7 +58,7 @@ const UploadExcel = () => {
             <Button
               type="submit"
               variant="contained"
-              sx={{ maxHeight: "30px" }}
+              sx={{ maxHeight: "30px" , marginLeft:'20px'}}
             >
               UPLOAD
             </Button>
@@ -68,7 +68,7 @@ const UploadExcel = () => {
       </Box>
       {excelData ? (
         <Box>
-          <TableComponent data={excelData} />
+          <TableComponent excelData={excelData} setExcelData={setExcelData} />
           <Button
             // type="submit"
             variant="contained"

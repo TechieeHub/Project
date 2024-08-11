@@ -3,20 +3,29 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-const TableComponent = (props) => {
+const TableComponent = ({excelData,setExcelData}) => {
   const columns = useMemo(
     () =>
-      Object.keys(props.data[0]).map((key) => ({
+      Object.keys(excelData[0]).map((key) => ({
         accessorKey: key,
         header: key,
         size: 50,
+        enableEditing: true,
       })),
-    [props]
+    [excelData]
   );
   const table = useMaterialReactTable({
     columns,
-    data: props.data,
+    data: excelData,
     enableEditing: true,
+    onEditingRowSave: ({ exitEditingMode, row, values }) => {
+      // Implement save logic here
+      // Example: updating your data state
+      const updatedData = [...excelData];
+      updatedData[row.index] = values;
+      setExcelData(updatedData);  // Ensure props.setData is passed to update the data
+      exitEditingMode();  // Close the edit box
+    },
     muiTableHeadCellProps: {
       sx: {
         backgroundColor: "#818589	",
