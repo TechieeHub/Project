@@ -8,7 +8,7 @@ const TableComponent = (props) => {
 const columns = useMemo(
     () =>  Object.keys(props.data[0]).map((key) => ({
         accessorKey: key,
-        header: key.charAt(0).toUpperCase() + key.slice(1),
+        header: key,
         size: 50,
       })),
     [],
