@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 const TableComponent = ({ excelData, setExcelData }) => {
@@ -28,7 +28,14 @@ const TableComponent = ({ excelData, setExcelData }) => {
       handleDeleteRow(row.index);
     }
   };
-
+  // const handleAddRow = () => {
+  //   const newRow = {};
+  //   // Initialize the new row with empty values or defaults
+  //   Object.keys(excelData[0]).forEach((key) => {
+  //     newRow[key] = ""; // Or set default values
+  //   });
+  //   setExcelData([...excelData, newRow]);
+  // };
   const table = useMaterialReactTable({
     columns,
     data: excelData,
@@ -66,6 +73,12 @@ const TableComponent = ({ excelData, setExcelData }) => {
       },
     },
   });
-  return <MaterialReactTable table={table} />;
+  return <>
+  {/* <Button onClick={handleAddRow} variant="contained" color="primary">
+        Add Row
+      </Button> */}
+  <MaterialReactTable table={table} />;
+
+  </>
 };
 export default TableComponent;

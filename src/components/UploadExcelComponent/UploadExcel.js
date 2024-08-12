@@ -44,19 +44,28 @@ const UploadExcel = () => {
   const formData = new FormData();
   formData.append("file", excelData);
   formData.append("otherKey", excelData);
-  console.log("Updated Excel data", excelData);
-  axios
-    .post("https://your-backend-url.com/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data", // This header is automatically set, but you can specify it
-      },
-    })
-    .then((response) => {
-      console.log("File uploaded successfully", response.data);
-    })
-    .catch((error) => {
-      console.error("Error uploading file", error);
+  console.log("formData", formData);
+
+  // axios
+  //   .post("https://your-backend-url.com/upload", formData, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data", // This header is automatically set, but you can specify it
+  //     },
+  //   })
+  //   .then((response) => {
+  //     console.log("File uploaded successfully", response.data);
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error uploading file", error);
+  //   });
+  const handleAddRow = () => {
+    const newRow = {};
+    // Initialize the new row with empty values or defaults
+    Object.keys(excelData[0]).forEach((key) => {
+      newRow[key] = ""; // Or set default values
     });
+    setExcelData([...excelData, newRow]);
+  };
   return (
     <Box>
       <Box
@@ -88,6 +97,7 @@ const UploadExcel = () => {
           <TableComponent excelData={excelData} setExcelData={setExcelData} />
           <Button
             // type="submit"
+            onClick={handleAddRow}
             variant="contained"
             sx={{
               maxHeight: "30px",
