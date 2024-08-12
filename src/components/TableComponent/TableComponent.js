@@ -20,9 +20,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const TableComponent = ({ excelData, setExcelData }) => {
   const [open, setOpen] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
-  const [tempColumns, setTempColumns] = useState({}); 
+  const [tempColumns, setTempColumns] = useState({});
   const handleOpenDialog = () => {
-    setTempColumns(editedColumns); 
+    setTempColumns(editedColumns);
     setOpen(true);
   };
 
@@ -33,8 +33,18 @@ const TableComponent = ({ excelData, setExcelData }) => {
   const handleColumnNameChange = (key, newHeader) => {
     setTempColumns((prev) => ({ ...prev, [key]: newHeader }));
   };
-
   const handleSaveChanges = () => {
+    const originalKeys = Object.keys(excelData[0]);
+    const updatedData = excelData.map((row) => {
+      const updatedRow = {};
+      originalKeys.forEach((key) => {
+        const newKey = tempColumns[key] || key;
+        updatedRow[newKey] = row[key];
+      });
+      return updatedRow;
+    });
+
+    setExcelData(updatedData);
     setEditedColumns(tempColumns);
     setOpen(false);
   };
@@ -43,8 +53,8 @@ const TableComponent = ({ excelData, setExcelData }) => {
     () =>
       Object.keys(excelData[0]).map((key) => ({
         accessorKey: key,
-        header: editedColumns[key] || key, 
-        size: 50,
+        header: editedColumns[key] || key,
+        size: 250,
         enableEditing: true,
       })),
     [excelData, editedColumns]
@@ -69,7 +79,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
     columns,
     data: excelData,
     enableEditing: true,
-    enableDensityToggle:false,
+    enableDensityToggle: false,
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
       const updatedData = [...excelData];
       updatedData[row.index] = values;
@@ -131,7 +141,6 @@ const TableComponent = ({ excelData, setExcelData }) => {
           </Button>
         </DialogActions>
       </Dialog>
-
       <MaterialReactTable table={table} />
     </>
   );
