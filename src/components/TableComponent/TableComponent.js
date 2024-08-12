@@ -70,6 +70,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
     columns,
     data: excelData,
     enableEditing: true,
+    enableDensityToggle:false,
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
       const updatedData = [...excelData];
       updatedData[row.index] = values;
