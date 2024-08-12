@@ -32,6 +32,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
   };
 
   const handleColumnNameChange = (key, newHeader) => {
+    console.log('newHeader',newHeader)
     setTempColumns((prev) => ({ ...prev, [key]: newHeader }));
   };
 
@@ -120,7 +121,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
               fullWidth
               variant="outlined"
               margin="normal"
-              value={tempColumns[key] || key} // Use tempColumns for editing
+              value={tempColumns[key] !== undefined ? tempColumns[key] : key}
               onChange={(e) => handleColumnNameChange(key, e.target.value)}
             />
           ))}
