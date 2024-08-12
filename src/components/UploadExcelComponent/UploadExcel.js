@@ -60,9 +60,8 @@ const UploadExcel = () => {
   //   });
   const handleAddRow = () => {
     const newRow = {};
-    // Initialize the new row with empty values or defaults
     Object.keys(excelData[0]).forEach((key) => {
-      newRow[key] = ""; // Or set default values
+      newRow[key] = "";
     });
     setExcelData([...excelData, newRow]);
   };
@@ -96,7 +95,6 @@ const UploadExcel = () => {
         <Box>
           <TableComponent excelData={excelData} setExcelData={setExcelData} />
           <Button
-            // type="submit"
             onClick={handleAddRow}
             variant="contained"
             sx={{

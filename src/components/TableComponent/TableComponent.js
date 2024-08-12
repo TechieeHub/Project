@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, Button, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 const TableComponent = ({ excelData, setExcelData }) => {
@@ -19,23 +19,13 @@ const TableComponent = ({ excelData, setExcelData }) => {
   );
   const handleDeleteRow = (rowIndex) => {
     const updatedData = excelData.filter((_, index) => index !== rowIndex);
-    setExcelData(updatedData);
+    updatedData?.length !== 0 && setExcelData(updatedData);
   };
-
   const openDeleteConfirmModal = (row) => {
-    // You can add a confirmation dialog here if needed
     if (window.confirm("Are you sure you want to delete this row?")) {
       handleDeleteRow(row.index);
     }
   };
-  // const handleAddRow = () => {
-  //   const newRow = {};
-  //   // Initialize the new row with empty values or defaults
-  //   Object.keys(excelData[0]).forEach((key) => {
-  //     newRow[key] = ""; // Or set default values
-  //   });
-  //   setExcelData([...excelData, newRow]);
-  // };
   const table = useMaterialReactTable({
     columns,
     data: excelData,
@@ -46,11 +36,8 @@ const TableComponent = ({ excelData, setExcelData }) => {
       const updatedData = [...excelData];
       updatedData[row.index] = values;
       setExcelData(updatedData); // Ensure props.setData is passed to update the data
-      exitEditingMode(); // Close the edit box
+      exitEditingMode();
     },
-    // renderRowActions: ({ row }) => (
-    //   <button onClick={() => handleDeleteRow(row.index)}>Delete</button>
-    // ),
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: "flex", gap: "1rem" }}>
         <Tooltip title="Edit">
@@ -73,12 +60,6 @@ const TableComponent = ({ excelData, setExcelData }) => {
       },
     },
   });
-  return <>
-  {/* <Button onClick={handleAddRow} variant="contained" color="primary">
-        Add Row
-      </Button> */}
-  <MaterialReactTable table={table} />;
-
-  </>
+  return <MaterialReactTable table={table} />;
 };
 export default TableComponent;
