@@ -3,6 +3,9 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
+import { Box, IconButton, Tooltip } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 const TableComponent = ({excelData,setExcelData}) => {
   const columns = useMemo(
     () =>
@@ -14,6 +17,11 @@ const TableComponent = ({excelData,setExcelData}) => {
       })),
     [excelData]
   );
+  const handleDeleteRow = (rowIndex) => {
+    const updatedData = excelData.filter((_, index) => index !== rowIndex);
+    setExcelData(updatedData);
+  };
+
   const table = useMaterialReactTable({
     columns,
     data: excelData,
@@ -26,6 +34,25 @@ const TableComponent = ({excelData,setExcelData}) => {
       setExcelData(updatedData);  // Ensure props.setData is passed to update the data
       exitEditingMode();  // Close the edit box
     },
+    // renderRowActions: ({ row }) => (
+    //   <button onClick={() => handleDeleteRow(row.index)}>Delete</button>
+    // ),
+    renderRowActions: ({ row, table }) => (
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Tooltip title="Edit">
+          <IconButton onClick={() => table.setEditingRow(row)}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Delete">
+          <IconButton color="error" 
+          // onClick={() => openDeleteConfirmModal(row)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ),
     muiTableHeadCellProps: {
       sx: {
         backgroundColor: "#818589	",
