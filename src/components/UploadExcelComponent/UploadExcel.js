@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import * as XLSX from "xlsx";
+import axios from "axios";
 import TableComponent from "../TableComponent/TableComponent";
 
 const UploadExcel = () => {
@@ -40,6 +41,22 @@ const UploadExcel = () => {
       setExcelData(data.slice(0, 10));
     }
   };
+  const formData = new FormData();
+  formData.append("file", excelData);
+  formData.append("otherKey", excelData);
+  console.log("Updated Excel data", excelData);
+  axios
+    .post("https://your-backend-url.com/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // This header is automatically set, but you can specify it
+      },
+    })
+    .then((response) => {
+      console.log("File uploaded successfully", response.data);
+    })
+    .catch((error) => {
+      console.error("Error uploading file", error);
+    });
   return (
     <Box>
       <Box
@@ -58,7 +75,7 @@ const UploadExcel = () => {
             <Button
               type="submit"
               variant="contained"
-              sx={{ maxHeight: "30px" , marginLeft:'20px'}}
+              sx={{ maxHeight: "30px", marginLeft: "20px" }}
             >
               UPLOAD
             </Button>

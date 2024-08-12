@@ -4,9 +4,9 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { Box, IconButton, Tooltip } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-const TableComponent = ({excelData,setExcelData}) => {
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+const TableComponent = ({ excelData, setExcelData }) => {
   const columns = useMemo(
     () =>
       Object.keys(excelData[0]).map((key) => ({
@@ -21,7 +21,6 @@ const TableComponent = ({excelData,setExcelData}) => {
     const updatedData = excelData.filter((_, index) => index !== rowIndex);
     setExcelData(updatedData);
   };
-
 
   const openDeleteConfirmModal = (row) => {
     // You can add a confirmation dialog here if needed
@@ -39,23 +38,21 @@ const TableComponent = ({excelData,setExcelData}) => {
       // Example: updating your data state
       const updatedData = [...excelData];
       updatedData[row.index] = values;
-      setExcelData(updatedData);  // Ensure props.setData is passed to update the data
-      exitEditingMode();  // Close the edit box
+      setExcelData(updatedData); // Ensure props.setData is passed to update the data
+      exitEditingMode(); // Close the edit box
     },
     // renderRowActions: ({ row }) => (
     //   <button onClick={() => handleDeleteRow(row.index)}>Delete</button>
     // ),
     renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box sx={{ display: "flex", gap: "1rem" }}>
         <Tooltip title="Edit">
           <IconButton onClick={() => table.setEditingRow(row)}>
             <EditIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Delete">
-          <IconButton color="error" 
-          onClick={() => openDeleteConfirmModal(row)}
-          >
+          <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
