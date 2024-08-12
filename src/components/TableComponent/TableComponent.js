@@ -21,9 +21,16 @@ const TableComponent = ({ excelData, setExcelData }) => {
     const updatedData = excelData.filter((_, index) => index !== rowIndex);
     updatedData?.length !== 0 && setExcelData(updatedData);
   };
+
+  console.log("kjdkcdsa");
   const openDeleteConfirmModal = (row) => {
-    if (window.confirm("Are you sure you want to delete this row?")) {
-      handleDeleteRow(row.index);
+    if (excelData.length > 1) {
+      if (window.confirm("Are you sure you want to delete this row?")) {
+        handleDeleteRow(row.index);
+      }
+    }
+    else{
+      alert('The Last Record cannot be deleted')
     }
   };
   const table = useMaterialReactTable({
