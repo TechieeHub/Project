@@ -20,10 +20,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const TableComponent = ({ excelData, setExcelData }) => {
   const [open, setOpen] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
-  const [tempColumns, setTempColumns] = useState({}); // Temporary state for editing
-
+  const [tempColumns, setTempColumns] = useState({}); 
   const handleOpenDialog = () => {
-    setTempColumns(editedColumns); // Copy the current edited columns to temp state
+    setTempColumns(editedColumns); 
     setOpen(true);
   };
 
@@ -32,12 +31,11 @@ const TableComponent = ({ excelData, setExcelData }) => {
   };
 
   const handleColumnNameChange = (key, newHeader) => {
-    console.log('newHeader',newHeader)
     setTempColumns((prev) => ({ ...prev, [key]: newHeader }));
   };
 
   const handleSaveChanges = () => {
-    setEditedColumns(tempColumns); // Commit the changes from temp to the main state
+    setEditedColumns(tempColumns);
     setOpen(false);
   };
 
@@ -45,7 +43,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
     () =>
       Object.keys(excelData[0]).map((key) => ({
         accessorKey: key,
-        header: editedColumns[key] || key, // Use the edited column name if available
+        header: editedColumns[key] || key, 
         size: 50,
         enableEditing: true,
       })),
