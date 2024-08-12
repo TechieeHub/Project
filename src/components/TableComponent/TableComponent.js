@@ -22,6 +22,14 @@ const TableComponent = ({excelData,setExcelData}) => {
     setExcelData(updatedData);
   };
 
+
+  const openDeleteConfirmModal = (row) => {
+    // You can add a confirmation dialog here if needed
+    if (window.confirm("Are you sure you want to delete this row?")) {
+      handleDeleteRow(row.index);
+    }
+  };
+
   const table = useMaterialReactTable({
     columns,
     data: excelData,
@@ -46,7 +54,7 @@ const TableComponent = ({excelData,setExcelData}) => {
         </Tooltip>
         <Tooltip title="Delete">
           <IconButton color="error" 
-          // onClick={() => openDeleteConfirmModal(row)}
+          onClick={() => openDeleteConfirmModal(row)}
           >
             <DeleteIcon />
           </IconButton>
