@@ -1,48 +1,79 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+
 const TableComponent = ({ excelData, setExcelData }) => {
+  const [open, setOpen] = useState(false);
+  const [editedColumns, setEditedColumns] = useState({});
+  const [tempColumns, setTempColumns] = useState({}); // Temporary state for editing
+
+  const handleOpenDialog = () => {
+    setTempColumns(editedColumns); // Copy the current edited columns to temp state
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
+
+  const handleColumnNameChange = (key, newHeader) => {
+    setTempColumns((prev) => ({ ...prev, [key]: newHeader }));
+  };
+
+  const handleSaveChanges = () => {
+    setEditedColumns(tempColumns); // Commit the changes from temp to the main state
+    setOpen(false);
+  };
+
   const columns = useMemo(
     () =>
       Object.keys(excelData[0]).map((key) => ({
         accessorKey: key,
-        header: key,
+        header: editedColumns[key] || key, // Use the edited column name if available
         size: 50,
         enableEditing: true,
       })),
-    [excelData]
+    [excelData, editedColumns]
   );
+
   const handleDeleteRow = (rowIndex) => {
     const updatedData = excelData.filter((_, index) => index !== rowIndex);
     updatedData?.length !== 0 && setExcelData(updatedData);
   };
 
-  console.log("kjdkcdsa");
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
       if (window.confirm("Are you sure you want to delete this row?")) {
         handleDeleteRow(row.index);
       }
-    }
-    else{
-      alert('The Last Record cannot be deleted')
+    } else {
+      alert("The Last Record cannot be deleted");
     }
   };
+
   const table = useMaterialReactTable({
     columns,
     data: excelData,
     enableEditing: true,
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
-      // Implement save logic here
-      // Example: updating your data state
       const updatedData = [...excelData];
       updatedData[row.index] = values;
-      setExcelData(updatedData); // Ensure props.setData is passed to update the data
+      setExcelData(updatedData);
       exitEditingMode();
     },
     renderRowActions: ({ row, table }) => (
@@ -61,12 +92,49 @@ const TableComponent = ({ excelData, setExcelData }) => {
     ),
     muiTableHeadCellProps: {
       sx: {
-        backgroundColor: "#818589	",
+        backgroundColor: "#818589",
         color: "#ffffff",
         fontWeight: "bold",
       },
     },
   });
-  return <MaterialReactTable table={table} />;
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        sx={{ maxHeight: "30px", marginLeft: "20px", marginTop: "30px" }}
+        onClick={handleOpenDialog}
+      >
+        Edit columns
+      </Button>
+
+      <Dialog open={open} onClose={handleCloseDialog}>
+        <DialogTitle>Edit Column Names</DialogTitle>
+        <DialogContent>
+          {Object.keys(excelData[0]).map((key) => (
+            <TextField
+              key={key}
+              label={`Edit ${key}`}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              value={tempColumns[key] || key} // Use tempColumns for editing
+              onChange={(e) => handleColumnNameChange(key, e.target.value)}
+            />
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleSaveChanges} variant="contained">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <MaterialReactTable table={table} />
+    </>
+  );
 };
+
 export default TableComponent;
