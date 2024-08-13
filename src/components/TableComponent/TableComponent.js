@@ -16,11 +16,16 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 
 const TableComponent = ({ excelData, setExcelData }) => {
   const [open, setOpen] = useState(false);
+  const [openAddColumnDialog, setOpenAddColumnDialog] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
   const [tempColumns, setTempColumns] = useState({});
+  const [newColumnName, setNewColumnName] = useState('');
+  const [newColumnValue, setNewColumnValue] = useState('');
+
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
     setOpen(true);
@@ -30,28 +35,51 @@ const TableComponent = ({ excelData, setExcelData }) => {
     setOpen(false);
   };
 
+  const handleOpenAddColumnDialog = () => {
+    setOpenAddColumnDialog(true);
+  };
+
+  const handleCloseAddColumnDialog = () => {
+    setOpenAddColumnDialog(false);
+  };
+
   const handleColumnNameChange = (key, newHeader) => {
     setTempColumns((prev) => ({ ...prev, [key]: newHeader }));
   };
-  const handleSaveChanges = () => {
-    // const originalKeys = Object.keys(excelData[0]);
-    // const updatedData = excelData.map((row) => {
-    //   const updatedRow = {};
-    //   originalKeys.forEach((key) => {
-    //     const newKey = tempColumns[key] || key;
-    //     updatedRow[newKey] = row[key];
-    //   });
-    //   return updatedRow;
-    // });
 
-    // setExcelData(updatedData);
+  const handleSaveChanges = () => {
+    const columnNameMapping = { ...editedColumns };
+    
+    const updatedData = excelData.map((row) => {
+      const updatedRow = {};
+      Object.keys(row).forEach((oldKey) => {
+        const newKey = columnNameMapping[oldKey] || oldKey;
+        updatedRow[newKey] = row[oldKey];
+      });
+      return updatedRow;
+    });
+
+    setExcelData(updatedData);
     setEditedColumns(tempColumns);
     setOpen(false);
   };
 
+  const handleAddColumn = () => {
+    const updatedData = excelData.map(row => ({
+      ...row,
+      [newColumnName]: newColumnValue,
+    }));
+
+    setExcelData(updatedData);
+    setEditedColumns(prev => ({ ...prev, [newColumnName]: newColumnName }));
+    setNewColumnName('');
+    setNewColumnValue('');
+    setOpenAddColumnDialog(false);
+  };
+
   const columns = useMemo(
     () =>
-      Object.keys(excelData[0]).map((key) => ({
+      Object.keys(excelData[0] || {}).map((key) => ({
         accessorKey: key,
         header: editedColumns[key] || key,
         size: 250,
@@ -118,11 +146,18 @@ const TableComponent = ({ excelData, setExcelData }) => {
       >
         Edit columns
       </Button>
+      <Button
+        variant="contained"
+        sx={{ maxHeight: "30px", marginLeft: "20px", marginTop: "30px" }}
+        onClick={handleOpenAddColumnDialog}
+      >
+        Add Column
+      </Button>
 
       <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle>Edit Column Names</DialogTitle>
         <DialogContent>
-          {Object.keys(excelData[0]).map((key) => (
+          {Object.keys(excelData[0] || {}).map((key) => (
             <TextField
               key={key}
               label={`Edit ${key}`}
@@ -141,6 +176,35 @@ const TableComponent = ({ excelData, setExcelData }) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Dialog open={openAddColumnDialog} onClose={handleCloseAddColumnDialog}>
+        <DialogTitle>Add New Column</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Column Name"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            value={newColumnName}
+            onChange={(e) => setNewColumnName(e.target.value)}
+          />
+          {/* <TextField
+            label="Default Value"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            value={newColumnValue}
+            onChange={(e) => setNewColumnValue(e.target.value)}
+          /> */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAddColumnDialog}>Cancel</Button>
+          <Button onClick={handleAddColumn} variant="contained">
+            Add Column
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <MaterialReactTable table={table} />
     </>
   );
