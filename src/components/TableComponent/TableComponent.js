@@ -13,9 +13,14 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
 const TableComponent = ({ excelData, setExcelData }) => {
   const [open, setOpen] = useState(false);
@@ -24,6 +29,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
   const [tempColumns, setTempColumns] = useState({});
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
+  const [exportOption, setExportOption] = useState(""); // State to manage export option
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
@@ -65,22 +71,54 @@ const TableComponent = ({ excelData, setExcelData }) => {
   };
 
   const handleDeleteColumn = (columnKey) => {
+    if (window.confirm('Are you sure you want to delete this column?')) {
+      const updatedColumns = { ...editedColumns };
+      delete updatedColumns[columnKey];
+      setEditedColumns(updatedColumns);
 
-    if(window.confirm('Are you sure you want to delete this column.'))
-    {
-    const updatedColumns = { ...editedColumns };
-    delete updatedColumns[columnKey];
-    setEditedColumns(updatedColumns);
+      const updatedData = excelData.map((row) => {
+        const { [columnKey]: _, ...rest } = row;
+        return rest;
+      });
 
-    const updatedData = excelData.map((row) => {
-      const { [columnKey]: _, ...rest } = row;
-      return rest;
-    });
-
-    setExcelData(updatedData);
-  }
+      setExcelData(updatedData);
+    }
   };
 
+  // const handleExport = () => {
+  //   if (exportOption === "pdf") {
+  //     console.log("Exporting to PDF");
+  //     axios.get('http://localhost:8000/api/export/pdf/').then(resp=>console.log('resp',resp)).catch(error=>console.warn('error'))
+  //   } else if (exportOption === "excel") {
+  //     axios.get('http://localhost:8000/api/export/excel/').then(resp=>console.log('resp',resp)).catch(error=>console.warn('error'))
+  //     console.log("Exporting to Excel");
+  //   }
+  // };
+  const handleExport = async () => {
+    try {
+      let response;
+      if (exportOption === "pdf") {
+        response = await axios.get("http://localhost:8000/api/export/pdf/", {
+          responseType: "blob",
+        });
+      } else if (exportOption === "excel") {
+        response = await axios.get("http://localhost:8000/api/export/excel/", {
+          responseType: "blob",
+        });
+      }
+  
+      const blob = new Blob([response.data], { type: response.headers["content-type"] });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = exportOption === "pdf" ? "export.pdf" : "export.xlsx";
+      document.body.appendChild(link);
+      link.click();
+      window.URL.revokeObjectURL(link.href);
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error exporting file:", error);
+    }
+  };
   const columns = useMemo(
     () =>
       Object.keys(excelData[0] || {}).map((key) => ({
@@ -140,6 +178,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
       },
     },
   });
+
   return (
     <>
       <Button
@@ -165,6 +204,32 @@ const TableComponent = ({ excelData, setExcelData }) => {
         onClick={handleOpenAddColumnDialog}
       >
         Add Column
+      </Button>
+      <FormControl sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}>
+        <InputLabel id="export-select-label">Export</InputLabel>
+        <Select
+          labelId="export-select-label"
+          id="export-select"
+          value={exportOption}
+          label="Export"
+          onChange={(e) => setExportOption(e.target.value)}
+        >
+          <MenuItem value="pdf">Export to PDF</MenuItem>
+          <MenuItem value="excel">Export to Excel</MenuItem>
+        </Select>
+      </FormControl>
+      <Button
+        variant="contained"
+        sx={{
+          maxHeight: "30px",
+          marginLeft: "20px",
+          marginTop: "30px",
+          backgroundColor: "grey",
+        }}
+        onClick={handleExport}
+        disabled={!exportOption} // Disable the button if no option is selected
+      >
+        Export
       </Button>
 
       <Dialog open={open} onClose={handleCloseDialog}>
@@ -194,8 +259,8 @@ const TableComponent = ({ excelData, setExcelData }) => {
           ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} sx={{color:'grey'}}>Cancel</Button>
-          <Button onClick={handleSaveChanges} variant="contained" sx={{backgroundColor:'grey'}}>
+          <Button onClick={handleCloseDialog} sx={{ color: 'grey' }}>Cancel</Button>
+          <Button onClick={handleSaveChanges} variant="contained" sx={{ backgroundColor: 'grey' }}>
             Save
           </Button>
         </DialogActions>
@@ -214,8 +279,8 @@ const TableComponent = ({ excelData, setExcelData }) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseAddColumnDialog} sx={{color:'grey'}}>Cancel</Button>
-          <Button onClick={handleAddColumn} variant="contained" sx={{backgroundColor:'grey'}}>
+          <Button onClick={handleCloseAddColumnDialog} sx={{ color: 'grey' }}>Cancel</Button>
+          <Button onClick={handleAddColumn} variant="contained" sx={{ backgroundColor: 'grey' }}>
             Add Column
           </Button>
         </DialogActions>
