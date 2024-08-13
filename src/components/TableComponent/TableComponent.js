@@ -65,6 +65,9 @@ const TableComponent = ({ excelData, setExcelData }) => {
   };
 
   const handleDeleteColumn = (columnKey) => {
+
+    if(window.confirm('Are you sure you want to delete this column.'))
+    {
     const updatedColumns = { ...editedColumns };
     delete updatedColumns[columnKey];
     setEditedColumns(updatedColumns);
@@ -75,6 +78,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
     });
 
     setExcelData(updatedData);
+  }
   };
 
   const columns = useMemo(
