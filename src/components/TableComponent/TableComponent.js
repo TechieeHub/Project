@@ -23,8 +23,8 @@ const TableComponent = ({ excelData, setExcelData }) => {
   const [openAddColumnDialog, setOpenAddColumnDialog] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
   const [tempColumns, setTempColumns] = useState({});
-  const [newColumnName, setNewColumnName] = useState('');
-  const [newColumnValue, setNewColumnValue] = useState('');
+  const [newColumnName, setNewColumnName] = useState("");
+  const [newColumnValue, setNewColumnValue] = useState("");
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
@@ -49,7 +49,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
 
   const handleSaveChanges = () => {
     const columnNameMapping = { ...editedColumns };
-    
+
     const updatedData = excelData.map((row) => {
       const updatedRow = {};
       Object.keys(row).forEach((oldKey) => {
@@ -65,15 +65,15 @@ const TableComponent = ({ excelData, setExcelData }) => {
   };
 
   const handleAddColumn = () => {
-    const updatedData = excelData.map(row => ({
+    const updatedData = excelData.map((row) => ({
       ...row,
       [newColumnName]: newColumnValue,
     }));
 
     setExcelData(updatedData);
-    setEditedColumns(prev => ({ ...prev, [newColumnName]: newColumnName }));
-    setNewColumnName('');
-    setNewColumnValue('');
+    setEditedColumns((prev) => ({ ...prev, [newColumnName]: newColumnName }));
+    setNewColumnName("");
+    setNewColumnValue("");
     setOpenAddColumnDialog(false);
   };
 
@@ -102,7 +102,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
       alert("The Last Record cannot be deleted");
     }
   };
-
+  console.log("excenjnhj", excelData);
   const table = useMaterialReactTable({
     columns,
     data: excelData,
@@ -141,14 +141,14 @@ const TableComponent = ({ excelData, setExcelData }) => {
     <>
       <Button
         variant="contained"
-        sx={{ maxHeight: "30px", marginLeft: "20px", marginTop: "30px" }}
+        sx={{ maxHeight: "30px", marginLeft: "20px", marginTop: "30px" , backgroundColor: 'grey'}}
         onClick={handleOpenDialog}
       >
         Edit columns
       </Button>
       <Button
         variant="contained"
-        sx={{ maxHeight: "30px", marginLeft: "20px", marginTop: "30px" }}
+        sx={{ maxHeight: "30px", marginLeft: "20px", marginTop: "30px" ,backgroundColor: 'grey'}}
         onClick={handleOpenAddColumnDialog}
       >
         Add Column
