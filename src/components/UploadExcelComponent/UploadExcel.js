@@ -83,7 +83,12 @@ const UploadExcel = () => {
             <Button
               type="submit"
               variant="contained"
-              sx={{ maxHeight: "30px", marginLeft: "20px" }}
+              sx={{
+                maxHeight: "30px",
+                marginLeft: "20px",
+
+                backgroundColor: "grey",
+              }}
             >
               UPLOAD
             </Button>
@@ -102,6 +107,7 @@ const UploadExcel = () => {
               margin: "30px 0px 100px 0px",
               alignContent: "center",
               left: "50%",
+              backgroundColor: "grey",
             }}
           >
             Add New Row
