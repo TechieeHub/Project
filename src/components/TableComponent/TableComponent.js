@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
 
 const TableComponent = ({ excelData, setExcelData }) => {
   const [open, setOpen] = useState(false);
@@ -137,7 +136,6 @@ const TableComponent = ({ excelData, setExcelData }) => {
       },
     },
   });
-
   return (
     <>
       <Button

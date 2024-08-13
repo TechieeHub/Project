@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import axios from "axios";
 import TableComponent from "../TableComponent/TableComponent";
@@ -8,6 +8,7 @@ const UploadExcel = () => {
   const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
   const [excelData, setExcelData] = useState(null);
+
   const handleFile = (e) => {
     let fileTypes = [
       "application/vnd.ms-excel",
@@ -16,13 +17,9 @@ const UploadExcel = () => {
     ];
     let selectedFile = e.target.files[0];
     if (selectedFile) {
-      if (selectedFile && fileTypes.includes(selectedFile.type)) {
+      if (fileTypes.includes(selectedFile.type)) {
         setTypeError(null);
-        let reader = new FileReader();
-        reader.readAsArrayBuffer(selectedFile);
-        reader.onload = (e) => {
-          setExcelFile(e.target.result);
-        };
+        setExcelFile(selectedFile); 
       } else {
         setTypeError("Please select only excel file types");
         setExcelFile(null);
@@ -31,40 +28,55 @@ const UploadExcel = () => {
       console.log("Please select your file");
     }
   };
+
   const handleFileSubmit = (e) => {
     e.preventDefault();
-    if (excelFile !== null) {
-      const workbook = XLSX.read(excelFile, { type: "buffer" });
+    if (excelFile) {
+      uploadFile(excelFile); 
+    }
+  };
+
+  const uploadFile = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await axios.post(
+        "http://localhost:8000/api/upload/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("File uploaded successfully", response.data);
+      const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
-      setExcelData(data.slice(0, 10));
+      setExcelData(data.slice(0, 10)); // Set the data for the table
+    } catch (error) {
+      console.error("Error uploading file", error);
     }
   };
-  const formData = new FormData();
-  formData.append("file", excelData);
-  formData.append("otherKey", excelData);
-  console.log("formData", formData);
 
-  // axios
-  //   .post("https://your-backend-url.com/upload", formData, {
-  //     headers: {
-  //       "Content-Type": "multipart/form-data", // This header is automatically set, but you can specify it
-  //     },
-  //   })
-  //   .then((response) => {
-  //     console.log("File uploaded successfully", response.data);
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error uploading file", error);
-  //   });
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/data/")
+      .then((response) => setExcelData(response.data))
+      .catch((error) => console.log("error", error));
+  }, []);
+
   const handleAddRow = () => {
-    const newRow = {};
-    Object.keys(excelData[0]).forEach((key) => {
-      newRow[key] = "";
-    });
-    setExcelData([...excelData, newRow]);
+    if (excelData) {
+      const newRow = {};
+      Object.keys(excelData[0]).forEach((key) => {
+        newRow[key] = "";
+      });
+      setExcelData([...excelData, newRow]);
+    }
   };
+
   return (
     <Box>
       <Box
@@ -86,7 +98,6 @@ const UploadExcel = () => {
               sx={{
                 maxHeight: "30px",
                 marginLeft: "20px",
-
                 backgroundColor: "grey",
               }}
             >
@@ -121,4 +132,5 @@ const UploadExcel = () => {
     </Box>
   );
 };
+
 export default UploadExcel;
