@@ -34,17 +34,17 @@ const TableComponent = ({ excelData, setExcelData }) => {
     setTempColumns((prev) => ({ ...prev, [key]: newHeader }));
   };
   const handleSaveChanges = () => {
-    const originalKeys = Object.keys(excelData[0]);
-    const updatedData = excelData.map((row) => {
-      const updatedRow = {};
-      originalKeys.forEach((key) => {
-        const newKey = tempColumns[key] || key;
-        updatedRow[newKey] = row[key];
-      });
-      return updatedRow;
-    });
+    // const originalKeys = Object.keys(excelData[0]);
+    // const updatedData = excelData.map((row) => {
+    //   const updatedRow = {};
+    //   originalKeys.forEach((key) => {
+    //     const newKey = tempColumns[key] || key;
+    //     updatedRow[newKey] = row[key];
+    //   });
+    //   return updatedRow;
+    // });
 
-    setExcelData(updatedData);
+    // setExcelData(updatedData);
     setEditedColumns(tempColumns);
     setOpen(false);
   };
