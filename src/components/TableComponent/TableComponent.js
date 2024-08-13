@@ -50,16 +50,16 @@ const TableComponent = ({ excelData, setExcelData }) => {
   const handleSaveChanges = () => {
     const columnNameMapping = { ...editedColumns };
 
-    const updatedData = excelData.map((row) => {
-      const updatedRow = {};
-      Object.keys(row).forEach((oldKey) => {
-        const newKey = columnNameMapping[oldKey] || oldKey;
-        updatedRow[newKey] = row[oldKey];
-      });
-      return updatedRow;
-    });
+    // const updatedData = excelData.map((row) => {
+    //   const updatedRow = {};
+    //   Object.keys(row).forEach((oldKey) => {
+    //     const newKey = columnNameMapping[oldKey] || oldKey;
+    //     updatedRow[newKey] = row[oldKey];
+    //   });
+    //   return updatedRow;
+    // });
 
-    setExcelData(updatedData);
+    // setExcelData(updatedData);
     setEditedColumns(tempColumns);
     setOpen(false);
   };
