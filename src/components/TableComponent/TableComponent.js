@@ -48,18 +48,6 @@ const TableComponent = ({ excelData, setExcelData }) => {
   };
 
   const handleSaveChanges = () => {
-    const columnNameMapping = { ...editedColumns };
-
-    // const updatedData = excelData.map((row) => {
-    //   const updatedRow = {};
-    //   Object.keys(row).forEach((oldKey) => {
-    //     const newKey = columnNameMapping[oldKey] || oldKey;
-    //     updatedRow[newKey] = row[oldKey];
-    //   });
-    //   return updatedRow;
-    // });
-
-    // setExcelData(updatedData);
     setEditedColumns(tempColumns);
     setOpen(false);
   };
@@ -75,6 +63,19 @@ const TableComponent = ({ excelData, setExcelData }) => {
     setNewColumnName("");
     setNewColumnValue("");
     setOpenAddColumnDialog(false);
+  };
+
+  const handleDeleteColumn = (columnKey) => {
+    const updatedColumns = { ...editedColumns };
+    delete updatedColumns[columnKey];
+    setEditedColumns(updatedColumns);
+
+    const updatedData = excelData.map((row) => {
+      const { [columnKey]: _, ...rest } = row;
+      return rest;
+    });
+
+    setExcelData(updatedData);
   };
 
   const columns = useMemo(
@@ -102,7 +103,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
       alert("The Last Record cannot be deleted");
     }
   };
-  console.log("excenjnhj", excelData);
+
   const table = useMaterialReactTable({
     columns,
     data: excelData,
@@ -141,14 +142,24 @@ const TableComponent = ({ excelData, setExcelData }) => {
     <>
       <Button
         variant="contained"
-        sx={{ maxHeight: "30px", marginLeft: "20px", marginTop: "30px" , backgroundColor: 'grey'}}
+        sx={{
+          maxHeight: "30px",
+          marginLeft: "20px",
+          marginTop: "30px",
+          backgroundColor: "grey",
+        }}
         onClick={handleOpenDialog}
       >
         Edit columns
       </Button>
       <Button
         variant="contained"
-        sx={{ maxHeight: "30px", marginLeft: "20px", marginTop: "30px" ,backgroundColor: 'grey'}}
+        sx={{
+          maxHeight: "30px",
+          marginLeft: "20px",
+          marginTop: "30px",
+          backgroundColor: "grey",
+        }}
         onClick={handleOpenAddColumnDialog}
       >
         Add Column
@@ -158,15 +169,26 @@ const TableComponent = ({ excelData, setExcelData }) => {
         <DialogTitle>Edit Column Names</DialogTitle>
         <DialogContent>
           {Object.keys(excelData[0] || {}).map((key) => (
-            <TextField
+            <Box
               key={key}
-              label={`Edit ${key}`}
-              fullWidth
-              variant="outlined"
-              margin="normal"
-              value={tempColumns[key] !== undefined ? tempColumns[key] : key}
-              onChange={(e) => handleColumnNameChange(key, e.target.value)}
-            />
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <TextField
+                label={`Edit ${key}`}
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                value={tempColumns[key] !== undefined ? tempColumns[key] : key}
+                onChange={(e) => handleColumnNameChange(key, e.target.value)}
+              />
+              <IconButton color="error" onClick={() => handleDeleteColumn(key)}>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
           ))}
         </DialogContent>
         <DialogActions>
@@ -188,14 +210,6 @@ const TableComponent = ({ excelData, setExcelData }) => {
             value={newColumnName}
             onChange={(e) => setNewColumnName(e.target.value)}
           />
-          {/* <TextField
-            label="Default Value"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            value={newColumnValue}
-            onChange={(e) => setNewColumnValue(e.target.value)}
-          /> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseAddColumnDialog}>Cancel</Button>
