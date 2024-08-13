@@ -190,8 +190,8 @@ const TableComponent = ({ excelData, setExcelData }) => {
           ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSaveChanges} variant="contained">
+          <Button onClick={handleCloseDialog} sx={{color:'grey'}}>Cancel</Button>
+          <Button onClick={handleSaveChanges} variant="contained" sx={{backgroundColor:'grey'}}>
             Save
           </Button>
         </DialogActions>
@@ -210,8 +210,8 @@ const TableComponent = ({ excelData, setExcelData }) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseAddColumnDialog}>Cancel</Button>
-          <Button onClick={handleAddColumn} variant="contained">
+          <Button onClick={handleCloseAddColumnDialog} sx={{color:'grey'}}>Cancel</Button>
+          <Button onClick={handleAddColumn} variant="contained" sx={{backgroundColor:'grey'}}>
             Add Column
           </Button>
         </DialogActions>
