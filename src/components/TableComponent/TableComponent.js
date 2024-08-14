@@ -111,7 +111,7 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
     axios
     .post("http://localhost:8000/api/rename-column/", apidata)
     .then((response) => refreshDataHandler(true))
-    .catch((error) => alert("Old and new Name are Same"));
+    .catch((error) => console.log("Old and new Name are Same"));
     }
   const handleExport = async () => {
     try {
