@@ -103,10 +103,10 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
   //Ishan
   const  handleEditColumnName=(data)=>{
 
-    console.log('oiuoiuoi',data)
+    console.log('oiuoiuoi',Object.keys(data))
     const apidata={
-        old_column_name: "Name",
-    new_column_name: "Name Of Person"
+        old_column_name: Object.keys(data)[0],
+    new_column_name: Object.values(data)[0]
     }
     axios
     .post("http://localhost:8000/api/rename-column/", apidata)
