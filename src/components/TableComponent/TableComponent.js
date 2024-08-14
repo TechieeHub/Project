@@ -54,6 +54,7 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
 
   const handleSaveChanges = () => {
     setEditedColumns(tempColumns);
+    handleEditColumnName(tempColumns)
     setOpen(false);
   };
 
@@ -101,13 +102,16 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
 
   //Ishan
   const  handleEditColumnName=(data)=>{
+
+    console.log('oiuoiuoi',data)
     const apidata={
-        column_name: data
+        old_column_name: "Name",
+    new_column_name: "Name Of Person"
     }
     axios
     .post("http://localhost:8000/api/rename-column/", apidata)
     .then((response) => refreshDataHandler(true))
-    .catch((error) => alert("Something went wrong"));
+    .catch((error) => alert("Old and new Name are Same"));
     }
   const handleExport = async () => {
     try {
