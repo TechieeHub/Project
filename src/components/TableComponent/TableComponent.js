@@ -62,8 +62,8 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
       ...row,
       [newColumnName]: newColumnValue,
     }));
-
-    setExcelData(updatedData);
+    addNewColumnHandler(newColumnName)
+    // setExcelData(updatedData);
     setEditedColumns((prev) => ({ ...prev, [newColumnName]: newColumnName }));
     setNewColumnName("");
     setNewColumnValue("");
@@ -194,6 +194,19 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
       .then((response) => refreshDataHandler(true))
       .catch((error) => console.log("error", error));
   };
+
+
+  const addNewColumnHandler=(columnName)=>{
+    const data=
+      {
+        column_name: columnName
+      
+    }
+    console.log('columnName',data)
+
+    axios.post('http://localhost:8000/api/add-column/',data).then((response) => refreshDataHandler(true))
+    .catch((error) => alert('Something went wrong'))
+  }
   return (
     <>
       <Button
