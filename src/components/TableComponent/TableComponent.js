@@ -172,15 +172,29 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
 
   const editRowHandler = (data) => {
     const { _id, ...dataWithoutId } = data
-    console.log('editRowHandler',dataWithoutId)
-
-    axios
+    const areAllValuesBlank = Object.values(dataWithoutId).every(value => 
+      value === '' || value === ' ' || value == null
+    );
+    if(data._id)
+    {
+      axios
       .post(
         `http://localhost:8000/api/create_or_update_record/${data._id}/`,
         dataWithoutId
       )
       .then((response) => refreshDataHandler(true))
       .catch((error) => console.log("error", error));
+    }
+    else{
+      axios
+      .post(
+        `http://localhost:8000/api/create_or_update_record/`,dataWithoutId
+      )
+      .then((response) => refreshDataHandler(true))
+      .catch((error) => console.log("error", error));
+    }
+
+    
   };
   const table = useMaterialReactTable({
     // columns: visibleColumns,
