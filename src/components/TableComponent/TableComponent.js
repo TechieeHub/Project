@@ -73,18 +73,30 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
 
   const handleDeleteColumn = (columnKey) => {
     if (window.confirm("Are you sure you want to delete this column?")) {
-      const updatedColumns = { ...editedColumns };
-      delete updatedColumns[columnKey];
-      setEditedColumns(updatedColumns);
+      // const updatedColumns = { ...editedColumns };
 
-      const updatedData = excelData.map((row) => {
-        const { [columnKey]: _, ...rest } = row;
-        return rest;
-      });
+      handleSoftDeleteColumn(columnKey)
+      // delete updatedColumns[columnKey];
+      // setEditedColumns(updatedColumns);
 
-      setExcelData(updatedData);
+      // const updatedData = excelData.map((row) => {
+      //   const { [columnKey]: _, ...rest } = row;
+      //   return rest;
+      // });
+
+      // setExcelData(updatedData);
     }
   };
+
+ const  handleSoftDeleteColumn=(data)=>{
+  const apidata={
+      column_name: data
+  }
+  axios
+  .post("http://localhost:8000/api/add-column/", apidata)
+  .then((response) => refreshDataHandler(true))
+  .catch((error) => alert("Something went wrong"));
+  }
 
   const handleExport = async () => {
     try {
@@ -166,7 +178,6 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
       const updatedData = [...excelData];
       updatedData[row.index] = values;
       editRowHandler(values);
-      // setExcelData(updatedData); //Ishan
       exitEditingMode();
     },
     renderRowActions: ({ row, table }) => (
