@@ -93,11 +93,22 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
       column_name: data
   }
   axios
-  .post("http://localhost:8000/api/add-column/", apidata)
+  .post("http://localhost:8000/api/soft-delete-column/", apidata)
   .then((response) => refreshDataHandler(true))
   .catch((error) => alert("Something went wrong"));
   }
 
+
+  //Ishan
+  const  handleEditColumnName=(data)=>{
+    const apidata={
+        column_name: data
+    }
+    axios
+    .post("http://localhost:8000/api/rename-column/", apidata)
+    .then((response) => refreshDataHandler(true))
+    .catch((error) => alert("Something went wrong"));
+    }
   const handleExport = async () => {
     try {
       let response;
