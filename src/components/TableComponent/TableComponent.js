@@ -22,14 +22,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
-const TableComponent = ({ excelData, setExcelData }) => {
+const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
   const [open, setOpen] = useState(false);
   const [openAddColumnDialog, setOpenAddColumnDialog] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
   const [tempColumns, setTempColumns] = useState({});
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
-  const [exportOption, setExportOption] = useState(""); // State to manage export option
+  const [exportOption, setExportOption] = useState(""); 
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
@@ -68,6 +68,7 @@ const TableComponent = ({ excelData, setExcelData }) => {
     setNewColumnName("");
     setNewColumnValue("");
     setOpenAddColumnDialog(false);
+    // refreshDataHandler()
   };
 
   const handleDeleteColumn = (columnKey) => {
@@ -85,15 +86,6 @@ const TableComponent = ({ excelData, setExcelData }) => {
     }
   };
 
-  // const handleExport = () => {
-  //   if (exportOption === "pdf") {
-  //     console.log("Exporting to PDF");
-  //     axios.get('http://localhost:8000/api/export/pdf/').then(resp=>console.log('resp',resp)).catch(error=>console.warn('error'))
-  //   } else if (exportOption === "excel") {
-  //     axios.get('http://localhost:8000/api/export/excel/').then(resp=>console.log('resp',resp)).catch(error=>console.warn('error'))
-  //     console.log("Exporting to Excel");
-  //   }
-  // };
   const handleExport = async () => {
     try {
       let response;

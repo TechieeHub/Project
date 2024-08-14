@@ -77,6 +77,11 @@ const UploadExcel = () => {
     }
   };
 
+  const refreshDataHandler=(data)=>{
+
+    alert('data refreshed')
+
+  }
   return (
     <Box>
       <Box
@@ -109,7 +114,10 @@ const UploadExcel = () => {
       </Box>
       {excelData ? (
         <Box>
-          <TableComponent excelData={excelData} setExcelData={setExcelData} />
+          <TableComponent
+           excelData={excelData} setExcelData={setExcelData} 
+           refreshDataHandler={refreshDataHandler}
+           />
           <Button
             onClick={handleAddRow}
             variant="contained"
