@@ -84,6 +84,12 @@ const UploadExcel = () => {
     setRefreshData(!refreshData)
 
   }
+  const addNewRowHandler = (data) => {
+    axios
+      .post(`http://localhost:8000//api/create_or_update_record/`,data)
+      .then((response) => refreshDataHandler(true))
+      .catch((error) => console.log("error", error));
+  };
   return (
     <Box>
       <Box

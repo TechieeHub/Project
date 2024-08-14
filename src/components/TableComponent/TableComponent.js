@@ -57,6 +57,7 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
     setOpen(false);
   };
 
+  console.log("yutyutyu", excelData);
   const handleAddColumn = () => {
     const updatedData = excelData.map((row) => ({
       ...row,
@@ -120,11 +121,12 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
         size: 250,
         enableEditing: true,
         // isVisible: key !== ("_id" && 'is_deleted'),
-        isVisible: key !== "_id" && key !== "is_deleted",
+        // isVisible: key !== "_id" && key !== "is_deleted",
       })),
     [excelData, editedColumns]
   );
-  const visibleColumns = columns.filter((column) => column.isVisible);
+  // const visibleColumns = columns.filter((column) => column.isVisible);
+
   const handleDeleteRow = (rowIndex) => {
     const updatedData = excelData.filter((_, index) => index !== rowIndex);
     updatedData?.length !== 0 && setExcelData(updatedData);
@@ -141,15 +143,28 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
     }
   };
 
+  const editRowHandler = (data) => {
+    // console.log('uiuiouoi',data._id)
+    axios
+      .post(
+        `http://localhost:8000/api/create_or_update_record/${data._id}/`,
+        data
+      )
+      .then((response) => refreshDataHandler(true))
+      .catch((error) => console.log("error", error));
+  };
   const table = useMaterialReactTable({
-    columns: visibleColumns,
+    // columns: visibleColumns,
+    columns,
+
     data: excelData,
     enableEditing: true,
     enableDensityToggle: false,
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
       const updatedData = [...excelData];
       updatedData[row.index] = values;
-      setExcelData(updatedData);
+      editRowHandler(values);
+      // setExcelData(updatedData); //Ishan
       exitEditingMode();
     },
     renderRowActions: ({ row, table }) => (
