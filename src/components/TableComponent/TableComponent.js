@@ -72,20 +72,36 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
     setOpenAddColumnDialog(false);
   };
 
+  // const handleDeleteColumn = (columnKey) => {
+  //   if (window.confirm("Are you sure you want to delete this column?")) {
+  //     // const updatedColumns = { ...editedColumns };
+
+  //     handleSoftDeleteColumn(columnKey)
+  //     // delete updatedColumns[columnKey];
+  //     // setEditedColumns(updatedColumns);
+
+  //     // const updatedData = excelData.map((row) => {
+  //     //   const { [columnKey]: _, ...rest } = row;
+  //     //   return rest;
+  //     // });
+
+  //     // setExcelData(updatedData);
+  //   }
+  // };
+
+  //Ishan
   const handleDeleteColumn = (columnKey) => {
-    if (window.confirm("Are you sure you want to delete this column?")) {
-      // const updatedColumns = { ...editedColumns };
+    if (window.confirm('Are you sure you want to delete this column?')) {
+      const updatedColumns = { ...editedColumns };
+      delete updatedColumns[columnKey];
+      setEditedColumns(updatedColumns);
 
-      handleSoftDeleteColumn(columnKey)
-      // delete updatedColumns[columnKey];
-      // setEditedColumns(updatedColumns);
+      const updatedData = excelData.map((row) => {
+        const { [columnKey]: _, ...rest } = row;
+        return rest;
+      });
 
-      // const updatedData = excelData.map((row) => {
-      //   const { [columnKey]: _, ...rest } = row;
-      //   return rest;
-      // });
-
-      // setExcelData(updatedData);
+      setExcelData(updatedData);
     }
   };
 
@@ -99,8 +115,6 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
   .catch((error) => alert("Something went wrong"));
   }
 
-
-  //Ishan
   const  handleEditColumnName=(data)=>{
 
     console.log('oiuoiuoi',Object.keys(data))
