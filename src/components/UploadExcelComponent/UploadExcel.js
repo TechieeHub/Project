@@ -8,6 +8,7 @@ const UploadExcel = () => {
   const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
   const [excelData, setExcelData] = useState(null);
+  const [refreshData,setRefreshData]=useState(false)
 
   const handleFile = (e) => {
     let fileTypes = [
@@ -54,7 +55,8 @@ const UploadExcel = () => {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
-      setExcelData(data.slice(0, 10)); // Set the data for the table
+      // setExcelData(data.slice(0, 10)); // Set the data for the table
+      setRefreshData(!refreshData)
     } catch (error) {
       console.error("Error uploading file", error);
     }
@@ -65,7 +67,8 @@ const UploadExcel = () => {
       .get("http://localhost:8000/api/data/")
       .then((response) => setExcelData(response.data))
       .catch((error) => console.log("error", error));
-  }, []);
+      setRefreshData(false)
+  }, [refreshData]);
 
   const handleAddRow = () => {
     if (excelData) {
@@ -78,8 +81,7 @@ const UploadExcel = () => {
   };
 
   const refreshDataHandler=(data)=>{
-
-    alert('data refreshed')
+    setRefreshData(!refreshData)
 
   }
   return (

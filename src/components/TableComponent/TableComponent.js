@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -22,14 +22,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
-const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
+const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
   const [open, setOpen] = useState(false);
   const [openAddColumnDialog, setOpenAddColumnDialog] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
   const [tempColumns, setTempColumns] = useState({});
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
-  const [exportOption, setExportOption] = useState(""); 
+  const [exportOption, setExportOption] = useState("");
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
@@ -68,11 +68,10 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
     setNewColumnName("");
     setNewColumnValue("");
     setOpenAddColumnDialog(false);
-    // refreshDataHandler()
   };
 
   const handleDeleteColumn = (columnKey) => {
-    if (window.confirm('Are you sure you want to delete this column?')) {
+    if (window.confirm("Are you sure you want to delete this column?")) {
       const updatedColumns = { ...editedColumns };
       delete updatedColumns[columnKey];
       setEditedColumns(updatedColumns);
@@ -98,8 +97,10 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
           responseType: "blob",
         });
       }
-  
-      const blob = new Blob([response.data], { type: response.headers["content-type"] });
+
+      const blob = new Blob([response.data], {
+        type: response.headers["content-type"],
+      });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
       link.download = exportOption === "pdf" ? "export.pdf" : "export.xlsx";
@@ -118,10 +119,12 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
         header: editedColumns[key] || key,
         size: 250,
         enableEditing: true,
+        // isVisible: key !== ("_id" && 'is_deleted'),
+        isVisible: key !== "_id" && key !== "is_deleted",
       })),
     [excelData, editedColumns]
   );
-
+  const visibleColumns = columns.filter((column) => column.isVisible);
   const handleDeleteRow = (rowIndex) => {
     const updatedData = excelData.filter((_, index) => index !== rowIndex);
     updatedData?.length !== 0 && setExcelData(updatedData);
@@ -130,7 +133,8 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
       if (window.confirm("Are you sure you want to delete this row?")) {
-        handleDeleteRow(row.index);
+        // handleDeleteRow(row.index);
+        deleteRowHandler(row.original._id);
       }
     } else {
       alert("The Last Record cannot be deleted");
@@ -138,7 +142,7 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
   };
 
   const table = useMaterialReactTable({
-    columns,
+    columns:visibleColumns,
     data: excelData,
     enableEditing: true,
     enableDensityToggle: false,
@@ -150,16 +154,24 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
     },
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: "flex", gap: "1rem" }}>
-        <Tooltip title="Edit">
-          <IconButton onClick={() => table.setEditingRow(row)}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        {!row.original.is_deleted && (
+          <Tooltip title="Edit">
+            <IconButton onClick={() => table.setEditingRow(row)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+
+        {!row.original.is_deleted && (
+          <Tooltip title="Delete">
+            <IconButton
+              color="error"
+              onClick={() => openDeleteConfirmModal(row)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
     ),
     muiTableHeadCellProps: {
@@ -169,8 +181,19 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
         fontWeight: "bold",
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.original.is_deleted && "#ffc7c7",
+      },
+    }),
   });
 
+  const deleteRowHandler = (rowId) => {
+    axios
+      .delete(`http://localhost:8000/api/create_or_update_record/${rowId}/`)
+      .then((response) => refreshDataHandler(true))
+      .catch((error) => console.log("error", error));
+  };
   return (
     <>
       <Button
@@ -197,7 +220,9 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
       >
         Add Column
       </Button>
-      <FormControl sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}>
+      <FormControl
+        sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}
+      >
         <InputLabel id="export-select-label">Export</InputLabel>
         <Select
           labelId="export-select-label"
@@ -251,8 +276,14 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
           ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} sx={{ color: 'grey' }}>Cancel</Button>
-          <Button onClick={handleSaveChanges} variant="contained" sx={{ backgroundColor: 'grey' }}>
+          <Button onClick={handleCloseDialog} sx={{ color: "grey" }}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSaveChanges}
+            variant="contained"
+            sx={{ backgroundColor: "grey" }}
+          >
             Save
           </Button>
         </DialogActions>
@@ -271,8 +302,14 @@ const TableComponent = ({ excelData, setExcelData,refreshDataHandler }) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseAddColumnDialog} sx={{ color: 'grey' }}>Cancel</Button>
-          <Button onClick={handleAddColumn} variant="contained" sx={{ backgroundColor: 'grey' }}>
+          <Button onClick={handleCloseAddColumnDialog} sx={{ color: "grey" }}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleAddColumn}
+            variant="contained"
+            sx={{ backgroundColor: "grey" }}
+          >
             Add Column
           </Button>
         </DialogActions>
