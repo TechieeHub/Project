@@ -62,7 +62,7 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
       ...row,
       [newColumnName]: newColumnValue,
     }));
-    addNewColumnHandler(newColumnName)
+    addNewColumnHandler(newColumnName);
     // setExcelData(updatedData);
     setEditedColumns((prev) => ({ ...prev, [newColumnName]: newColumnName }));
     setNewColumnName("");
@@ -142,7 +142,7 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
   };
 
   const table = useMaterialReactTable({
-    columns:visibleColumns,
+    columns: visibleColumns,
     data: excelData,
     enableEditing: true,
     enableDensityToggle: false,
@@ -195,18 +195,17 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
       .catch((error) => console.log("error", error));
   };
 
+  const addNewColumnHandler = (columnName) => {
+    const data = {
+      column_name: columnName,
+    };
+    console.log("columnName", data);
 
-  const addNewColumnHandler=(columnName)=>{
-    const data=
-      {
-        column_name: columnName
-      
-    }
-    console.log('columnName',data)
-
-    axios.post('http://localhost:8000/api/add-column/',data).then((response) => refreshDataHandler(true))
-    .catch((error) => alert('Something went wrong'))
-  }
+    axios
+      .post("http://localhost:8000/api/add-column/", data)
+      .then((response) => refreshDataHandler(true))
+      .catch((error) => alert("Something went wrong"));
+  };
   return (
     <>
       <Button
