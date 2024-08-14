@@ -144,7 +144,7 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
   };
 
   const editRowHandler = (data) => {
-    // console.log('uiuiouoi',data._id)
+    console.log('editRowHandler',data)
     axios
       .post(
         `http://localhost:8000/api/create_or_update_record/${data._id}/`,
