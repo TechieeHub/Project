@@ -309,21 +309,45 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       >
         Add Column
       </Button>
-      <FormControl
-        sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}
-      >
-        <InputLabel id="export-select-label">Export</InputLabel>
-        <Select
-          labelId="export-select-label"
-          id="export-select"
-          value={exportOption}
-          label="Export"
-          onChange={(e) => setExportOption(e.target.value)}
-        >
-          <MenuItem value="pdf">Export to PDF</MenuItem>
-          <MenuItem value="excel">Export to Excel</MenuItem>
-        </Select>
-      </FormControl>
+      
+      <FormControl sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}>
+  <InputLabel 
+   sx={{
+    fontSize: "14px",  // Reduce the font size of the label
+    lineHeight: "1.2", // Adjust the line height if needed
+    transform: "translate(14px, 8px) scale(1)", // Adjust label position
+  }}
+  id="export-select-label">Export</InputLabel>
+  <Select
+    labelId="export-select-label"
+    id="export-select"
+    value={exportOption}
+    label="Export"
+    onChange={(e) => setExportOption(e.target.value)}
+    sx={{
+      height: "30px",  // Set the height of the select box
+      minHeight: "30px",  // Ensure the minimum height is consistent
+      fontSize: "14px",  // Optional: Adjust font size to fit within the reduced height
+      paddingTop: "2px", // Optional: Adjust padding to vertically center the text
+      paddingBottom: "2px", // Optional: Adjust padding to vertically center the text
+    }}
+    MenuProps={{
+      PaperProps: {
+        sx: {
+          maxHeight: 200, // Limit the dropdown height
+          '& .MuiMenuItem-root': {
+            fontSize: '14px', // Adjust font size for menu items
+            padding: '4px 8px', // Reduce padding for menu items
+          },
+        },
+      },
+    }}
+  >
+    <MenuItem value="pdf">Export to PDF</MenuItem>
+    <MenuItem value="excel">Export to Excel</MenuItem>
+  </Select>
+</FormControl>
+
       <Button
         variant="contained"
         sx={{
