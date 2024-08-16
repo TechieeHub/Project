@@ -159,7 +159,8 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
         accessorKey: key,
         header: editedColumns[key] || key,
         size: 250,
-        enableEditing: true,
+        // enableEditing: true,
+        enableEditing: key !== "_id",
         muiTableBodyCellProps: () => ({
           sx: {
             backgroundColor: deletedColumns.includes(key) ? '#FFB7C5' : 'transparent', 
