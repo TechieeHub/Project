@@ -65,7 +65,7 @@ const UploadExcel = () => {
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/data/")
-      .then((response) => setExcelData(response.data))
+      .then((response) => setExcelData(response.data.records))
       .catch((error) => console.log("error", error));
       setRefreshData(false)
   }, [refreshData]);
