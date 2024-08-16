@@ -161,6 +161,13 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
         header: editedColumns[key] || key,
         size: 250,
         enableEditing: true,
+        // Tochnage color of column
+        // muiTableBodyCellProps: ({ cell }) => ({
+        //   sx: {
+        //     backgroundColor: cell.getValue() === 'Active' ? 'black' : 'green',
+        //     color: 'white',
+        //   },
+        // }),
         // isVisible: key !== ("_id" && 'is_deleted'),
         // isVisible: key !== "_id" && key !== "is_deleted",
       })),
