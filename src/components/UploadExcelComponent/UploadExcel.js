@@ -9,6 +9,7 @@ const UploadExcel = () => {
   const [typeError, setTypeError] = useState(null);
   const [excelData, setExcelData] = useState(null);
   const [refreshData,setRefreshData]=useState(false)
+  const [deletedColumns,setDeletedColumns]=useState(null)
 
   const handleFile = (e) => {
     let fileTypes = [
@@ -65,7 +66,7 @@ const UploadExcel = () => {
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/data/")
-      .then((response) => setExcelData(response.data.records))
+      .then((response) => {setExcelData(response.data.records);setDeletedColumns(response.data.deleted_columns)})
       .catch((error) => console.log("error", error));
       setRefreshData(false)
   }, [refreshData]);
@@ -125,6 +126,7 @@ const UploadExcel = () => {
           <TableComponent
            excelData={excelData} setExcelData={setExcelData} 
            refreshDataHandler={refreshDataHandler}
+           deletedColumns={deletedColumns}
            />
           <Button
             onClick={handleAddRow}

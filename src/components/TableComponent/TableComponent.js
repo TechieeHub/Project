@@ -22,7 +22,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
-const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
+const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHandler }) => {
   const [open, setOpen] = useState(false);
   const [openAddColumnDialog, setOpenAddColumnDialog] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
@@ -58,7 +58,7 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
     setOpen(false);
   };
 
-  console.log("yutyutyu", excelData);
+  console.log("yutyutyu", deletedColumns);
   const handleAddColumn = () => {
     const updatedData = excelData.map((row) => ({
       ...row,
@@ -72,38 +72,38 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
     setOpenAddColumnDialog(false);
   };
 
-  // const handleDeleteColumn = (columnKey) => {
-  //   if (window.confirm("Are you sure you want to delete this column?")) {
-  //     // const updatedColumns = { ...editedColumns };
-
-  //     handleSoftDeleteColumn(columnKey)
-  //     // delete updatedColumns[columnKey];
-  //     // setEditedColumns(updatedColumns);
-
-  //     // const updatedData = excelData.map((row) => {
-  //     //   const { [columnKey]: _, ...rest } = row;
-  //     //   return rest;
-  //     // });
-
-  //     // setExcelData(updatedData);
-  //   }
-  // };
-
-  //Ishan
   const handleDeleteColumn = (columnKey) => {
-    if (window.confirm('Are you sure you want to delete this column?')) {
-      const updatedColumns = { ...editedColumns };
-      delete updatedColumns[columnKey];
-      setEditedColumns(updatedColumns);
+    if (window.confirm("Are you sure you want to delete this column?")) {
+      // const updatedColumns = { ...editedColumns };
 
-      const updatedData = excelData.map((row) => {
-        const { [columnKey]: _, ...rest } = row;
-        return rest;
-      });
+      handleSoftDeleteColumn(columnKey)
+      // delete updatedColumns[columnKey];
+      // setEditedColumns(updatedColumns);
 
-      setExcelData(updatedData);
+      // const updatedData = excelData.map((row) => {
+      //   const { [columnKey]: _, ...rest } = row;
+      //   return rest;
+      // });
+
+      // setExcelData(updatedData);
     }
   };
+
+  //Ishan
+  // const handleDeleteColumn = (columnKey) => {
+  //   if (window.confirm('Are you sure you want to delete this column?')) {
+  //     const updatedColumns = { ...editedColumns };
+  //     delete updatedColumns[columnKey];
+  //     setEditedColumns(updatedColumns);
+
+  //     const updatedData = excelData.map((row) => {
+  //       const { [columnKey]: _, ...rest } = row;
+  //       return rest;
+  //     });
+
+  //     setExcelData(updatedData);
+  //   }
+  // };
 
  const  handleSoftDeleteColumn=(data)=>{
   const apidata={
@@ -117,7 +117,6 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
 
   const  handleEditColumnName=(data)=>{
 
-    console.log('oiuoiuoi',Object.keys(data))
     const apidata={
         old_column_name: Object.keys(data)[0],
     new_column_name: Object.values(data)[0]
@@ -161,17 +160,16 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
         header: editedColumns[key] || key,
         size: 250,
         enableEditing: true,
-        // Tochnage color of column
-        muiTableBodyCellProps: ({ cell }) => ({
+        muiTableBodyCellProps: () => ({
           sx: {
-            backgroundColor: cell.getValue() === 'Active' ? 'black' : 'green',
-            color: 'white',
+            backgroundColor: deletedColumns.includes(key) ? '#cd5700' : 'transparent', 
+            color: deletedColumns.includes(key) ? 'white' : 'black', 
           },
         }),
         isVisible: key !== ("_id" && 'is_deleted'),
         // isVisible: key !== "_id" && key !== "is_deleted",
       })),
-    [excelData, editedColumns]
+    [excelData, editedColumns,deletedColumns]
   );
   // const visibleColumns = columns.filter((column) => column.isVisible);
 
@@ -277,7 +275,6 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
     const data = {
       column_name: columnName,
     };
-    console.log("columnName", data);
 
     axios
       .post("http://localhost:8000/api/add-column/", data)
@@ -339,7 +336,7 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
         Export
       </Button>
 
-      <Dialog open={open} onClose={handleCloseDialog}>
+      {/* <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle>Edit Column Names</DialogTitle>
         <DialogContent>
           {Object.keys(excelData[0] || {}).map((key) => (
@@ -377,7 +374,48 @@ const TableComponent = ({ excelData, setExcelData, refreshDataHandler }) => {
             Save
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
+      <Dialog open={open} onClose={handleCloseDialog}>
+  <DialogTitle>Edit Column Names</DialogTitle>
+  <DialogContent>
+    {Object.keys(excelData[0] || {})
+      .filter((key) => !deletedColumns.includes(key)) // Filter out deleted columns
+      .map((key) => (
+        <Box
+          key={key}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "8px",
+          }}
+        >
+          <TextField
+            label={`Edit ${key}`}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            value={tempColumns[key] !== undefined ? tempColumns[key] : key}
+            onChange={(e) => handleColumnNameChange(key, e.target.value)}
+          />
+          <IconButton color="error" onClick={() => handleDeleteColumn(key)}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      ))}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseDialog} sx={{ color: "grey" }}>
+      Cancel
+    </Button>
+    <Button
+      onClick={handleSaveChanges}
+      variant="contained"
+      sx={{ backgroundColor: "grey" }}
+    >
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
 
       <Dialog open={openAddColumnDialog} onClose={handleCloseAddColumnDialog}>
         <DialogTitle>Add New Column</DialogTitle>
