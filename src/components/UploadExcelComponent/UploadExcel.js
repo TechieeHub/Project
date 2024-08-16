@@ -91,6 +91,7 @@ const UploadExcel = () => {
       .then((response) => refreshDataHandler(true))
       .catch((error) => console.log("error", error));
   };
+  
   return (
     <Box>
       <Box
@@ -121,7 +122,7 @@ const UploadExcel = () => {
           </form>
         </Box>
       </Box>
-      {excelData.records ? (
+      {excelData?.length>0 ? (
         <Box>
           <TableComponent
            excelData={excelData} setExcelData={setExcelData} 
