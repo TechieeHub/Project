@@ -336,7 +336,7 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
         Export
       </Button>
 
-      <Dialog open={open} onClose={handleCloseDialog}>
+      {/* <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle>Edit Column Names</DialogTitle>
         <DialogContent>
           {Object.keys(excelData[0] || {}).map((key) => (
@@ -374,7 +374,49 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
             Save
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
+      <Dialog open={open} onClose={handleCloseDialog}>
+  <DialogTitle>Edit Column Names</DialogTitle>
+  <DialogContent>
+    {Object.keys(excelData[0] || {})
+      .filter((key) => !deletedColumns.includes(key)) // Filter out deleted columns
+      .map((key) => (
+        <Box
+          key={key}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "8px",
+          }}
+        >
+          <TextField
+            label={`Edit ${key}`}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            value={tempColumns[key] !== undefined ? tempColumns[key] : key}
+            onChange={(e) => handleColumnNameChange(key, e.target.value)}
+          />
+          <IconButton color="error" onClick={() => handleDeleteColumn(key)}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      ))}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseDialog} sx={{ color: "grey" }}>
+      Cancel
+    </Button>
+    <Button
+      onClick={handleSaveChanges}
+      variant="contained"
+      sx={{ backgroundColor: "grey" }}
+    >
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
+
 
       <Dialog open={openAddColumnDialog} onClose={handleCloseAddColumnDialog}>
         <DialogTitle>Add New Column</DialogTitle>
