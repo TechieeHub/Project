@@ -219,7 +219,7 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
   const table = useMaterialReactTable({
     // columns: visibleColumns,
     columns,
-
+    initialState: { columnVisibility: {'_id': false,'is_deleted': false } },
     data: excelData,
     enableEditing: true,
     enableDensityToggle: false,
