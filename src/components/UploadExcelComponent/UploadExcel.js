@@ -121,7 +121,7 @@ const UploadExcel = () => {
           </form>
         </Box>
       </Box>
-      {excelData ? (
+      {excelData.records ? (
         <Box>
           <TableComponent
            excelData={excelData} setExcelData={setExcelData} 
