@@ -162,8 +162,9 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
         enableEditing: true,
         muiTableBodyCellProps: () => ({
           sx: {
-            backgroundColor: deletedColumns.includes(key) ? '#cd5700' : 'transparent', 
-            color: deletedColumns.includes(key) ? 'white' : 'black', 
+            backgroundColor: deletedColumns.includes(key) ? '#FFB7C5' : 'transparent', 
+            color: deletedColumns.includes(key) ? 'black' : 'black', 
+            opacity: deletedColumns.includes(key) ? 0.8 : 1,
           },
         }),
         isVisible: key !== ("_id" && 'is_deleted'),
@@ -259,7 +260,8 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
     },
     muiTableBodyRowProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.original.is_deleted && "#ffc7c7",
+        backgroundColor: row.original.is_deleted && "#F8C8DC",
+        opacity:row.original.is_deleted && 0.8
       },
     }),
   });
@@ -326,6 +328,7 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
         variant="contained"
         sx={{
           maxHeight: "30px",
+          
           marginLeft: "20px",
           marginTop: "30px",
           backgroundColor: "grey",
