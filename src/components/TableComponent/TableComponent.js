@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -22,7 +22,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
-const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHandler }) => {
+const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHandler }) => {
   const [open, setOpen] = useState(false);
   const [openAddColumnDialog, setOpenAddColumnDialog] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
@@ -58,12 +58,14 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
     setOpen(false);
   };
 
+  console.log("yutyutyu", deletedColumns);
   const handleAddColumn = () => {
     const updatedData = excelData.map((row) => ({
       ...row,
       [newColumnName]: newColumnValue,
     }));
     addNewColumnHandler(newColumnName);
+    // setExcelData(updatedData);
     setEditedColumns((prev) => ({ ...prev, [newColumnName]: newColumnName }));
     setNewColumnName("");
     setNewColumnValue("");
@@ -72,31 +74,58 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
 
   const handleDeleteColumn = (columnKey) => {
     if (window.confirm("Are you sure you want to delete this column?")) {
-      handleSoftDeleteColumn(columnKey);
+      // const updatedColumns = { ...editedColumns };
+
+      handleSoftDeleteColumn(columnKey)
+      // delete updatedColumns[columnKey];
+      // setEditedColumns(updatedColumns);
+
+      // const updatedData = excelData.map((row) => {
+      //   const { [columnKey]: _, ...rest } = row;
+      //   return rest;
+      // });
+
+      // setExcelData(updatedData);
     }
   };
 
-  const handleSoftDeleteColumn = (data) => {
-    const apidata = {
+  //Ishan
+  // const handleDeleteColumn = (columnKey) => {
+  //   if (window.confirm('Are you sure you want to delete this column?')) {
+  //     const updatedColumns = { ...editedColumns };
+  //     delete updatedColumns[columnKey];
+  //     setEditedColumns(updatedColumns);
+
+  //     const updatedData = excelData.map((row) => {
+  //       const { [columnKey]: _, ...rest } = row;
+  //       return rest;
+  //     });
+
+  //     setExcelData(updatedData);
+  //   }
+  // };
+
+ const  handleSoftDeleteColumn=(data)=>{
+  const apidata={
       column_name: data
-    };
-    axios
-      .post("http://localhost:8000/api/soft-delete-column/", apidata)
-      .then((response) => refreshDataHandler(true))
-      .catch((error) => alert("Something went wrong"));
-  };
+  }
+  axios
+  .post("http://localhost:8000/api/soft-delete-column/", apidata)
+  .then((response) => refreshDataHandler(true))
+  .catch((error) => alert("Something went wrong"));
+  }
 
-  const handleEditColumnName = (data) => {
-    const apidata = {
-      old_column_name: Object.keys(data)[0],
-      new_column_name: Object.values(data)[0]
-    };
-    axios
-      .post("http://localhost:8000/api/rename-column/", apidata)
-      .then((response) => refreshDataHandler(true))
-      .catch((error) => console.log("Old and new Name are Same"));
-  };
+  const  handleEditColumnName=(data)=>{
 
+    const apidata={
+        old_column_name: Object.keys(data)[0],
+    new_column_name: Object.values(data)[0]
+    }
+    axios
+    .post("http://localhost:8000/api/rename-column/", apidata)
+    .then((response) => refreshDataHandler(true))
+    .catch((error) => console.log("Old and new Name are Same"));
+    }
   const handleExport = async () => {
     try {
       let response;
@@ -124,24 +153,27 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
       console.error("Error exporting file:", error);
     }
   };
-
   const columns = useMemo(
-    () => Object.keys(excelData[0] || {}).map((key) => ({
-      accessorKey: key,
-      header: editedColumns[key] || key,
-      size: 250,
-      enableEditing: key !== "_id",
-      isVisible: !deletedColumns.includes(key), // Determine visibility based on deletedColumns
-      muiTableBodyCellProps: () => ({
-        sx: {
-          backgroundColor: deletedColumns.includes(key) ? '#FFB7C5' : 'transparent',
-          color: deletedColumns.includes(key) ? 'black' : 'black',
-          opacity: deletedColumns.includes(key) ? 0.8 : 1,
-        },
-      }),
-    })),
-    [excelData, editedColumns, deletedColumns]
+    () =>
+      Object.keys(excelData[0] || {}).map((key) => ({
+        accessorKey: key,
+        header: editedColumns[key] || key,
+        size: 250,
+        // enableEditing: true,
+        enableEditing: key !== "_id",
+        muiTableBodyCellProps: () => ({
+          sx: {
+            backgroundColor: deletedColumns.includes(key) ? '#FFB7C5' : 'transparent', 
+            color: deletedColumns.includes(key) ? 'black' : 'black', 
+            opacity: deletedColumns.includes(key) ? 0.8 : 1,
+          },
+        }),
+        isVisible: key !== ("_id" && 'is_deleted'),
+        // isVisible: key !== "_id" && key !== "is_deleted",
+      })),
+    [excelData, editedColumns,deletedColumns]
   );
+  // const visibleColumns = columns.filter((column) => column.isVisible);
 
   const handleDeleteRow = (rowIndex) => {
     const updatedData = excelData.filter((_, index) => index !== rowIndex);
@@ -151,6 +183,7 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
       if (window.confirm("Are you sure you want to delete this row?")) {
+        // handleDeleteRow(row.index);
         deleteRowHandler(row.original._id);
       }
     } else {
@@ -159,32 +192,36 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
   };
 
   const editRowHandler = (data) => {
-    const { _id, ...dataWithoutId } = data;
-    const areAllValuesBlank = Object.values(dataWithoutId).every(value =>
+    const { _id, ...dataWithoutId } = data
+    const areAllValuesBlank = Object.values(dataWithoutId).every(value => 
       value === '' || value === ' ' || value == null
     );
-    if (data._id) {
+    if(data._id)
+    {
       axios
-        .post(
-          `http://localhost:8000/api/create_or_update_record/${data._id}/`,
-          dataWithoutId
-        )
-        .then((response) => refreshDataHandler(true))
-        .catch((error) => console.log("error", error));
-    } else {
-      axios
-        .post(
-          `http://localhost:8000/api/create_or_update_record/`, dataWithoutId
-        )
-        .then((response) => refreshDataHandler(true))
-        .catch((error) => console.log("error", error));
+      .post(
+        `http://localhost:8000/api/create_or_update_record/${data._id}/`,
+        dataWithoutId
+      )
+      .then((response) => refreshDataHandler(true))
+      .catch((error) => console.log("error", error));
     }
-  };
+    else{
+      axios
+      .post(
+        `http://localhost:8000/api/create_or_update_record/`,dataWithoutId
+      )
+      .then((response) => refreshDataHandler(true))
+      .catch((error) => console.log("error", error));
+    }
 
+    
+  };
   const table = useMaterialReactTable({
-    columns: columns.filter((column) => column.isVisible), // Filter out hidden columns
-    initialState: { columnVisibility: {'_id': false,'is_deleted': false} },
-    data:  excelData.filter(row => !row.is_deleted), // To hide Soft Deleted Rows
+    // columns: visibleColumns,
+    columns,
+    initialState: { columnVisibility: {'_id': false,'is_deleted': false } },
+    data: excelData,
     enableEditing: true,
     enableDensityToggle: false,
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
@@ -225,7 +262,7 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
     muiTableBodyRowProps: ({ row }) => ({
       sx: {
         backgroundColor: row.original.is_deleted && "#F8C8DC",
-        opacity: row.original.is_deleted && 0.8
+        opacity:row.original.is_deleted && 0.8
       },
     }),
   });
@@ -257,7 +294,6 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
       setExcelData([...excelData, newRow]);
     }
   };
-
   return (
     <>
       <Button
@@ -273,17 +309,17 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
         Edit columns
       </Button>
       <Button
-        onClick={handleAddRow}
-        variant="contained"
-        sx={{
-          maxHeight: "30px",
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-      >
-        Add New Row
-      </Button> 
+            onClick={handleAddRow}
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+          >
+            Add New Row
+          </Button> 
       <Button
         variant="contained"
         sx={{
@@ -297,99 +333,101 @@ const TableComponent = ({ excelData, setExcelData, deletedColumns, refreshDataHa
         Add Column
       </Button>
        
+      
       <FormControl sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}>
-        <InputLabel 
-          sx={{
-            fontSize: "14px",
-            lineHeight: "1.2",
-            transform: "translate(14px, 8px) scale(1)",
-          }}
-          id="export-select-label">Export</InputLabel>
-        <Select
-          labelId="export-select-label"
-          id="export-select"
-          value={exportOption}
-          label="Export"
-          onChange={(e) => setExportOption(e.target.value)}
-          sx={{
-            height: "30px",
-            minHeight: "30px",
-            fontSize: "14px",
-            paddingTop: "2px",
-            paddingBottom: "2px",
-          }}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                maxHeight: 200,
-                '& .MuiMenuItem-root': {
-                  fontSize: '14px',
-                  padding: '4px 8px',
-                },
-              },
-            },
-          }}
-        >
-          <MenuItem value="pdf">Export to PDF</MenuItem>
-          <MenuItem value="excel">Export to Excel</MenuItem>
-        </Select>
-      </FormControl>
+  <InputLabel 
+   sx={{
+    fontSize: "14px",  // Reduce the font size of the label
+    lineHeight: "1.2", // Adjust the line height if needed
+    transform: "translate(14px, 8px) scale(1)", // Adjust label position
+  }}
+  id="export-select-label">Export</InputLabel>
+  <Select
+    labelId="export-select-label"
+    id="export-select"
+    value={exportOption}
+    label="Export"
+    onChange={(e) => setExportOption(e.target.value)}
+    sx={{
+      height: "30px",  // Set the height of the select box
+      minHeight: "30px",  // Ensure the minimum height is consistent
+      fontSize: "14px",  // Optional: Adjust font size to fit within the reduced height
+      paddingTop: "2px", // Optional: Adjust padding to vertically center the text
+      paddingBottom: "2px", // Optional: Adjust padding to vertically center the text
+    }}
+    MenuProps={{
+      PaperProps: {
+        sx: {
+          maxHeight: 200, // Limit the dropdown height
+          '& .MuiMenuItem-root': {
+            fontSize: '14px', // Adjust font size for menu items
+            padding: '4px 8px', // Reduce padding for menu items
+          },
+        },
+      },
+    }}
+  >
+    <MenuItem value="pdf">Export to PDF</MenuItem>
+    <MenuItem value="excel">Export to Excel</MenuItem>
+  </Select>
+</FormControl>
 
       <Button
         variant="contained"
         sx={{
           maxHeight: "30px",
+          
           marginLeft: "20px",
           marginTop: "30px",
           backgroundColor: "grey",
         }}
         onClick={handleExport}
-        disabled={!exportOption}
+        disabled={!exportOption} // Disable the button if no option is selected
       >
         Export
       </Button>
-      
       <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>Edit Column Names</DialogTitle>
-        <DialogContent>
-          {Object.keys(excelData[0] || {}).filter((key) => key !== "_id")
-            .filter((key) => !deletedColumns.includes(key)) // Filter out deleted columns
-            .map((key) => (
-              <Box
-                key={key}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "8px",
-                }}
-              >
-                <TextField
-                  label={`Edit ${key}`}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  value={tempColumns[key] !== undefined ? tempColumns[key] : key}
-                  onChange={(e) => handleColumnNameChange(key, e.target.value)}
-                />
-                <IconButton color="error" onClick={() => handleDeleteColumn(key)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            ))}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} sx={{ color: "grey" }}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSaveChanges}
-            variant="contained"
-            sx={{ backgroundColor: "grey" }}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+  <DialogTitle>Edit Column Names</DialogTitle>
+  <DialogContent>
+    {Object.keys(excelData[0] || {}).filter((key) => key!=="_id")
+      .filter((key) => !deletedColumns.includes(key)) // Filter out deleted columns
+      .map((key) => (
+        <Box
+          key={key}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "8px",
+          }}
+        >
+          <TextField
+            label={`Edit ${key}`}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            value={tempColumns[key] !== undefined ? tempColumns[key] : key}
+            onChange={(e) => handleColumnNameChange(key, e.target.value)}
+          />
+          <IconButton color="error" onClick={() => handleDeleteColumn(key)}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      ))}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseDialog} sx={{ color: "grey" }}>
+      Cancel
+    </Button>
+    <Button
+      onClick={handleSaveChanges}
+      variant="contained"
+      sx={{ backgroundColor: "grey" }}
+    >
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
+
 
       <Dialog open={openAddColumnDialog} onClose={handleCloseAddColumnDialog}>
         <DialogTitle>Add New Column</DialogTitle>
