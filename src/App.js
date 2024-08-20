@@ -5,15 +5,12 @@ import ChartData from './components/Charts/ChartData'
 const App = () => {
   return (
     <>  
-    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />}>
-          {/* <Route path="*" element={<NoPage />} /> */}
         </Route>
         <Route path="charts" element={<ChartData />} />
 
       </Routes>
-    </BrowserRouter>
     </>
   )
 }
