@@ -284,6 +284,16 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       .then((response) => refreshDataHandler(true))
       .catch((error) => alert("Something went wrong"));
   };
+
+  const handleAddRow = () => {
+    if (excelData) {
+      const newRow = {};
+      Object.keys(excelData[0]).forEach((key) => {
+        newRow[key] = "";
+      });
+      setExcelData([...excelData, newRow]);
+    }
+  };
   return (
     <>
       <Button
@@ -299,6 +309,18 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
         Edit columns
       </Button>
       <Button
+            onClick={handleAddRow}
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+          >
+            Add New Row
+          </Button> 
+      <Button
         variant="contained"
         sx={{
           maxHeight: "30px",
@@ -310,6 +332,7 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       >
         Add Column
       </Button>
+       
       
       <FormControl sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}>
   <InputLabel 

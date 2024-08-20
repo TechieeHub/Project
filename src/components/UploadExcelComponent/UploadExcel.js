@@ -71,26 +71,11 @@ const UploadExcel = () => {
       setRefreshData(false)
   }, [refreshData]);
 
-  const handleAddRow = () => {
-    if (excelData) {
-      const newRow = {};
-      Object.keys(excelData[0]).forEach((key) => {
-        newRow[key] = "";
-      });
-      setExcelData([...excelData, newRow]);
-    }
-  };
 
   const refreshDataHandler=(data)=>{
     setRefreshData(!refreshData)
 
   }
-  const addNewRowHandler = (data) => {
-    axios
-      .post(`http://localhost:8000//api/create_or_update_record/`,data)
-      .then((response) => refreshDataHandler(true))
-      .catch((error) => console.log("error", error));
-  };
   
   return (
     <Box>
@@ -129,19 +114,6 @@ const UploadExcel = () => {
            refreshDataHandler={refreshDataHandler}
            deletedColumns={deletedColumns}
            />
-          <Button
-            onClick={handleAddRow}
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              margin: "30px 0px 100px 0px",
-              alignContent: "center",
-              left: "50%",
-              backgroundColor: "grey",
-            }}
-          >
-            Add New Row
-          </Button>
         </Box>
       ) : (
         <Box sx={{ height: "40px", background: "#D3D3D3", marginTop: "3px" }}>
