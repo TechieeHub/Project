@@ -45,7 +45,8 @@ const AppHeader=()=> {
           <Typography
             variant="h6"
             noWrap
-            component="a"
+            component={Link}
+            to='/'
             // href="#app-bar-wit-menu"
             sx={{
               mr: 2,
