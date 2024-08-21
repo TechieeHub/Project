@@ -58,7 +58,6 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
     setOpen(false);
   };
 
-  console.log("yutyutyu", deletedColumns);
   const handleAddColumn = () => {
     const updatedData = excelData.map((row) => ({
       ...row,
@@ -155,7 +154,9 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
   };
   const columns = useMemo(
     () =>
-      Object.keys(excelData[0] || {}).map((key) => ({
+      Object.keys(excelData[0] || {})
+    .filter((key) => !deletedColumns.includes(key)) // To hide Deleted Columns
+    .map((key) => ({
         accessorKey: key,
         header: editedColumns[key] || key,
         size: 250,
@@ -221,7 +222,7 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
     // columns: visibleColumns,
     columns,
     initialState: { columnVisibility: {'_id': false,'is_deleted': false } },
-    data: excelData,
+    data:  excelData.filter(row => !row.is_deleted),  // Filter out deleted rows
     enableEditing: true,
     enableDensityToggle: false,
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
