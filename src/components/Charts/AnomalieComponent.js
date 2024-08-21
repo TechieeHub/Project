@@ -17,6 +17,9 @@ const AnomalieComponent = () => {
   const excelData = useSelector((state) => state.excel.data)?.filter(
     (data) => data.is_deleted !== true
   );
+
+
+  console.log('lkjncxkja',excelData?.map(data=>data?.Deviation_5Day_Today))
   return (
     <TableContainer component={Paper}>
       <Typography sx={{ fontSize: "25px", fontWeight:600 , backgroundColor:'grey'}}>
@@ -37,7 +40,7 @@ const AnomalieComponent = () => {
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontSize: "17px" ,fontWeight:550}}>No anomalies</TableCell>
-            <TableCell>6</TableCell>
+            <TableCell>{excelData?.map(data=>data?.Deviation_5Day_Today).length}</TableCell>
 
 
           </TableRow>
@@ -45,7 +48,7 @@ const AnomalieComponent = () => {
         <TableBody>
           <TableRow>
             <TableCell>EOD balance more than 5 day average end of day balance by 10%</TableCell>
-            <TableCell>3</TableCell>
+            <TableCell>{excelData?.filter(data=>data?.Deviation_5Day_Today>0)?.length}</TableCell>
             <TableCell></TableCell>
             <TableCell>
               <Button  variant="contained"
@@ -58,7 +61,7 @@ const AnomalieComponent = () => {
           </TableRow>
           <TableRow>
             <TableCell>EOD Balance less than 5 day average end of day balance</TableCell>
-            <TableCell>3</TableCell>
+            <TableCell>{excelData?.filter(data=>data?.Deviation_5Day_Today<=0)?.length}</TableCell>
             <TableCell></TableCell>
             <TableCell>
               <Button  variant="contained"
