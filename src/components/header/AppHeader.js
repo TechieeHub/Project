@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // const pages = ['Products', 'Pricing', 'Blog'];
 const pages=[{name:'Charts', path:'/charts'}];
@@ -36,6 +37,7 @@ const AppHeader=()=> {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const excelData = useSelector((state) => state.excel.data);
 
   return (
     <AppBar position="static"  sx={{backgroundColor:'#484848'}}>
@@ -117,7 +119,8 @@ const AppHeader=()=> {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {excelData?.length>0 &&
+            pages.map((page) => (
               <Button
                 key={page.name}
                 component={Link}  // Add this line
