@@ -233,9 +233,9 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
     [excelData]
   );
 
+  const filteredColumn=columns?.filter(data=>!deletedColumns.includes(data?.accessorKey))
   const table = useMaterialReactTable({
-    // columns: visibleColumns,
-    columns,
+    columns:filteredColumn,
     initialState: { columnVisibility: {'_id': false,'is_deleted': false } },
     data: filteredData,
     enableEditing: true,
