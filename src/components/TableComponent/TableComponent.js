@@ -226,11 +226,17 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       setExcelData([...excelData, newRow]);
     }
   };
+
+  const filteredData = useMemo(() => 
+    excelData.filter(row => !row.is_deleted), 
+    [excelData]
+  );
+
   const table = useMaterialReactTable({
     // columns: visibleColumns,
     columns,
     initialState: { columnVisibility: {'_id': false,'is_deleted': false } },
-    data: excelData,
+    data: filteredData,
     enableEditing: true,
     enableDensityToggle: false,
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
