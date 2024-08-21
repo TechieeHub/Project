@@ -9,6 +9,7 @@ import {
   Paper,
   Button,
   Typography,
+  Box,
 } from "@mui/material";
 
 const VisualizationComponent = () => {
@@ -17,7 +18,9 @@ const VisualizationComponent = () => {
       <Typography
         sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
       >
+        <Box sx={{marginLeft:'15px'}}>
         Visualizations
+        </Box>
       </Typography>
 
       <Table>

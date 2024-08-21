@@ -9,12 +9,18 @@ import {
   Paper,
   Button,
   Typography,
+  Box,
 } from "@mui/material";
 
 const AnomalieComponent = () => {
   return (
     <TableContainer component={Paper}>
-      <Typography sx={{ fontSize: "25px", fontWeight:600 , backgroundColor:'grey'}}>Anomalies</Typography>
+      <Typography sx={{ fontSize: "25px", fontWeight:600 , backgroundColor:'grey'}}>
+      <Box sx={{marginLeft:'15px'}}>
+      Anomalies
+        </Box>
+        
+        </Typography>
 
       <Table>
         <TableHead>
