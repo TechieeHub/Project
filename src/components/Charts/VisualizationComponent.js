@@ -14,29 +14,21 @@ import {
 import { useSelector } from "react-redux";
 
 const VisualizationComponent = () => {
-  
-  const excelData = useSelector((state) => state.excel.data)?.filter(data=>data.is_deleted!==true);
-
-  // const quickRunCount=excelData.filter(data=>data.AccountRefresh==="Quick run")
-
-  console.log('akjhckjac',excelData?.filter(data=>data.AccountRefresh==='Large run'
-    )?.length)
+  const excelData = useSelector((state) => state.excel.data)?.filter(
+    (data) => data.is_deleted !== true
+  );
 
   return (
     <TableContainer component={Paper}>
       <Typography
         sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
       >
-        <Box sx={{marginLeft:'15px'}}>
-        Visualizations
-        </Box>
+        <Box sx={{ marginLeft: "15px" }}>Visualizations</Box>
       </Typography>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell
-              sx={{ fontSize: "20px", fontWeight: 600 }}
-            >
+            <TableCell sx={{ fontSize: "20px", fontWeight: 600 }}>
               Account Monitored
             </TableCell>
           </TableRow>
@@ -52,8 +44,12 @@ const VisualizationComponent = () => {
         <TableBody>
           <TableRow>
             <TableCell>Large run</TableCell>
-            <TableCell>{excelData?.filter(data=>data.AccountRefresh==='Large run'
-    )?.length}</TableCell>
+            <TableCell>
+              {
+                excelData?.filter((data) => data.AccountRefresh === "Large run")
+                  ?.length
+              }
+            </TableCell>
             <TableCell></TableCell>
             <TableCell>
               <Button
@@ -69,9 +65,10 @@ const VisualizationComponent = () => {
           <TableRow>
             <TableCell>Quick run</TableCell>
             <TableCell>
-{excelData?.filter(data=>data.AccountRefresh==='Quick run'
-    )?.length}
-
+              {
+                excelData?.filter((data) => data.AccountRefresh === "Quick run")
+                  ?.length
+              }
             </TableCell>
             <TableCell></TableCell>
             <TableCell>

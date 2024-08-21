@@ -11,8 +11,12 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const AnomalieComponent = () => {
+  const excelData = useSelector((state) => state.excel.data)?.filter(
+    (data) => data.is_deleted !== true
+  );
   return (
     <TableContainer component={Paper}>
       <Typography sx={{ fontSize: "25px", fontWeight:600 , backgroundColor:'grey'}}>
