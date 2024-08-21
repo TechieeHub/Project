@@ -223,7 +223,8 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       Object.keys(excelData[0]).forEach((key) => {
         newRow[key] = "";
       });
-      setExcelData([...excelData, newRow]);
+      // setExcelData([...excelData, newRow]);
+      setExcelData([newRow, ...excelData]); 
     }
   };
 
