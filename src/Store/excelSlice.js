@@ -1,4 +1,3 @@
-// src/slices/excelSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const excelSlice = createSlice({
@@ -7,11 +6,11 @@ const excelSlice = createSlice({
     data: [],
   },
   reducers: {
-    setExcelData: (state, action) => {
+    setTableData: (state, action) => {
       state.data = action.payload;
     },
   },
 });
 
-export const { setExcelData } = excelSlice.actions;
+export const { setTableData } = excelSlice.actions;
 export default excelSlice.reducer;

@@ -1,4 +1,3 @@
-
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
@@ -6,12 +5,14 @@ import axios from "axios";
 import TableComponent from "../TableComponent/TableComponent";
 import { useDispatch } from "react-redux";
 
+import { setTableData } from "../../Store/excelSlice";
+
 const UploadExcel = () => {
   const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
   const [excelData, setExcelData] = useState(null);
-  const [refreshData,setRefreshData]=useState(false)
-  const [deletedColumns,setDeletedColumns]=useState(null)
+  const [refreshData, setRefreshData] = useState(false);
+  const [deletedColumns, setDeletedColumns] = useState(null);
   const dispatch = useDispatch();
   const handleFile = (e) => {
     let fileTypes = [
@@ -23,7 +24,7 @@ const UploadExcel = () => {
     if (selectedFile) {
       if (fileTypes.includes(selectedFile.type)) {
         setTypeError(null);
-        setExcelFile(selectedFile); 
+        setExcelFile(selectedFile);
       } else {
         setTypeError("Please select only excel file types");
         setExcelFile(null);
@@ -36,7 +37,7 @@ const UploadExcel = () => {
   const handleFileSubmit = (e) => {
     e.preventDefault();
     if (excelFile) {
-      uploadFile(excelFile); 
+      uploadFile(excelFile);
     }
   };
 
@@ -59,7 +60,7 @@ const UploadExcel = () => {
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
       // setExcelData(data.slice(0, 10)); // Set the data for the table
-      setRefreshData(!refreshData)
+      setRefreshData(!refreshData);
     } catch (error) {
       console.error("Error uploading file", error);
     }
@@ -68,23 +69,19 @@ const UploadExcel = () => {
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/data/")
-      .then((response) => {setExcelData(response.data.records);setDeletedColumns(response.data.deleted_columns)})
+      .then((response) => {
+        setExcelData(response.data.records);
+        setDeletedColumns(response.data.deleted_columns);
+        dispatch(setTableData(response.data.records));
+      })
       .catch((error) => console.log("error", error));
-      setRefreshData(false)
-  }, [refreshData]);
+    setRefreshData(false);
+  }, [refreshData, dispatch]);
 
-
-  const refreshDataHandler=(data)=>{
-    setRefreshData(!refreshData)
-
-  }
-  const addNewRowHandler = (data) => {
-    axios
-      .post(`http://localhost:8000//api/create_or_update_record/`,data)
-      .then((response) => refreshDataHandler(true))
-      .catch((error) => console.log("error", error));
+  const refreshDataHandler = (data) => {
+    setRefreshData(!refreshData);
   };
-  
+
   return (
     <Box>
       <Box
@@ -115,13 +112,14 @@ const UploadExcel = () => {
           </form>
         </Box>
       </Box>
-      {excelData?.length>0 ? (
+      {excelData?.length > 0 ? (
         <Box>
           <TableComponent
-           excelData={excelData} setExcelData={setExcelData} 
-           refreshDataHandler={refreshDataHandler}
-           deletedColumns={deletedColumns}
-           />
+            excelData={excelData}
+            setExcelData={setExcelData}
+            refreshDataHandler={refreshDataHandler}
+            deletedColumns={deletedColumns}
+          />
           {/* <Button
             onClick={handleAddRow}
             variant="contained"
@@ -146,4 +144,3 @@ const UploadExcel = () => {
 };
 
 export default UploadExcel;
-
