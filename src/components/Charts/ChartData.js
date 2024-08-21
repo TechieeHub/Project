@@ -11,7 +11,7 @@ const ChartData = () => {
       <VisualizationComponent/>
       <AnomalieComponent/>
     </Box>
-    <Box>
+    <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'10px'}}>
       <ChartComponent/>      
 
     </Box>

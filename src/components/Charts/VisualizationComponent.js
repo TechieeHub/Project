@@ -22,7 +22,6 @@ const VisualizationComponent = () => {
         Visualizations
         </Box>
       </Typography>
-
       <Table>
         <TableHead>
           <TableRow>
