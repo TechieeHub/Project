@@ -217,6 +217,15 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
 
     
   };
+  const handleAddRow = () => {
+    if (excelData) {
+      const newRow = {};
+      Object.keys(excelData[0]).forEach((key) => {
+        newRow[key] = "";
+      });
+      setExcelData([...excelData, newRow]);
+    }
+  };
   const table = useMaterialReactTable({
     // columns: visibleColumns,
     columns,
@@ -310,6 +319,18 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       >
         Add Column
       </Button>
+      <Button
+            onClick={handleAddRow}
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+          >
+            Add New Row
+          </Button>
       
       <FormControl sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}>
   <InputLabel 

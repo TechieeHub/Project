@@ -130,7 +130,7 @@ const UploadExcel = () => {
            refreshDataHandler={refreshDataHandler}
            deletedColumns={deletedColumns}
            />
-          <Button
+          {/* <Button
             onClick={handleAddRow}
             variant="contained"
             sx={{
@@ -142,7 +142,7 @@ const UploadExcel = () => {
             }}
           >
             Add New Row
-          </Button>
+          </Button> */}
         </Box>
       ) : (
         <Box sx={{ height: "40px", background: "#D3D3D3", marginTop: "3px" }}>
