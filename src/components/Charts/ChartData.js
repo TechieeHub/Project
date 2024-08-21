@@ -1,14 +1,23 @@
 import { Box } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import VisualizationComponent from './VisualizationComponent'
 import AnomalieComponent from './AnomalieComponent'
 import ChartComponent from './ChartComponent'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios'
+import { setTableData } from '../../Store/excelSlice'
 
 const ChartData = () => {
-  const excelData = useSelector((state) => state.excel.data);
 
-  console.log('excelData',excelData)
+  const dispatch=useDispatch()
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/data/")
+      .then((response) => {
+        dispatch(setTableData(response.data.records));
+      })
+      .catch((error) => console.log("error", error));
+  }, []);
   return (
     <Box>
     <Box sx={{display:'flex', gap:'10px', marginTop:'10px', marginLeft:'5px', marginRight:'5px'}}>

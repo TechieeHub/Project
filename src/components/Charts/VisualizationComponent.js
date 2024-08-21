@@ -11,8 +11,17 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const VisualizationComponent = () => {
+  
+  const excelData = useSelector((state) => state.excel.data)?.filter(data=>data.is_deleted!==true);
+
+  // const quickRunCount=excelData.filter(data=>data.AccountRefresh==="Quick run")
+
+  console.log('akjhckjac',excelData?.filter(data=>data.AccountRefresh==='Large run'
+    )?.length)
+
   return (
     <TableContainer component={Paper}>
       <Typography
@@ -37,13 +46,14 @@ const VisualizationComponent = () => {
             <TableCell sx={{ fontSize: "17px", fontWeight: 550 }}>
               Total MDM IDs
             </TableCell>
-            <TableCell>12</TableCell>
+            <TableCell>{excelData?.length}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
             <TableCell>Large run</TableCell>
-            <TableCell>2</TableCell>
+            <TableCell>{excelData?.filter(data=>data.AccountRefresh==='Large run'
+    )?.length}</TableCell>
             <TableCell></TableCell>
             <TableCell>
               <Button
@@ -58,7 +68,11 @@ const VisualizationComponent = () => {
           </TableRow>
           <TableRow>
             <TableCell>Quick run</TableCell>
-            <TableCell>10</TableCell>
+            <TableCell>
+{excelData?.filter(data=>data.AccountRefresh==='Quick run'
+    )?.length}
+
+            </TableCell>
             <TableCell></TableCell>
             <TableCell>
               <Button
