@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import axios from "axios";
 import TableComponent from "../TableComponent/TableComponent";
+import { useDispatch } from "react-redux";
 
 const UploadExcel = () => {
   const [excelFile, setExcelFile] = useState(null);
@@ -11,7 +12,7 @@ const UploadExcel = () => {
   const [excelData, setExcelData] = useState(null);
   const [refreshData,setRefreshData]=useState(false)
   const [deletedColumns,setDeletedColumns]=useState(null)
-
+  const dispatch = useDispatch();
   const handleFile = (e) => {
     let fileTypes = [
       "application/vnd.ms-excel",
@@ -72,15 +73,6 @@ const UploadExcel = () => {
       setRefreshData(false)
   }, [refreshData]);
 
-  // const handleAddRow = () => {
-  //   if (excelData) {
-  //     const newRow = {};
-  //     Object.keys(excelData[0]).forEach((key) => {
-  //       newRow[key] = "";
-  //     });
-  //     setExcelData([...excelData, newRow]);
-  //   }
-  // };
 
   const refreshDataHandler=(data)=>{
     setRefreshData(!refreshData)

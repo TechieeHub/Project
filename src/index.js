@@ -6,15 +6,19 @@ import reportWebVitals from './reportWebVitals';
 import { StyledEngineProvider } from '@mui/material';
 import AppHeader from './components/header/AppHeader';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './Store/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <Provider store={store}>
   <BrowserRouter>
     <StyledEngineProvider injectFirst>
       <AppHeader/>
       <App />
     </StyledEngineProvider>
   </BrowserRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
