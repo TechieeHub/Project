@@ -58,6 +58,7 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
     setOpen(false);
   };
 
+  console.log("yutyutyu", deletedColumns);
   const handleAddColumn = () => {
     const updatedData = excelData.map((row) => ({
       ...row,
@@ -154,9 +155,7 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
   };
   const columns = useMemo(
     () =>
-      Object.keys(excelData[0] || {})
-    .filter((key) => !deletedColumns.includes(key)) // To hide Deleted Columns
-    .map((key) => ({
+      Object.keys(excelData[0] || {}).map((key) => ({
         accessorKey: key,
         header: editedColumns[key] || key,
         size: 250,
@@ -222,7 +221,7 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
     // columns: visibleColumns,
     columns,
     initialState: { columnVisibility: {'_id': false,'is_deleted': false } },
-    data:  excelData.filter(row => !row.is_deleted),  // Filter out deleted rows
+    data: excelData,
     enableEditing: true,
     enableDensityToggle: false,
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
@@ -285,16 +284,6 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       .then((response) => refreshDataHandler(true))
       .catch((error) => alert("Something went wrong"));
   };
-
-  const handleAddRow = () => {
-    if (excelData) {
-      const newRow = {};
-      Object.keys(excelData[0]).forEach((key) => {
-        newRow[key] = "";
-      });
-      setExcelData([...excelData, newRow]);
-    }
-  };
   return (
     <>
       <Button
@@ -310,18 +299,6 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
         Edit columns
       </Button>
       <Button
-            onClick={handleAddRow}
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              marginLeft: "20px",
-              marginTop: "30px",
-              backgroundColor: "grey",
-            }}
-          >
-            Add New Row
-          </Button> 
-      <Button
         variant="contained"
         sx={{
           maxHeight: "30px",
@@ -333,7 +310,6 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       >
         Add Column
       </Button>
-       
       
       <FormControl sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}>
   <InputLabel 
