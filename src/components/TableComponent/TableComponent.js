@@ -240,6 +240,8 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
     data: filteredData,
     enableEditing: true,
     enableDensityToggle: false,
+    enableColumnOrdering: true,
+    // onColumnOrderChange can be used to perform any action on Column order change
     onEditingRowSave: ({ exitEditingMode, row, values }) => {
       const updatedData = [...excelData];
       updatedData[row.index] = values;
