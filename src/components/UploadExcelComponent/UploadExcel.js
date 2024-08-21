@@ -72,15 +72,15 @@ const UploadExcel = () => {
       setRefreshData(false)
   }, [refreshData]);
 
-  const handleAddRow = () => {
-    if (excelData) {
-      const newRow = {};
-      Object.keys(excelData[0]).forEach((key) => {
-        newRow[key] = "";
-      });
-      setExcelData([...excelData, newRow]);
-    }
-  };
+  // const handleAddRow = () => {
+  //   if (excelData) {
+  //     const newRow = {};
+  //     Object.keys(excelData[0]).forEach((key) => {
+  //       newRow[key] = "";
+  //     });
+  //     setExcelData([...excelData, newRow]);
+  //   }
+  // };
 
   const refreshDataHandler=(data)=>{
     setRefreshData(!refreshData)
