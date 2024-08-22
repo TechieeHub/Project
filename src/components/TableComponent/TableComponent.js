@@ -153,26 +153,56 @@ const TableComponent = ({ excelData, setExcelData,deletedColumns, refreshDataHan
       console.error("Error exporting file:", error);
     }
   };
-  const columns = useMemo(
-    () =>
-      Object.keys(excelData[0] || {}).map((key) => ({
-        accessorKey: key,
-        header: editedColumns[key] || key,
-        size: 250,
-        // enableEditing: true,
-        enableEditing: key !== "_id",
-        muiTableBodyCellProps: () => ({
-          sx: {
-            backgroundColor: deletedColumns.includes(key) ? '#FFB7C5' : 'transparent', 
-            color: deletedColumns.includes(key) ? 'black' : 'black', 
-            opacity: deletedColumns.includes(key) ? 0.8 : 1,
-          },
-        }),
-        isVisible: key !== ("_id" && 'is_deleted'),
-        // isVisible: key !== "_id" && key !== "is_deleted",
-      })),
-    [excelData, editedColumns,deletedColumns]
-  );
+  const columns = useMemo(() => {
+    // Define default columns
+    const defaultColumns = [
+      { accessorKey: '1', header: 'Projected Balance', size: 250 },
+      { accessorKey: '2', header: '5-Day average', size: 250 },
+      { accessorKey: '3', header: 'Deviation_5Day_Today', size: 250 },
+      { accessorKey: '4', header: 'Anomaly', size: 250 },
+    ];
+  
+    // Combine default columns with dynamic columns from excelData
+    const dynamicColumns = Object.keys(excelData[0] || {}).map((key) => ({
+      accessorKey: key,
+      header: editedColumns[key] || key,
+      size: 250,
+      enableEditing: key !== "_id",
+      muiTableBodyCellProps: () => ({
+        sx: {
+          backgroundColor: deletedColumns.includes(key) ? '#FFB7C5' : 'transparent',
+          color: deletedColumns.includes(key) ? 'black' : 'black',
+          opacity: deletedColumns.includes(key) ? 0.8 : 1,
+        },
+      }),
+      isVisible: key !== ("_id" && 'is_deleted'),
+    }));
+  
+    // Combine both default and dynamic columns, with dynamic columns taking precedence
+    return [...dynamicColumns,...defaultColumns ];
+  }, [excelData, editedColumns, deletedColumns]);
+  
+  // const columns = useMemo(
+  //   () =>
+  //     Object.keys(excelData[0] || {}).map((key) => ({
+  //       accessorKey: key,
+  //       header: editedColumns[key] || key,
+  //       size: 250,
+  //       // enableEditing: true,
+  //       enableEditing: key !== "_id",
+  //       muiTableBodyCellProps: () => ({
+  //         sx: {
+  //           backgroundColor: deletedColumns.includes(key) ? '#FFB7C5' : 'transparent', 
+  //           color: deletedColumns.includes(key) ? 'black' : 'black', 
+  //           opacity: deletedColumns.includes(key) ? 0.8 : 1,
+  //         },
+  //       }),
+  //       isVisible: key !== ("_id" && 'is_deleted'),
+  //       // isVisible: key !== "_id" && key !== "is_deleted",
+  //     })),
+  //   [excelData, editedColumns,deletedColumns]
+  // );
+
   // const visibleColumns = columns.filter((column) => column.isVisible);
 
   const handleDeleteRow = (rowIndex) => {
