@@ -152,7 +152,7 @@ const TableComponent = ({
     const defaultColumns = [
       {
         accessorKey: "Projected Balance",
-        header: "Projected Balance123",
+        header: "Projected Balance",
         size: 250,
       },
       { accessorKey: "5-Day average", header: "5-Day average", size: 250 },
