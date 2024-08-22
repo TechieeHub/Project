@@ -135,16 +135,22 @@ const TableComponent = ({
     const number = parseFloat(cleanedStr);
     return isNaN(number) ? 0 : number;
   };
-  const calculateProjectedBalance = (data) => {
+  const calculateColumns = (data) => {
     return data.map((row) => ({
       ...row,
       "Projected Balance":
         convertToNumber(row["Available Balance"] || 0) -
         convertToNumber(row["Scheduled Out Balance"] || 0),
+        "5-Day average":(convertToNumber(row["EODBalance-14Aug"] || 0)+convertToNumber(row["EODBalance-15Aug"] || 0)+convertToNumber(row["EODBalance-16Aug"] || 0)+convertToNumber(row["EODBalance-17Aug"] || 0)+convertToNumber(row["EODBalance-18Aug"] || 0))/5,
+        "Deviation_5Day_Today":(( convertToNumber(row["Projected Balance"] || 0) -
+        convertToNumber(row["5-Day average"] || 0))/convertToNumber(row["5-Day average"] || 0))*100,
+        "Anomaly": row["Deviation_5Day_Today"]*100<0?'EOD Balance less than 5 day average end of day balance': row["Deviation_5Day_Today"]*100>10?"EOD balance more than 5 day average end of day balance by 10%":''
+
+
     }));
   };
 
-  const updatedExcelData = calculateProjectedBalance(excelData);
+  const updatedExcelData = calculateColumns(excelData);
 
   console.log("akjhckja", updatedExcelData);
 
