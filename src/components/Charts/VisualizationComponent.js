@@ -12,6 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const VisualizationComponent = () => {
   const excelData = useSelector((state) => state.excel.data)?.filter(
@@ -23,22 +24,46 @@ const VisualizationComponent = () => {
       <Typography
         sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
       >
-        <Box sx={{ marginLeft: "15px" }}>Visualizations</Box>
+        <Box sx={{ marginLeft: "15px" }}>Account Monitored</Box>
       </Typography>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontSize: "20px", fontWeight: 600 }}>
-              Account Monitored
+            <TableCell>
+            
             </TableCell>
           </TableRow>
         </TableHead>
         <TableHead>
+          {/* <TableRow>
+            <TableCell sx={{ fontSize: "17px", fontWeight: 550 }}>
+              Total MDM IDs
+            </TableCell>
+            <TableCell>{excelData?.length}</TableCell>
+          </TableRow> */}
           <TableRow>
             <TableCell sx={{ fontSize: "17px", fontWeight: 550 }}>
               Total MDM IDs
             </TableCell>
             <TableCell>{excelData?.length}</TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+                            <Button
+                key={'Add/ModifyAccountId'}
+                component={Link}  
+                to={"/"}   
+                sx={{
+                  my: 2,
+                  display: 'block',
+                  textDecoration: 'underline', // Underline the text
+                  '&:hover': {
+                    textDecoration: 'underline', // Ensure underline on hover as well
+                  },
+                }}
+              >
+                Add/Modify Account ID
+              </Button>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -58,7 +83,7 @@ const VisualizationComponent = () => {
                   backgroundColor: "grey",
                 }}
               >
-                Add/Modify Account ID
+                View
               </Button>
             </TableCell>
           </TableRow>
@@ -78,7 +103,7 @@ const VisualizationComponent = () => {
                   backgroundColor: "grey",
                 }}
               >
-                Add/Modify Account ID
+                View
               </Button>
             </TableCell>
           </TableRow>
