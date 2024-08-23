@@ -135,20 +135,32 @@ const TableComponent = ({
     const number = parseFloat(cleanedStr);
     return isNaN(number) ? 0 : number;
   };
+ 
   const calculateColumns = (data) => {
-    return data.map((row) => ({
-      ...row,
-      "Projected Balance":
-        convertToNumber(row["Available Balance"] || 0) -
-        convertToNumber(row["Scheduled Out Balance"] || 0),
-        "5-Day average":(convertToNumber(row["EODBalance-14Aug"] || 0)+convertToNumber(row["EODBalance-15Aug"] || 0)+convertToNumber(row["EODBalance-16Aug"] || 0)+convertToNumber(row["EODBalance-17Aug"] || 0)+convertToNumber(row["EODBalance-18Aug"] || 0))/5,
-        "Deviation_5Day_Today":(( convertToNumber(row["Projected Balance"] || 0) -
-        convertToNumber(row["5-Day average"] || 0))/convertToNumber(row["5-Day average"] || 0))*100,
-        "Anomaly": row["Deviation_5Day_Today"]*100<0?'EOD Balance less than 5 day average end of day balance': row["Deviation_5Day_Today"]*100>10?"EOD balance more than 5 day average end of day balance by 10%":''
-
-
-    }));
+    return data.map((row) => {
+      const projectedBalance = convertToNumber(row["Available Balance"] || 0) - convertToNumber(row["Scheduled Out Balance"] || 0);
+      const average5Day = (
+        convertToNumber(row["EODBalance-14Aug"] || 0) +
+        convertToNumber(row["EODBalance-15Aug"] || 0) +
+        convertToNumber(row["EODBalance-16Aug"] || 0) +
+        convertToNumber(row["EODBalance-17Aug"] || 0) +
+        convertToNumber(row["EODBalance-18Aug"] || 0)
+      ) / 5;
+  
+      const deviation5DayToday = average5Day === 0 ? 0 : ((projectedBalance - average5Day) / average5Day) * 100;
+  
+      return {
+        ...row,
+        "Projected Balance": projectedBalance,
+        "5-Day average": average5Day,
+        "Deviation_5Day_Today": isNaN(deviation5DayToday) ? 0 : deviation5DayToday,
+        "Anomaly": deviation5DayToday < 0 ? 'EOD Balance less than 5 day average end of day balance' 
+                  : deviation5DayToday > 10 ? "EOD balance more than 5 day average end of day balance by 10%" 
+                  : ''
+      };
+    });
   };
+  
 
   const updatedExcelData = calculateColumns(excelData);
 
