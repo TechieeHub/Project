@@ -13,13 +13,17 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 
+
+
 const AnomalieComponent = () => {
-  const excelData = useSelector((state) => state.excel.data)?.filter(
+  const excelData = useSelector((state) => state.excel.filteredData)?.filter(
     (data) => data.is_deleted !== true
   );
 
+  // const filteredData = useSelector((state) => state.excel.filteredData);
 
-  console.log('lkjncxkja',excelData?.map(data=>data?.Deviation_5Day_Today))
+
+  // console.log('lkjncxkja',filteredData)
   return (
     <TableContainer component={Paper}>
       <Typography sx={{ fontSize: "25px", fontWeight:600 , backgroundColor:'grey'}}>

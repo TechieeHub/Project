@@ -21,6 +21,8 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setFilteredData } from "../../Store/excelSlice";
 
 const TableComponent = ({
   excelData,
@@ -35,6 +37,7 @@ const TableComponent = ({
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
   const [exportOption, setExportOption] = useState("");
+  const dispatch = useDispatch();
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
@@ -245,6 +248,9 @@ const TableComponent = ({
     () => updatedExcelData.filter((row) => !row.is_deleted),
     [excelData]
   );
+  useEffect(() => {
+    dispatch(setFilteredData(filteredData));
+  }, [filteredData, dispatch]);
 
   const filteredColumn = columns?.filter(
     (data) => !deletedColumns.includes(data?.accessorKey)
