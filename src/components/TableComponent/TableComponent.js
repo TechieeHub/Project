@@ -163,9 +163,6 @@ const TableComponent = ({
   
 
   const updatedExcelData = calculateColumns(excelData);
-
-  console.log("akjhckja", updatedExcelData);
-
   const columns = useMemo(() => {
     const defaultColumns = [
       {
