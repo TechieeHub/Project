@@ -140,16 +140,17 @@ const TableComponent = ({
   };
  
   const calculateColumns = (data) => {
+    const activeColumns = Object.keys(excelData[0] || {}).filter(
+      (key) => !deletedColumns.includes(key) && key.startsWith("EODBalance")
+    );
+  
     return data.map((row) => {
       const projectedBalance = convertToNumber(row["Available Balance"] || 0) - convertToNumber(row["Scheduled Out Balance"] || 0);
-      const average5Day = (
-        convertToNumber(row["EODBalance-14Aug"] || 0) +
-        convertToNumber(row["EODBalance-15Aug"] || 0) +
-        convertToNumber(row["EODBalance-16Aug"] || 0) +
-        convertToNumber(row["EODBalance-17Aug"] || 0) +
-        convertToNumber(row["EODBalance-18Aug"] || 0)
-      ) / 5;
-  
+      
+      // Calculate the average only with active columns
+      const total = activeColumns.reduce((sum, columnKey) => sum + convertToNumber(row[columnKey] || 0), 0);
+      const average5Day = activeColumns.length > 0 ? total / activeColumns.length : 0;
+      
       const deviation5DayToday = average5Day === 0 ? 0 : ((projectedBalance - average5Day) / average5Day) * 100;
   
       return {
@@ -163,6 +164,31 @@ const TableComponent = ({
       };
     });
   };
+  
+  // const calculateColumns = (data) => {
+  //   return data.map((row) => {
+  //     const projectedBalance = convertToNumber(row["Available Balance"] || 0) - convertToNumber(row["Scheduled Out Balance"] || 0);
+  //     const average5Day = (
+  //       convertToNumber(row["EODBalance-14Aug"] || 0) +
+  //       convertToNumber(row["EODBalance-15Aug"] || 0) +
+  //       convertToNumber(row["EODBalance-16Aug"] || 0) +
+  //       convertToNumber(row["EODBalance-17Aug"] || 0) +
+  //       convertToNumber(row["EODBalance-18Aug"] || 0)
+  //     ) / 5;
+  
+  //     const deviation5DayToday = average5Day === 0 ? 0 : ((projectedBalance - average5Day) / average5Day) * 100;
+  
+  //     return {
+  //       ...row,
+  //       "Projected Balance": projectedBalance,
+  //       "5-Day average": average5Day,
+  //       "Deviation_5Day_Today": isNaN(deviation5DayToday) ? 0 : deviation5DayToday,
+  //       "Anomaly": deviation5DayToday < 0 ? 'EOD Balance less than 5 day average end of day balance' 
+  //                 : deviation5DayToday > 10 ? "EOD balance more than 5 day average end of day balance by 10%" 
+  //                 : ''
+  //     };
+  //   });
+  // };
   
 
   const updatedExcelData = calculateColumns(excelData);

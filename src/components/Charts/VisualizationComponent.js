@@ -96,7 +96,7 @@ const VisualizationComponent = () => {
                   backgroundColor: "grey",
                 }}
 
-                onClick={()=>largeRunViewHandler()}
+                // onClick={()=>largeRunViewHandler()}
               >
                 View
               </Button>
@@ -118,7 +118,7 @@ const VisualizationComponent = () => {
                   backgroundColor: "grey",
                 }}
 
-                onClick={()=>quickRunViewHandler()}
+                // onClick={()=>quickRunViewHandler()}
               >
                 View
               </Button>
