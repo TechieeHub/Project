@@ -11,6 +11,9 @@ const ChartData = () => {
   const [initialChartData,setInitialChartData]=useState(null)
 
   const dispatch=useDispatch()
+  const excelData = useSelector((state) => state.excel.filteredData)?.filter(
+    (data) => data.is_deleted !== true
+  );
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/data/")
@@ -21,15 +24,16 @@ const ChartData = () => {
       .catch((error) => console.log("error", error));
   }, []);
 
+
   return (
     <Box>
     <Box sx={{display:'flex', gap:'10px', marginTop:'10px', marginLeft:'5px', marginRight:'5px'}}>
       <VisualizationComponent/>
       <AnomalieComponent/>
     </Box>
-    <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'10px'}}>
+    <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', gap:'10px', marginTop:'30px'}}>
       {initialChartData?.length>0 && 
-      <ChartComponent initialChartData={initialChartData}/>      
+      <ChartComponent data={excelData}/>      
 }
 
     </Box>
