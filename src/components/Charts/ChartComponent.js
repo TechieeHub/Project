@@ -58,6 +58,7 @@
 
 // MultiLineChart.js
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 // Transform your data to include all the required fields
@@ -88,6 +89,9 @@ const transformData = (data) => {
 };
 
 const ChartComponent = ({ data }) => {
+  const excelData = useSelector((state) => state.excel.chartDisplayData)
+
+  console.log('iayciuydaiu',excelData)
   const transformedData = transformData(data);
 
   return (

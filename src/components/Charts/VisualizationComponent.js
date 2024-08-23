@@ -11,14 +11,27 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { setChartDisplayData } from "../../Store/excelSlice";
 
 const VisualizationComponent = () => {
+
+  const dispatch=useDispatch()
   const excelData = useSelector((state) => state.excel.data)?.filter(
     (data) => data.is_deleted !== true
   );
 
+
+  const largeRunViewHandler=()=>{
+    const data=excelData.filter(data=>data.AccountRefresh==='Large run')
+    dispatch(setChartDisplayData(data))
+  }
+
+  const quickRunViewHandler=()=>{
+    const data=excelData.filter(data=>data.AccountRefresh==='Quick run')
+    dispatch(setChartDisplayData(data))
+  }
   return (
     <TableContainer component={Paper}>
       <Typography
@@ -82,6 +95,8 @@ const VisualizationComponent = () => {
                 sx={{
                   backgroundColor: "grey",
                 }}
+
+                onClick={()=>largeRunViewHandler()}
               >
                 View
               </Button>
@@ -102,6 +117,8 @@ const VisualizationComponent = () => {
                 sx={{
                   backgroundColor: "grey",
                 }}
+
+                onClick={()=>quickRunViewHandler()}
               >
                 View
               </Button>
