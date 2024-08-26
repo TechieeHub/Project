@@ -1,3 +1,8 @@
+
+
+
+
+
 import { Box, Button } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
@@ -88,9 +93,58 @@ const AdminComponent = () => {
   console.log('excelData', excelData);
   return (
     <>
-      {/* Your existing buttons */}
-      <MaterialReactTable table={table} />
-    </>
+    <Button
+      variant="contained"
+      sx={{
+        maxHeight: "20px",
+        fontSize: '9px',
+        marginLeft: "20px",
+        marginTop: "30px",
+        backgroundColor: "grey",
+      }}
+    >
+      Approve All Column Deletions
+    </Button>
+    <Button
+      variant="contained"
+      sx={{
+        maxHeight: "20px",
+        fontSize: '9px',
+        marginLeft: "20px",
+        marginTop: "30px",
+        backgroundColor: "grey",
+      }}
+    >
+      Reject All Column Deletions
+    </Button>
+    <Button
+      variant="contained"
+      sx={{
+        maxHeight: "20px",
+        fontSize: '9px',
+        marginLeft: "20px",
+        marginTop: "30px",
+        backgroundColor: "grey",
+      }}
+    >
+      Approve All Row Deletions
+    </Button>
+    <Button
+      variant="contained"
+      sx={{
+        maxHeight: "20px",
+        fontSize: '9px',
+        marginLeft: "20px",
+        marginTop: "30px",
+        backgroundColor: "grey",
+      }}
+    >
+      Reject All Row Deletions
+    </Button>
+
+    <MaterialReactTable table={table} />
+  </>
+
   );
 };
 
