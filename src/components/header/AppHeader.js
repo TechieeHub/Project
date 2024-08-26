@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // const pages = ['Products', 'Pricing', 'Blog'];
-const pages=[{name:'Charts', path:'/charts'}];
+const pages=[{name:'Charts', path:'/charts'},{name:'Admin Page', path:'/admin'}];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const AppHeader=()=> {
