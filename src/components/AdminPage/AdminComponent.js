@@ -1,12 +1,10 @@
 import { Box } from '@mui/material'
 import React from 'react'
+import UploadExcel from '../UploadExcelComponent/UploadExcel'
 
 const AdminComponent = () => {
   return (
-    <Box>
-
-        Admin
-      </Box>
+    <UploadExcel/>
   )
 }
 

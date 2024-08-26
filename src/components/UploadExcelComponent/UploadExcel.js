@@ -6,6 +6,7 @@ import TableComponent from "../TableComponent/TableComponent";
 import { useDispatch } from "react-redux";
 
 import { setTableData } from "../../Store/excelSlice";
+import { useLocation } from "react-router-dom";
 
 const UploadExcel = () => {
   const [excelFile, setExcelFile] = useState(null);
@@ -14,6 +15,9 @@ const UploadExcel = () => {
   const [refreshData, setRefreshData] = useState(false);
   const [deletedColumns, setDeletedColumns] = useState(null);
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  // console.log('lkjancdjhdaic',location?.pathname==='/admin)
   const handleFile = (e) => {
     let fileTypes = [
       "application/vnd.ms-excel",
