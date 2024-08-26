@@ -20,15 +20,54 @@ const AdminComponent = () => {
   const columns = useMemo(() => {
     if (!excelData || excelData.length === 0) return [];
 
-    return Object.keys(excelData[0]).map((key) => ({
+    // Map existing data columns
+    const dataColumns = Object.keys(excelData[0]).map((key) => ({
       accessorKey: key, // column key in the data
       header: key.replace(/_/g, ' ').toUpperCase(), // header name, formatted
       isVisible: key !== "_id" && key !== "is_deleted", // hide these specific columns
     }));
+
+    // Add custom column for buttons
+    const actionColumn = {
+      accessorKey: 'actions',
+      header: 'Actions',
+      Cell: ({ row }) => (
+        <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+          <Button 
+            variant="contained" 
+            size="small" 
+            onClick={() => handleApprove(row.original)}
+          >
+            Approve
+          </Button>
+          <Button 
+            variant="contained" 
+            size="small" 
+            color="error" 
+            onClick={() => handleReject(row.original)}
+          >
+            Reject
+          </Button>
+        </Box>
+      ),
+    };
+
+    return [...dataColumns, actionColumn];
   }, [excelData]);
+
   const filteredData = useMemo(() => {
     return excelData.filter((row) => row.is_deleted === true);
   }, [excelData]);
+
+  const handleApprove = (rowData) => {
+    console.log('Approve clicked', rowData);
+    // Add your approve logic here
+  };
+
+  const handleReject = (rowData) => {
+    console.log('Reject clicked', rowData);
+    // Add your reject logic here
+  };
 
   const table = useMaterialReactTable({
     columns: columns,
@@ -44,67 +83,12 @@ const AdminComponent = () => {
         fontWeight: "bold",
       },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      // sx: {
-      //   // backgroundColor: row.original.is_deleted && "#F8C8DC",
-      //   opacity: row.original.is_deleted && 0.8,
-      // },
-    }),
   });
 
-
-  console.log('excelData',excelData)
+  console.log('excelData', excelData);
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{
-          maxHeight: "20px",
-          fontSize: '9px',
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-      >
-        Approve All Column Deletions
-      </Button>
-      <Button
-        variant="contained"
-        sx={{
-          maxHeight: "20px",
-          fontSize: '9px',
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-      >
-        Reject All Column Deletions
-      </Button>
-      <Button
-        variant="contained"
-        sx={{
-          maxHeight: "20px",
-          fontSize: '9px',
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-      >
-        Approve All Row Deletions
-      </Button>
-      <Button
-        variant="contained"
-        sx={{
-          maxHeight: "20px",
-          fontSize: '9px',
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-      >
-        Reject All Row Deletions
-      </Button>
-
+      {/* Your existing buttons */}
       <MaterialReactTable table={table} />
     </>
   );
