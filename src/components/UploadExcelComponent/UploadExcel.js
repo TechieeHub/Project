@@ -123,6 +123,7 @@ const UploadExcel = () => {
             setExcelData={setExcelData}
             refreshDataHandler={refreshDataHandler}
             deletedColumns={deletedColumns}
+            location={location}
           />
           {/* <Button
             onClick={handleAddRow}

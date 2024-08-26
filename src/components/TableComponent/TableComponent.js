@@ -27,6 +27,7 @@ import { setFilteredData } from "../../Store/excelSlice";
 const TableComponent = ({
   excelData,
   setExcelData,
+  location,
   deletedColumns,
   refreshDataHandler,
 }) => {
@@ -348,6 +349,11 @@ const TableComponent = ({
       .then((response) => refreshDataHandler(true))
       .catch((error) => alert("Something went wrong"));
   };
+  const handleAllDeletions=()=>{
+  // console.log('ljkdckdckjd',location?.pathname==="/admin")
+
+    return;
+  }
   return (
     <>
       <Button
@@ -428,6 +434,7 @@ const TableComponent = ({
           <MenuItem value="pdf">Export to PDF</MenuItem>
           <MenuItem value="excel">Export to Excel</MenuItem>
         </Select>
+        
       </FormControl>
 
       <Button
@@ -444,6 +451,20 @@ const TableComponent = ({
       >
         Export
       </Button>
+      {location?.pathname==="/admin" && 
+      <Button
+        variant="contained"
+        sx={{
+          maxHeight: "30px",
+          marginLeft: "20px",
+          marginTop: "30px",
+          backgroundColor: "grey",
+        }}
+        onClick={handleAllDeletions}
+      >
+        Approve All Deletions
+      </Button>
+}
       <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle>Edit Column Names</DialogTitle>
         <DialogContent>
