@@ -76,15 +76,18 @@ const AdminComponent = () => {
   }, [excelData]);
 
   const handleApprove = (rowData) => {
+    const data={record_ids:[rowData?._id]}
+
     axios
-      .post(`http://localhost:8000/api/record_deletion_approved/${rowData?._id}/`)
+      .post(`http://localhost:8000/api/record_deletion_approved/`,data)
       .then(() => setRefreshData(!refreshData))
       .catch((error) => console.warn("Something went wrong"));
   };
 
   const handleReject = (rowData) => {
+    const data={record_ids:[rowData?._id]}
     axios
-      .post(`http://localhost:8000/api/record_deletion_disapproved/${rowData?._id}/`)
+      .post(`http://localhost:8000/api/record_deletion_disapproved/`,data)
       .then(() => setRefreshData(!refreshData))
       .catch((error) => console.warn("Something went wrong"));
   };
