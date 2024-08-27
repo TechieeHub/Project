@@ -41,11 +41,7 @@ const VisualizationComponent = () => {
       </Typography>
       <Table>
         <TableHead>
-          <TableRow>
-            <TableCell>
-            
-            </TableCell>
-          </TableRow>
+          
         </TableHead>
         <TableHead>
           {/* <TableRow>

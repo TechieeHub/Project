@@ -17,8 +17,8 @@ import { useSelector } from 'react-redux';
 
 // Add Home to the pages array
 const pages = [
-  { name: 'Home', path: '/' },
-  { name: 'Accounts and Visualizations', path: '/charts' },
+  { name: 'Accounts', path: '/' },
+  { name: 'Summary and Visualization', path: '/charts' },
   { name: 'Admin', path: '/admin' }
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
