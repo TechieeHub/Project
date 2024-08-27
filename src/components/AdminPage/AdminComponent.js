@@ -139,11 +139,25 @@ const AdminComponent = () => {
   });
 
   const handleApproveAllRowDeletions = () => {
-    setRefreshData(!refreshData);
+    // const data=filteredData.map()
+    const payload=filteredData.map(data=>data?._id)
+    const data={record_ids:payload}
+
+    axios
+      .post(`http://localhost:8000/api/record_deletion_approved/`,data)
+      .then(() => setRefreshData(!refreshData))
+      .catch((error) => console.warn("Something went wrong"));
+
   };
 
   const handleRejectAllRowDeletions = () => {
-    setRefreshData(!refreshData);
+    const payload=filteredData.map(data=>data?._id)
+    const data={record_ids:payload}
+
+    axios
+      .post(`http://localhost:8000/api/record_deletion_disapproved/`,data)
+      .then(() => setRefreshData(!refreshData))
+      .catch((error) => console.warn("Something went wrong"));
   };
 
   const handleApproveAllColumnDeletions = () => {
