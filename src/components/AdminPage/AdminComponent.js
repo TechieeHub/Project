@@ -3,15 +3,12 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from "material-react-table";
+import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
 
 const AdminComponent = () => {
-  const [excelData, setExcelData] = useState([]); // Initialize as an empty array
+  const [excelData, setExcelData] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
-  const [deletedColumnData,setDeletedColumnData]=useState([])
+  const [deletedColumnData, setDeletedColumnData] = useState([]);
 
   useEffect(() => {
     axios
@@ -19,7 +16,6 @@ const AdminComponent = () => {
       .then((response) => {
         setExcelData(response.data.records);
         setDeletedColumnData(response.data.deleted_columns);
-
       })
       .catch((error) => console.log("error", error));
     setRefreshData(false);
@@ -28,23 +24,18 @@ const AdminComponent = () => {
   const columns = useMemo(() => {
     if (!excelData || excelData.length === 0) return [];
 
-    // Map existing data columns
     const dataColumns = Object.keys(excelData[0]).map((key) => ({
-      accessorKey: key, // column key in the data
-      header: key.replace(/_/g, " ").toUpperCase(), // header name, formatted
-      isVisible: key !== "_id" && key !== "is_deleted", // hide these specific columns
+      accessorKey: key,
+      header: key.replace(/_/g, " ").toUpperCase(),
+      isVisible: key !== "_id" && key !== "is_deleted",
     }));
 
-    // Add custom column for icons
     const actionColumn = {
       accessorKey: "actions",
       header: "Actions",
       Cell: ({ row }) => (
         <Box sx={{ display: "flex", gap: "0.5rem" }}>
-          <IconButton
-            color="success"
-            onClick={() => handleApprove(row.original)}
-          >
+          <IconButton color="success" onClick={() => handleApprove(row.original)}>
             <CheckCircleIcon />
           </IconButton>
           <IconButton color="error" onClick={() => handleReject(row.original)}>
@@ -57,6 +48,27 @@ const AdminComponent = () => {
     return [...dataColumns, actionColumn];
   }, [excelData]);
 
+  const deletedColumnColumns = useMemo(() => [
+    {
+      accessorKey: "account_id",
+      header: "Column Name",
+    },
+    {
+      accessorKey: "actions",
+      header: "Actions",
+      Cell: ({ row }) => (
+        <Box sx={{ display: "flex", gap: "0.5rem" }}>
+          <IconButton color="success" onClick={() => handleApproveColumn(row.original)}>
+            <CheckCircleIcon />
+          </IconButton>
+          <IconButton color="error" onClick={() => handleRejectColumn(row.original)}>
+            <CancelIcon />
+          </IconButton>
+        </Box>
+      ),
+    },
+  ], []);
+
   const filteredData = useMemo(() => {
     return excelData.filter(
       (row) => row.is_deleted === true && row.deleted_by_admin !== true
@@ -64,23 +76,31 @@ const AdminComponent = () => {
   }, [excelData]);
 
   const handleApprove = (rowData) => {
-    console.log("Approve clicked", rowData?._id);
     axios
-      .post(
-        `http://localhost:8000/api/record_deletion_approved/${rowData?._id}/`
-      )
-      .then((resp) => setRefreshData(!refreshData))
+      .post(`http://localhost:8000/api/record_deletion_approved/${rowData?._id}/`)
+      .then(() => setRefreshData(!refreshData))
       .catch((error) => console.warn("Something went wrong"));
   };
 
   const handleReject = (rowData) => {
     axios
-      .post(
-        `http://localhost:8000/api/record_deletion_disapproved/${rowData?._id}/`
-      )
-      .then((resp) => setRefreshData(!refreshData))
+      .post(`http://localhost:8000/api/record_deletion_disapproved/${rowData?._id}/`)
+      .then(() => setRefreshData(!refreshData))
       .catch((error) => console.warn("Something went wrong"));
+  };
 
+  const handleApproveColumn = (columnData) => {
+    // Implement logic to handle column approval
+    console.log('Approving column:', columnData);
+    // Example: axios.post(`http://localhost:8000/api/column_deletion_approved/${columnData.account_id}/`)
+    setRefreshData(!refreshData);
+  };
+
+  const handleRejectColumn = (columnData) => {
+    // Implement logic to handle column rejection
+    console.log('Rejecting column:', columnData);
+    // Example: axios.post(`http://localhost:8000/api/column_deletion_disapproved/${columnData.account_id}/`)
+    setRefreshData(!refreshData);
   };
 
   const tableRow = useMaterialReactTable({
@@ -100,9 +120,9 @@ const AdminComponent = () => {
   });
 
   const tableColumn = useMaterialReactTable({
-    columns: columns,
+    columns: deletedColumnColumns,
     initialState: { columnVisibility: { _id: false, is_deleted: false } },
-    data: filteredData,
+    data: deletedColumnData.map(item => ({ account_id: item })),
     enableEditing: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
@@ -114,115 +134,88 @@ const AdminComponent = () => {
       },
     },
   });
-  const hanldeApproveAllColumnDeletions = () => {
+
+  const handleApproveAllRowDeletions = () => {
     setRefreshData(!refreshData);
   };
 
-  const hanldeRejectAllColumnDeletions = () => {
+  const handleRejectAllRowDeletions = () => {
     setRefreshData(!refreshData);
   };
 
-  const hanldeApproveAllRowDeletions = () => {
+  const handleApproveAllColumnDeletions = () => {
     setRefreshData(!refreshData);
   };
 
-  const hanldeRejectAllRowDeletions = () => {
+  const handleRejectAllColumnDeletions = () => {
     setRefreshData(!refreshData);
   };
 
-
-  console.log(deletedColumnData,'deletedColumnData')
   return (
     <>
-      {filteredData.length > 0 ? (
+      {filteredData.length > 0 && (
         <>
-          <>
-            {/* <Button
+          <Button
             variant="contained"
             sx={{
               maxHeight: "30px",
-              fontSize: '9px',
+              fontSize: "9px",
               marginLeft: "30px",
               marginTop: "30px",
               backgroundColor: "grey",
             }}
-            onClick={() => hanldeApproveAllColumnDeletions()}
+            onClick={handleApproveAllRowDeletions}
           >
-            Approve All Column Deletions
+            Approve All Rows
           </Button>
           <Button
             variant="contained"
             sx={{
               maxHeight: "30px",
-              fontSize: '9px',
+              fontSize: "9px",
               marginLeft: "30px",
               marginTop: "30px",
               backgroundColor: "grey",
             }}
-            onClick={() => hanldeRejectAllColumnDeletions()}
+            onClick={handleRejectAllRowDeletions}
           >
-            Reject All Column Deletions
-          </Button> */}
-            <Button
-              variant="contained"
-              sx={{
-                maxHeight: "30px",
-                fontSize: "9px",
-                marginLeft: "30px",
-                marginTop: "30px",
-                backgroundColor: "grey",
-              }}
-              onClick={() => hanldeApproveAllRowDeletions()}
-            >
-              Approve All 
-            </Button>
-            <Button
-              variant="contained"
-              sx={{
-                maxHeight: "30px",
-                fontSize: "9px",
-                marginLeft: "30px",
-                marginTop: "30px",
-                backgroundColor: "grey",
-              }}
-              onClick={() => hanldeRejectAllRowDeletions()}
-            >
-              Reject All 
-            </Button>
-            <MaterialReactTable table={tableRow} />
-          </>
-          <>
-            <Button
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              fontSize: '9px',
-              marginLeft: "30px",
-              marginTop: "30px",
-              backgroundColor: "grey",
-            }}
-            onClick={() => hanldeApproveAllColumnDeletions()}
-          >
-            Approve All 
+            Reject All Rows
           </Button>
-          <Button
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              fontSize: '9px',
-              marginLeft: "30px",
-              marginTop: "30px",
-              backgroundColor: "grey",
-            }}
-            onClick={() => hanldeRejectAllColumnDeletions()}
-          >
-            Reject All 
-          </Button>
-                     
-            <MaterialReactTable table={tableColumn} />
-          </>
+          <MaterialReactTable table={tableRow} />
         </>
-      ) : (
+      )}
+      {deletedColumnData.length > 0 && (
+        <>
+          <Button
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              fontSize: "9px",
+              marginLeft: "30px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+            onClick={handleApproveAllColumnDeletions}
+          >
+            Approve All Columns
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              fontSize: "9px",
+              marginLeft: "30px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+            onClick={handleRejectAllColumnDeletions}
+          >
+            Reject All Columns
+          </Button>
+          <MaterialReactTable table={tableColumn} />
+        </>
+      )}
+      {filteredData.length === 0 && deletedColumnData.length === 0 && (
         <Typography variant="h6" align="center" sx={{ mt: 4 }}>
           No records found
         </Typography>
