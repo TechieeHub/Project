@@ -12,16 +12,21 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-// const pages = ['Products', 'Pricing', 'Blog'];
-const pages=[{name:'Charts', path:'/charts'},{name:'Admin Page', path:'/admin'}];
+// Add Home to the pages array
+const pages = [
+  { name: 'Home', path: '/' },
+  { name: 'Accounts and Visualizations', path: '/charts' },
+  { name: 'Admin', path: '/admin' }
+];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const AppHeader=()=> {
+const AppHeader = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const location = useLocation(); // Get the current path
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,10 +42,11 @@ const AppHeader=()=> {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
   const excelData = useSelector((state) => state.excel.data);
 
   return (
-    <AppBar position="static"  sx={{backgroundColor:'#484848'}}>
+    <AppBar position="static" sx={{ backgroundColor: '#484848' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -48,8 +54,7 @@ const AppHeader=()=> {
             variant="h6"
             noWrap
             component={Link}
-            to='/'
-            // href="#app-bar-wit-menu"
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -60,7 +65,7 @@ const AppHeader=()=> {
               textDecoration: 'none',
             }}
           >
-            PNC
+            Home
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -92,11 +97,12 @@ const AppHeader=()=> {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {/* {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              {/* Render pages in mobile menu */}
+              {pages.map((page) => (
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
-              ))} */}
+              ))}
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -119,18 +125,23 @@ const AppHeader=()=> {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {excelData?.length>0 &&
-            pages.map((page) => (
-              <Button
-                key={page.name}
-                component={Link}  // Add this line
-                to={page.path}    // Add this line
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page.name}
-              </Button>
-            ))}
+            {excelData?.length > 0 &&
+              pages.map((page) => (
+                <Button
+                  key={page.name}
+                  component={Link}
+                  to={page.path}
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    textDecoration: location.pathname === page.path ? 'underline' : 'none', // Underline current page
+                  }}
+                >
+                  {page.name}
+                </Button>
+              ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
