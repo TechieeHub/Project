@@ -58,12 +58,12 @@ const UploadExcel = () => {
           },
         }
       );
-      console.log("File uploaded successfully", response.data);
       const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
       setRefreshData(!refreshData);
+      window.location.reload(); // to reload the page
     } catch (error) {
       console.error("Error uploading file", error);
     }
