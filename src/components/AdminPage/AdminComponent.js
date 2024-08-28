@@ -3,19 +3,25 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 
 const AdminComponent = () => {
   const [excelData, setExcelData] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
   const [deletedColumnData, setDeletedColumnData] = useState([]);
+  const [deletedColumnByAdmin,setDeletedColumnByAdmin]=useState([])
+
 
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/data/")
       .then((response) => {
-        setExcelData(response.data.records);
-        setDeletedColumnData(response.data.deleted_columns);
+        setExcelData(response?.data?.records);
+        setDeletedColumnData(response?.data?.deleted_columns);
+        setDeletedColumnByAdmin(response?.data?.deleted_by_admin_columns)
       })
       .catch((error) => console.log("error", error));
     setRefreshData(false);
@@ -30,12 +36,16 @@ const AdminComponent = () => {
       isVisible: key !== "_id" && key !== "is_deleted",
     }));
 
+
     const actionColumn = {
       accessorKey: "actions",
       header: "Actions",
       Cell: ({ row }) => (
         <Box sx={{ display: "flex", gap: "0.5rem" }}>
-          <IconButton color="success" onClick={() => handleApprove(row.original)}>
+          <IconButton
+            color="success"
+            onClick={() => handleApprove(row.original)}
+          >
             <CheckCircleIcon />
           </IconButton>
           <IconButton color="error" onClick={() => handleReject(row.original)}>
@@ -48,26 +58,35 @@ const AdminComponent = () => {
     return [...dataColumns, actionColumn];
   }, [excelData]);
 
-  const deletedColumnColumns = useMemo(() => [
-    {
-      accessorKey: "account_id",
-      header: "Column Name",
-    },
-    {
-      accessorKey: "actions",
-      header: "Actions",
-      Cell: ({ row }) => (
-        <Box sx={{ display: "flex", gap: "0.5rem" }}>
-          <IconButton color="success" onClick={() => handleApproveColumn(row.original)}>
-            <CheckCircleIcon />
-          </IconButton>
-          <IconButton color="error" onClick={() => handleRejectColumn(row.original)}>
-            <CancelIcon />
-          </IconButton>
-        </Box>
-      ),
-    },
-  ], []);
+  const deletedColumnColumns = useMemo(
+    () => [
+      {
+        accessorKey: "account_id",
+        header: "Column Name",
+      },
+      {
+        accessorKey: "actions",
+        header: "Actions",
+        Cell: ({ row }) => (
+          <Box sx={{ display: "flex", gap: "0.5rem" }}>
+            <IconButton
+              color="success"
+              onClick={() => handleApproveColumn(row.original)}
+            >
+              <CheckCircleIcon />
+            </IconButton>
+            <IconButton
+              color="error"
+              onClick={() => handleRejectColumn(row.original)}
+            >
+              <CancelIcon />
+            </IconButton>
+          </Box>
+        ),
+      },
+    ],
+    []
+  );
 
   const filteredData = useMemo(() => {
     return excelData.filter(
@@ -76,34 +95,43 @@ const AdminComponent = () => {
   }, [excelData]);
 
   const handleApprove = (rowData) => {
-    const data={record_ids:[rowData?._id]}
+    const data = { record_ids: [rowData?._id] };
 
     axios
-      .post(`http://localhost:8000/api/record_deletion_approved/`,data)
+      .post(`http://localhost:8000/api/record_deletion_approved/`, data)
       .then(() => setRefreshData(!refreshData))
       .catch((error) => console.warn("Something went wrong"));
   };
 
   const handleReject = (rowData) => {
-    const data={record_ids:[rowData?._id]}
+    const data = { record_ids: [rowData?._id] };
     axios
-      .post(`http://localhost:8000/api/record_deletion_disapproved/`,data)
+      .post(`http://localhost:8000/api/record_deletion_disapproved/`, data)
       .then(() => setRefreshData(!refreshData))
       .catch((error) => console.warn("Something went wrong"));
   };
 
   const handleApproveColumn = (columnData) => {
-    // Implement logic to handle column approval
-    console.log('Approving column:', columnData);
-    // Example: axios.post(`http://localhost:8000/api/column_deletion_approved/${columnData.account_id}/`)
-    setRefreshData(!refreshData);
+    const data = { column_names: [columnData.account_id] };
+    console.log('kjcvjdsv',data)
+    if(data)
+    {
+    axios
+      .post(`http://localhost:8000/api/col_deletion_approval/`, data)
+      .then(() => setRefreshData(!refreshData))
+      .catch((error) => console.warn("Something went wrong"));
+    }
   };
 
   const handleRejectColumn = (columnData) => {
-    // Implement logic to handle column rejection
-    console.log('Rejecting column:', columnData);
-    // Example: axios.post(`http://localhost:8000/api/column_deletion_disapproved/${columnData.account_id}/`)
-    setRefreshData(!refreshData);
+    const data = { column_names: [columnData.account_id] };
+    if(data)
+    {
+    axios
+      .post(`http://localhost:8000/api/col_deletion_rejection/`, data)
+      .then(() => setRefreshData(!refreshData))
+      .catch((error) => console.warn("Something went wrong"));
+    }
   };
 
   const tableRow = useMaterialReactTable({
@@ -121,11 +149,13 @@ const AdminComponent = () => {
       },
     },
   });
+  const diffArr = deletedColumnData.filter(x => !deletedColumnByAdmin.includes(x));
+  console.log('hiuhiuh',deletedColumnData,deletedColumnByAdmin)
 
   const tableColumn = useMaterialReactTable({
     columns: deletedColumnColumns,
     initialState: { columnVisibility: { _id: false, is_deleted: false } },
-    data: deletedColumnData.map(item => ({ account_id: item })),
+    data: diffArr.map((item) => ({ account_id: item })),
     enableEditing: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
@@ -140,32 +170,43 @@ const AdminComponent = () => {
 
   const handleApproveAllRowDeletions = () => {
     // const data=filteredData.map()
-    const payload=filteredData.map(data=>data?._id)
-    const data={record_ids:payload}
+    const payload = filteredData.map((data) => data?._id);
+    const data = { record_ids: payload };
 
     axios
-      .post(`http://localhost:8000/api/record_deletion_approved/`,data)
+      .post(`http://localhost:8000/api/record_deletion_approved/`, data)
       .then(() => setRefreshData(!refreshData))
       .catch((error) => console.warn("Something went wrong"));
-
   };
 
   const handleRejectAllRowDeletions = () => {
-    const payload=filteredData.map(data=>data?._id)
-    const data={record_ids:payload}
+    const payload = filteredData.map((data) => data?._id);
+    const data = { record_ids: payload };
 
     axios
-      .post(`http://localhost:8000/api/record_deletion_disapproved/`,data)
+      .post(`http://localhost:8000/api/record_deletion_disapproved/`, data)
       .then(() => setRefreshData(!refreshData))
       .catch((error) => console.warn("Something went wrong"));
   };
 
   const handleApproveAllColumnDeletions = () => {
-    setRefreshData(!refreshData);
+    const data = { column_names: deletedColumnData };
+    if (data) {
+      axios
+        .post(`http://localhost:8000/api/col_deletion_approval/`, data)
+        .then(() => setRefreshData(!refreshData))
+        .catch((error) => console.warn("Something went wrong"));
+    }
   };
 
   const handleRejectAllColumnDeletions = () => {
-    setRefreshData(!refreshData);
+    const data = { column_names: deletedColumnData };
+    if (data) {
+      axios
+        .post(`http://localhost:8000/api/col_deletion_rejection/`, data)
+        .then(() => setRefreshData(!refreshData))
+        .catch((error) => console.warn("Something went wrong"));
+    }
   };
 
   return (
@@ -201,7 +242,7 @@ const AdminComponent = () => {
           <MaterialReactTable table={tableRow} />
         </>
       )}
-      {deletedColumnData.length > 0 && (
+      {diffArr.length > 0 && (
         <>
           <Button
             variant="contained"
