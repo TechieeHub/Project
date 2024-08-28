@@ -137,6 +137,11 @@ const AdminComponent = () => {
     enableEditing: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
+    enableFullScreenToggle:false,
+    enableColumnActions:false,
+    enableColumnFilters:false,
+    enableHiding:'false',
+
     muiTableHeadCellProps: {
       sx: {
         backgroundColor: "#818589",
@@ -148,7 +153,6 @@ const AdminComponent = () => {
   const diffArr = deletedColumnData.filter(
     (x) => !deletedColumnByAdmin.includes(x)
   );
-  console.log("hiuhiuh", deletedColumnData, deletedColumnByAdmin);
 
   const tableColumn = useMaterialReactTable({
     columns: deletedColumnColumns,
@@ -157,6 +161,10 @@ const AdminComponent = () => {
     enableEditing: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
+    enableFullScreenToggle:false,
+    enableColumnActions:false,
+    enableColumnFilters:false,
+    enableHiding:'false',
     muiTableHeadCellProps: {
       sx: {
         backgroundColor: "#818589",
