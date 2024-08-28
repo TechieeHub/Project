@@ -219,7 +219,7 @@ const AdminComponent = () => {
     <>
       {filteredData.length > 0 && (
         <Box
-        sx={{backgroundColor:'#A9A9A9', paddingBottom:'20px'}}
+        sx={{backgroundColor:'#A9A9A9', paddingBottom:'20px', marginBottom:'15px', borderBottomLeftRadius:'15px',borderBottomRightRadius:'15px'}}
         >
           <Button
             variant="contained"
@@ -249,7 +249,7 @@ const AdminComponent = () => {
           </Button>
           <Box
             sx={{
-              width: "100%",
+              width: "98%",
               marginLeft: "10px",
               marginRight: "10px",
               marginTop: "10px",
@@ -261,7 +261,7 @@ const AdminComponent = () => {
       )}
       {diffArr.length > 0 && (
         <Box
-        sx={{backgroundColor:'#A9A9A9', paddingBottom:'20px'}}
+        sx={{backgroundColor:'#A9A9A9', paddingBottom:'20px',borderTopLeftRadius:'15px',borderTopRightRadius:'15px'}}
         
         >
           <Button
