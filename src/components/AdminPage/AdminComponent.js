@@ -273,7 +273,7 @@ const AdminComponent = () => {
           <MaterialReactTable table={tableColumn} />
         </>
       )}
-      {filteredData.length === 0 && deletedColumnData.length === 0 && (
+      {filteredData.length === 0 && diffArr.length === 0 && (
         <Typography variant="h6" align="center" sx={{ mt: 4 }}>
           No records found
         </Typography>
