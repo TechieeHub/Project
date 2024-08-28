@@ -93,7 +93,7 @@ const UploadExcel = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "150px",
-          backgroundColor: "orange",
+          backgroundColor: "#A9A9A9",
         }}
       >
         <Box>
