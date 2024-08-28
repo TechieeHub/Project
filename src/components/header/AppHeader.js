@@ -8,14 +8,14 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-// Add Home to the pages array
 const pages = [
   { name: 'Accounts', path: '/' },
   { name: 'Summary and Visualization', path: '/charts' },
@@ -45,103 +45,39 @@ const AppHeader = () => {
 
   const excelData = useSelector((state) => state.excel.data);
 
+  // Determine the current tab based on the path
+  const currentTab = pages.findIndex((page) => page.path === location.pathname);
+
   return (
     <AppBar position="static" sx={{ backgroundColor: '#484848' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-          {/* <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Home
-          </Typography> */}
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            {/* <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton> */}
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {/* Render pages in mobile menu */}
-              {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page.name}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {excelData?.length > 0 &&
-              pages.map((page) => (
-                <Button
-                  key={page.name}
-                  component={Link}
-                  to={page.path}
-                  onClick={handleCloseNavMenu}
-                  sx={{
-                    my: 2,
-                    color: 'white',
-                    display: 'block',
-                    textDecoration: location.pathname === page.path ? 'underline' : 'none', // Underline current page
-                  }}
-                >
-                  {page.name}
-                </Button>
-              ))}
+            {excelData?.length > 0 && (
+              <Tabs
+                value={currentTab}
+                textColor="inherit"
+                indicatorColor="secondary"
+                aria-label="navigation tabs"
+                sx={{
+                  '& .MuiTabs-indicator': {
+                    backgroundColor: 'yellow', 
+                  },
+                }}
+              >
+                {pages.map((page, index) => (
+                  <Tab
+                    key={page.name}
+                    component={Link}
+                    to={page.path}
+                    label={page.name}
+                    sx={{
+                      color: location.pathname === page.path ? 'yellow' : 'white',
+                    }}
+                  />
+                ))}
+              </Tabs>
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -177,5 +113,5 @@ const AppHeader = () => {
       </Container>
     </AppBar>
   );
-}
+};
 export default AppHeader;
