@@ -261,7 +261,7 @@ const AdminComponent = () => {
       )}
       {diffArr.length > 0 && (
         <Box
-        sx={{backgroundColor:'#A9A9A9', paddingBottom:'20px',
+        sx={{ paddingBottom:'20px',
           borderTopLeftRadius:'15px',borderTopRightRadius:'15px'
         }}
         
