@@ -23,7 +23,7 @@ const AnomalieComponent = () => {
   // const filteredData = useSelector((state) => state.excel.filteredData);
 
 
-  // console.log('lkjncxkja',filteredData)
+  console.log('lkjncxkja',excelData.filter(item=>item.Anomaly==='').length)
   return (
     <TableContainer component={Paper}>
       <Typography sx={{ fontSize: "25px", fontWeight:600 , backgroundColor:'grey'}}>
@@ -54,8 +54,7 @@ const AnomalieComponent = () => {
               </TableCell>
             <TableCell>
             <Typography sx={{fontSize:'20px'}}>
-              
-              {(excelData?.map(data=>data?.Deviation_5Day_Today).length)-((excelData?.filter(data=>data?.Deviation_5Day_Today>0)?.length)+(excelData?.filter(data=>data?.Deviation_5Day_Today<=0)?.length))}
+              {excelData.filter(item=>item.Anomaly==='').length}
               </Typography>
               </TableCell>
             <TableCell></TableCell>
@@ -74,7 +73,9 @@ const AnomalieComponent = () => {
             </TableCell>
             <TableCell>
             <Typography sx={{fontSize:'20px'}}>
-            {excelData?.filter(data=>data?.Deviation_5Day_Today>0)?.length}</Typography></TableCell>
+            {excelData?.filter(data=>data?.Anomaly.includes('10%'))
+            
+            ?.length}</Typography></TableCell>
             <TableCell></TableCell>
             <TableCell>
             <Button
@@ -101,7 +102,7 @@ const AnomalieComponent = () => {
             <TableCell>
             <Typography sx={{fontSize:'20px'}}>
               
-              {excelData?.filter(data=>data?.Deviation_5Day_Today<=0)?.length}
+              {excelData?.filter(data=>(!data?.Anomaly.includes('10%') && data.Anomaly!==''))?.length}
               </Typography></TableCell>
             <TableCell></TableCell>
             <TableCell>
