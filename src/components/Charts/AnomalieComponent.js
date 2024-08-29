@@ -46,8 +46,18 @@ const AnomalieComponent = () => {
         </TableHead>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontSize: "17px" ,fontWeight:550}}>No anomalies</TableCell>
-            <TableCell>{excelData?.map(data=>data?.Deviation_5Day_Today).length}</TableCell>
+            <TableCell >
+            <Typography sx={{fontSize:'20px', fontWeight:550}}>
+              
+              No anomalies
+              </Typography>
+              </TableCell>
+            <TableCell>
+            <Typography sx={{fontSize:'20px'}}>
+              
+              {(excelData?.map(data=>data?.Deviation_5Day_Today).length)-((excelData?.filter(data=>data?.Deviation_5Day_Today>0)?.length)+(excelData?.filter(data=>data?.Deviation_5Day_Today<=0)?.length))}
+              </Typography>
+              </TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
 
@@ -57,8 +67,14 @@ const AnomalieComponent = () => {
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell>EOD balance more than 5 day average end of day balance by 10%</TableCell>
-            <TableCell>{excelData?.filter(data=>data?.Deviation_5Day_Today>0)?.length}</TableCell>
+            <TableCell>
+            <Typography sx={{fontSize:'20px'}}>
+            EOD balance more than 5 day average end of day balance by 10%
+            </Typography>
+            </TableCell>
+            <TableCell>
+            <Typography sx={{fontSize:'20px'}}>
+            {excelData?.filter(data=>data?.Deviation_5Day_Today>0)?.length}</Typography></TableCell>
             <TableCell></TableCell>
             <TableCell>
             <Button
@@ -79,8 +95,14 @@ const AnomalieComponent = () => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>EOD Balance less than 5 day average end of day balance</TableCell>
-            <TableCell>{excelData?.filter(data=>data?.Deviation_5Day_Today<=0)?.length}</TableCell>
+            <TableCell>
+            <Typography sx={{fontSize:'20px'}}>
+            EOD Balance less than 5 day average end of day balance</Typography></TableCell>
+            <TableCell>
+            <Typography sx={{fontSize:'20px'}}>
+              
+              {excelData?.filter(data=>data?.Deviation_5Day_Today<=0)?.length}
+              </Typography></TableCell>
             <TableCell></TableCell>
             <TableCell>
             <Button

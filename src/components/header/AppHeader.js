@@ -49,7 +49,7 @@ const AppHeader = () => {
   const currentTab = pages.findIndex((page) => page.path === location.pathname);
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#484848' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#484848' ,paddingLeft: 0, paddingRight: 0}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -61,7 +61,7 @@ const AppHeader = () => {
                 aria-label="navigation tabs"
                 sx={{
                   '& .MuiTabs-indicator': {
-                    backgroundColor: 'yellow', 
+                    backgroundColor: 'white', 
                   },
                 }}
               >
@@ -72,7 +72,7 @@ const AppHeader = () => {
                     to={page.path}
                     label={page.name}
                     sx={{
-                      color: location.pathname === page.path ? 'yellow' : 'white',
+                      color: location.pathname === page.path ? 'white' : 'white',
                     }}
                   />
                 ))}
