@@ -52,7 +52,10 @@ const VisualizationComponent = () => {
           </TableRow> */}
           <TableRow>
             <TableCell sx={{ fontSize: "17px", fontWeight: 550 }}>
+            <Typography sx={{fontSize:'20px', fontWeight:550}}>
+
               Total MDM IDs
+              </Typography>
             </TableCell>
             <TableCell>{excelData?.length}</TableCell>
             <TableCell></TableCell>
@@ -77,12 +80,14 @@ const VisualizationComponent = () => {
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell>Large run</TableCell>
+            <TableCell><Typography sx={{fontSize:'20px'}}>Large run</Typography></TableCell>
             <TableCell>
+            <Typography sx={{fontSize:'20px'}}>
               {
                 excelData?.filter((data) => data.AccountRefresh === "Large run")
                   ?.length
               }
+              </Typography>
             </TableCell>
             <TableCell></TableCell>
             <TableCell>
@@ -114,12 +119,18 @@ const VisualizationComponent = () => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Quick run</TableCell>
             <TableCell>
+            <Typography sx={{fontSize:'20px'}}>
+              Quick run
+              </Typography>
+              </TableCell>
+            <TableCell>
+            <Typography sx={{fontSize:'20px'}}>
               {
                 excelData?.filter((data) => data.AccountRefresh === "Quick run")
                   ?.length
               }
+              </Typography>
             </TableCell>
             <TableCell></TableCell>
             <TableCell>
