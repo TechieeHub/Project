@@ -38,6 +38,9 @@ const AnomalieComponent = () => {
           <TableRow>
             <TableCell sx={{ fontSize: "20px" ,fontWeight:600}}>
             Count in latest run</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
             
           </TableRow>
         </TableHead>
@@ -45,6 +48,9 @@ const AnomalieComponent = () => {
           <TableRow>
             <TableCell sx={{ fontSize: "17px" ,fontWeight:550}}>No anomalies</TableCell>
             <TableCell>{excelData?.map(data=>data?.Deviation_5Day_Today).length}</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+
 
 
           </TableRow>
@@ -55,10 +61,19 @@ const AnomalieComponent = () => {
             <TableCell>{excelData?.filter(data=>data?.Deviation_5Day_Today>0)?.length}</TableCell>
             <TableCell></TableCell>
             <TableCell>
-              <Button  variant="contained"
-              sx={{
-                backgroundColor: "grey",
-              }}>
+            <Button
+                key={'eodBalanceMoreThen5days'}
+                // component={Link}  
+                // to={"/"}   
+                sx={{
+                  my: 2,
+                  display: 'block',
+                  textDecoration: 'underline', 
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
                 View
               </Button>
             </TableCell>
@@ -68,13 +83,24 @@ const AnomalieComponent = () => {
             <TableCell>{excelData?.filter(data=>data?.Deviation_5Day_Today<=0)?.length}</TableCell>
             <TableCell></TableCell>
             <TableCell>
-              <Button  variant="contained"
-              sx={{
-                backgroundColor: "grey",
-              }}>
+            <Button
+                key={'eodBalanceLessThen5days'}
+                // component={Link}  
+                // to={"/"}   
+                sx={{
+                  my: 2,
+                  display: 'block',
+                  textDecoration: 'underline', 
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
                 View
               </Button>
-            </TableCell>
+              
+              
+                         </TableCell>
           </TableRow>
         </TableBody>
       </Table>

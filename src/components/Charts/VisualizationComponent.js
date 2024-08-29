@@ -86,13 +86,28 @@ const VisualizationComponent = () => {
             </TableCell>
             <TableCell></TableCell>
             <TableCell>
-              <Button
+              {/* <Button
                 variant="contained"
                 sx={{
                   backgroundColor: "grey",
                 }}
 
                 // onClick={()=>largeRunViewHandler()}
+              >
+                View
+              </Button> */}
+                            <Button
+                key={'largeRunView'}
+                // component={Link}  
+                // to={"/"}   
+                sx={{
+                  my: 2,
+                  display: 'block',
+                  textDecoration: 'underline', // Underline the text
+                  '&:hover': {
+                    textDecoration: 'underline', // Ensure underline on hover as well
+                  },
+                }}
               >
                 View
               </Button>
@@ -108,13 +123,18 @@ const VisualizationComponent = () => {
             </TableCell>
             <TableCell></TableCell>
             <TableCell>
-              <Button
-                variant="contained"
+            <Button
+                key={'quickRunView'}
+                // component={Link}  
+                // to={"/"}   
                 sx={{
-                  backgroundColor: "grey",
+                  my: 2,
+                  display: 'block',
+                  textDecoration: 'underline', 
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
                 }}
-
-                // onClick={()=>quickRunViewHandler()}
               >
                 View
               </Button>
