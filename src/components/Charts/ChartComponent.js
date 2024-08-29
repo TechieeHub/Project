@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 // Transform the data to a more usable format
 const transformData = (data) => {
@@ -38,14 +38,27 @@ const transposeData = (data) => {
   return transposed;
 };
 
+// Generate a color palette
+const generateColorPalette = (numColors) => {
+  const colors = [
+    "#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#413ea0",
+    "#d0ed57", "#ff6f6f", "#7b68ee", "#32cd32", "#dc143c"
+  ];
+  return colors.slice(0, numColors);
+};
+
 const ChartComponent = ({ data }) => {
   const transformedData = transformData(data);
   const transposedData = transposeData(transformedData);
 
+  // Generate a color for each account ID
+  const accountIDs = Object.keys(transposedData[0]).filter(key => key !== 'name');
+  const colors = generateColorPalette(accountIDs.length);
+
   return (
     <ResponsiveContainer width="100%" height={500}>
       <LineChart data={transposedData}>
-        <CartesianGrid strokeDasharray="3 3" />
+        {/* Remove the CartesianGrid component to remove grid lines */}
         
         {/* XAxis now uses the balance dates */}
         <XAxis dataKey="name" />
@@ -56,13 +69,13 @@ const ChartComponent = ({ data }) => {
         <Tooltip />
         <Legend verticalAlign="top" />
 
-        {/* Create a line for each account ID */}
-        {Object.keys(transposedData[0]).filter(key => key !== 'name').map((accountID, index) => (
+        {/* Create a line for each account ID with a unique color */}
+        {accountIDs.map((accountID, index) => (
           <Line
             key={index}
             type="monotone"
             dataKey={accountID}
-            stroke={index % 2 === 0 ? "#8884d8" : "#82ca9d"}
+            stroke={colors[index]}
             dot={false}
             strokeWidth={2}
           />
