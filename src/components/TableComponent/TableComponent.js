@@ -17,6 +17,8 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Typography,
+  Slider,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -38,11 +40,15 @@ const TableComponent = ({
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
   const [exportOption, setExportOption] = useState("");
+  const [sliderValue, setSliderValue] = useState(50)
   const dispatch = useDispatch();
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
     setOpen(true);
+  };
+  const handleSliderChange = (event, newValue) => {
+    setSliderValue(newValue);
   };
 
   const handleCloseDialog = () => {
@@ -356,6 +362,7 @@ const TableComponent = ({
   }
   return (
     <>
+    <Box sx={{display:'flex'}}>
       <Button
         variant="contained"
         sx={{
@@ -451,6 +458,24 @@ const TableComponent = ({
       >
         Export
       </Button>
+      <Box sx={{width:'35%', marginLeft:'5%', marginTop:'30px', display:'flex'}}>
+        <Typography sx={{marginRight:'10px', fontWeight:"550"}}>Anomaly:</Typography>
+        <Typography sx={{marginRight:'30px', fontWeight:"550"}}>{sliderValue}%</Typography>
+        
+      <Slider
+        value={sliderValue}
+        onChange={handleSliderChange}
+        min={0}
+        max={100}
+        aria-labelledby="continuous-slider"
+        sx={{color:'grey'}}
+        marks={[
+          { value: 0, label: '0' },
+          { value: 100, label: '100' },
+        ]}
+      />
+      </Box>
+      </Box>
       {location?.pathname==="/admin" && 
       <Button
         variant="contained"
