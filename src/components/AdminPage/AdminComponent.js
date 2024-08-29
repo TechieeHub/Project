@@ -151,7 +151,7 @@ const AdminComponent = () => {
     },
   });
   const diffArr = deletedColumnData.filter(
-    (x) => !deletedColumnByAdmin.includes(x)
+    (x) => !deletedColumnByAdmin?.includes(x)
   );
 
   const tableColumn = useMaterialReactTable({
