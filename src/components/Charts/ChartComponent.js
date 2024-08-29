@@ -6,11 +6,11 @@ const transformData = (data) => {
   return data.map(item => ({
     accountID: item["Account ID"],
     eodBalances: [
-      { date: "14Aug", balance: parseFloat(item["EODBalance-14Aug"]) || 0 },
-      { date: "15Aug", balance: parseFloat(item["EODBalance-15Aug"]) || 0 },
-      { date: "16Aug", balance: parseFloat(item["EODBalance-16Aug"]) || 0 },
-      { date: "17Aug", balance: parseFloat(item["EODBalance-17Aug"]) || 0 },
-      { date: "18Aug", balance: parseFloat(item["EODBalance-18Aug"]) || 0 },
+      { date: "EODBalance-14Aug", balance: parseFloat(item["EODBalance-14Aug"]) || 0 },
+      { date: "EODBalance-15Aug", balance: parseFloat(item["EODBalance-15Aug"]) || 0 },
+      { date: "EODBalance-16Aug", balance: parseFloat(item["EODBalance-16Aug"]) || 0 },
+      { date: "EODBalance-17Aug", balance: parseFloat(item["EODBalance-17Aug"]) || 0 },
+      { date: "EODBalance-18Aug", balance: parseFloat(item["EODBalance-18Aug"]) || 0 },
       { date: "Projected", balance: parseFloat(item["Projected Balance"]) || 0 },
       { date: "5DayAvg", balance: parseFloat(item["5-Day average"]) || 0 }
     ]
