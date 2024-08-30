@@ -34,7 +34,7 @@ const ChartData = () => {
     <Box>
       <Box sx={{ display: 'flex', gap: '10px', marginTop: '10px', marginLeft: '5px', marginRight: '5px' }}>
         <VisualizationComponent onView={handleView} />
-        <AnomalieComponent />
+        <AnomalieComponent onView={handleView} />
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginTop: '30px' }}>
         {filteredChartData?.length > 0 ? (
