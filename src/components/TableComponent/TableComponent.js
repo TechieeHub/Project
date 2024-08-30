@@ -40,10 +40,11 @@ const TableComponent = ({
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
   const [exportOption, setExportOption] = useState("");
-  const [sliderValue, setSliderValue] = useState(50);
+  const [sliderValue, setSliderValue] = useState(10);
   const dispatch = useDispatch();
 
-  const anamolyDataValue = useSelector((state) => state.excel.anomalyValue);
+  const anamolyValue = useSelector((state) => state.excel.anomalyValue);
+  const anamolyDataValue =anamolyValue?anamolyValue:sliderValue
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
