@@ -355,10 +355,13 @@ const TableComponent = ({
       .then((response) => refreshDataHandler(true))
       .catch((error) => alert("Something went wrong"));
   };
-  const handleAllDeletions=()=>{
-  // console.log('ljkdckdckjd',location?.pathname==="/admin")
+  
+
+
+  const anomalyHandler=()=>{
 
     return;
+    
   }
   return (
     <>
@@ -475,6 +478,20 @@ const TableComponent = ({
         ]}
       />
       </Box>
+      <Box>
+        <Button
+        onClick={anomalyHandler}
+        variant="contained"
+        sx={{
+          maxHeight: "30px",
+          marginLeft: "20px",
+          marginTop: "30px",
+          backgroundColor: "grey",
+        }}
+      >
+        Set Anomaly
+      </Button>
+      </Box>
       </Box>
       {location?.pathname==="/admin" && 
       <Button
@@ -485,7 +502,6 @@ const TableComponent = ({
           marginTop: "30px",
           backgroundColor: "grey",
         }}
-        onClick={handleAllDeletions}
       >
         Approve All Deletions
       </Button>

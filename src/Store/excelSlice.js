@@ -5,7 +5,8 @@ const excelSlice = createSlice({
   initialState: {
     data: [],
     filteredData: [],
-    chartDisplayData:[]
+    chartDisplayData:[],
+    anomalyValue:''
   },
   reducers: {
     setTableData: (state, action) => {
@@ -15,10 +16,13 @@ const excelSlice = createSlice({
       state.filteredData = action.payload;
     },
     setChartDisplayData: (state, action) => {
-      state.filteredData = action.payload;
+      state.chartDisplayData = action.payload;
+    },
+    setAnomalyValue: (state, action) => {
+      state.anomalyValue = action.payload;
     },
   },
 });
 
-export const { setTableData,setFilteredData,setChartDisplayData } = excelSlice.actions;
+export const { setTableData,setFilteredData,setChartDisplayData,setAnomalyValue } = excelSlice.actions;
 export default excelSlice.reducer;
