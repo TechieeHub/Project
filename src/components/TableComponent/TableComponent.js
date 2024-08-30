@@ -23,8 +23,8 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setFilteredData } from "../../Store/excelSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setAnomalyValue, setFilteredData } from "../../Store/excelSlice";
 
 const TableComponent = ({
   excelData,
@@ -40,8 +40,11 @@ const TableComponent = ({
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
   const [exportOption, setExportOption] = useState("");
-  const [sliderValue, setSliderValue] = useState(50)
+  const [sliderValue, setSliderValue] = useState(10);
   const dispatch = useDispatch();
+
+  const anamolyValue = useSelector((state) => state.excel.anomalyValue);
+  const anamolyDataValue = anamolyValue ? anamolyValue : sliderValue;
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
@@ -87,7 +90,6 @@ const TableComponent = ({
 
   const handleDeleteColumn = (columnKey) => {
     if (window.confirm("Are you sure you want to delete this column?")) {
-
       handleSoftDeleteColumn(columnKey);
     }
   };
@@ -145,60 +147,54 @@ const TableComponent = ({
     const number = parseFloat(cleanedStr);
     return isNaN(number) ? 0 : number;
   };
- 
   const calculateColumns = (data) => {
     const activeColumns = Object.keys(excelData[0] || {}).filter(
       (key) => !deletedColumns.includes(key) && key.startsWith("EODBalance")
     );
-  
+
     return data.map((row) => {
-      const projectedBalance = convertToNumber(row["Available Balance"] || 0) - convertToNumber(row["Scheduled Out Balance"] || 0);
-      
-      // Calculate the average only with active columns
-      const total = activeColumns.reduce((sum, columnKey) => sum + convertToNumber(row[columnKey] || 0), 0);
-      const average5Day = activeColumns.length > 0 ? total / activeColumns.length : 0;
-      
-      const deviation5DayToday = average5Day === 0 ? 0 : ((projectedBalance - average5Day) / average5Day) * 100;
-  
+      const projectedBalance =
+        convertToNumber(row["Available Balance"] || 0) -
+        convertToNumber(row["Scheduled Out Balance"] || 0);
+
+      const total = activeColumns.reduce(
+        (sum, columnKey) => sum + convertToNumber(row[columnKey] || 0),
+        0
+      );
+      const average5Day =
+        activeColumns.length > 0 ? total / activeColumns.length : 0;
+
+      const deviation5DayToday =
+        average5Day === 0
+          ? 0
+          : ((projectedBalance - average5Day) / average5Day) * 100;
+
       return {
         ...row,
         "Projected Balance": projectedBalance,
         "5-Day average": average5Day,
-        "Deviation_5Day_Today": isNaN(deviation5DayToday) ? 0 : deviation5DayToday,
-        "Anomaly": deviation5DayToday < 0 ? 'EOD Balance less than 5 day average end of day balance' 
-                  : deviation5DayToday > 10 ? "EOD balance more than 5 day average end of day balance by 10%" 
-                  : ''
+        Deviation_5Day_Today: isNaN(deviation5DayToday)
+          ? 0
+          : deviation5DayToday,
+        Anomaly:
+          deviation5DayToday < 0
+            ? "EOD Balance less than 5 day average end of day balance"
+            : deviation5DayToday > anamolyDataValue
+            ? `EOD balance more than 5 day average end of day balance by ${anamolyDataValue}%`
+            : "",
       };
     });
   };
-  
-  // const calculateColumns = (data) => {
-  //   return data.map((row) => {
-  //     const projectedBalance = convertToNumber(row["Available Balance"] || 0) - convertToNumber(row["Scheduled Out Balance"] || 0);
-  //     const average5Day = (
-  //       convertToNumber(row["EODBalance-14Aug"] || 0) +
-  //       convertToNumber(row["EODBalance-15Aug"] || 0) +
-  //       convertToNumber(row["EODBalance-16Aug"] || 0) +
-  //       convertToNumber(row["EODBalance-17Aug"] || 0) +
-  //       convertToNumber(row["EODBalance-18Aug"] || 0)
-  //     ) / 5;
-  
-  //     const deviation5DayToday = average5Day === 0 ? 0 : ((projectedBalance - average5Day) / average5Day) * 100;
-  
-  //     return {
-  //       ...row,
-  //       "Projected Balance": projectedBalance,
-  //       "5-Day average": average5Day,
-  //       "Deviation_5Day_Today": isNaN(deviation5DayToday) ? 0 : deviation5DayToday,
-  //       "Anomaly": deviation5DayToday < 0 ? 'EOD Balance less than 5 day average end of day balance' 
-  //                 : deviation5DayToday > 10 ? "EOD balance more than 5 day average end of day balance by 10%" 
-  //                 : ''
-  //     };
-  //   });
-  // };
-  
 
-  const updatedExcelData = calculateColumns(excelData);
+  useEffect(() => {
+    dispatch(setAnomalyValue(sliderValue));
+  }, [dispatch, sliderValue]);
+
+  const updatedExcelData = useMemo(
+    () => calculateColumns(excelData),
+    [excelData, anamolyDataValue]
+  );
+
   const columns = useMemo(() => {
     const defaultColumns = [
       {
@@ -279,8 +275,9 @@ const TableComponent = ({
 
   const filteredData = useMemo(
     () => updatedExcelData.filter((row) => !row.is_deleted),
-    [excelData]
+    [excelData, anamolyDataValue]
   );
+
   useEffect(() => {
     dispatch(setFilteredData(filteredData));
   }, [filteredData, dispatch]);
@@ -355,163 +352,166 @@ const TableComponent = ({
       .then((response) => refreshDataHandler(true))
       .catch((error) => alert("Something went wrong"));
   };
-  
 
-
-  const anomalyHandler=()=>{
-
-    return;
-    
-  }
   return (
     <>
-    <Box sx={{display:'flex'}}>
-      <Button
-        variant="contained"
-        sx={{
-          maxHeight: "30px",
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-        onClick={handleOpenDialog}
-      >
-        Edit columns
-      </Button>
-      <Button
-        variant="contained"
-        sx={{
-          maxHeight: "30px",
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-        onClick={handleOpenAddColumnDialog}
-      >
-        Add Column
-      </Button>
-      <Button
-        onClick={handleAddRow}
-        variant="contained"
-        sx={{
-          maxHeight: "30px",
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-      >
-        Add New Row
-      </Button>
-
-      <FormControl
-        sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}
-      >
-        <InputLabel
+      <Box sx={{ display: "flex" }}>
+        <Button
+          variant="contained"
           sx={{
-            fontSize: "14px",
-            lineHeight: "1.2",
-            transform: "translate(14px, 8px) scale(1)",
+            maxHeight: "30px",
+            marginLeft: "20px",
+            marginTop: "30px",
+            backgroundColor: "grey",
           }}
-          id="export-select-label"
+          onClick={handleOpenDialog}
         >
-          Export
-        </InputLabel>
-        <Select
-          labelId="export-select-label"
-          id="export-select"
-          value={exportOption}
-          label="Export"
-          onChange={(e) => setExportOption(e.target.value)}
+          Edit columns
+        </Button>
+        <Button
+          variant="contained"
           sx={{
-            height: "30px",
-            minHeight: "30px",
-            fontSize: "14px",
-            paddingTop: "2px",
-            paddingBottom: "2px",
+            maxHeight: "30px",
+            marginLeft: "20px",
+            marginTop: "30px",
+            backgroundColor: "grey",
           }}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                maxHeight: 200,
-                "& .MuiMenuItem-root": {
-                  fontSize: "14px",
-                  padding: "4px 8px",
+          onClick={handleOpenAddColumnDialog}
+        >
+          Add Column
+        </Button>
+        <Button
+          onClick={handleAddRow}
+          variant="contained"
+          sx={{
+            maxHeight: "30px",
+            marginLeft: "20px",
+            marginTop: "30px",
+            backgroundColor: "grey",
+          }}
+        >
+          Add New Row
+        </Button>
+
+        <FormControl
+          sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}
+        >
+          <InputLabel
+            sx={{
+              fontSize: "14px",
+              lineHeight: "1.2",
+              transform: "translate(14px, 8px) scale(1)",
+            }}
+            id="export-select-label"
+          >
+            Export
+          </InputLabel>
+          <Select
+            labelId="export-select-label"
+            id="export-select"
+            value={exportOption}
+            label="Export"
+            onChange={(e) => setExportOption(e.target.value)}
+            sx={{
+              height: "30px",
+              minHeight: "30px",
+              fontSize: "14px",
+              paddingTop: "2px",
+              paddingBottom: "2px",
+            }}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  maxHeight: 200,
+                  "& .MuiMenuItem-root": {
+                    fontSize: "14px",
+                    padding: "4px 8px",
+                  },
                 },
               },
-            },
+            }}
+          >
+            <MenuItem value="pdf">Export to PDF</MenuItem>
+            <MenuItem value="excel">Export to Excel</MenuItem>
+          </Select>
+        </FormControl>
+
+        <Button
+          variant="contained"
+          sx={{
+            maxHeight: "30px",
+
+            marginLeft: "20px",
+            marginTop: "30px",
+            backgroundColor: "grey",
+          }}
+          onClick={handleExport}
+          disabled={!exportOption}
+        >
+          Export
+        </Button>
+        <Box
+          sx={{
+            width: "35%",
+            marginLeft: "5%",
+            marginTop: "30px",
+            display: "flex",
           }}
         >
-          <MenuItem value="pdf">Export to PDF</MenuItem>
-          <MenuItem value="excel">Export to Excel</MenuItem>
-        </Select>
-        
-      </FormControl>
+          <Typography sx={{ marginRight: "10px", fontWeight: "550" }}>
+            Anomaly:
+          </Typography>
+          <Typography sx={{ marginRight: "30px", fontWeight: "550" }}>
+            {sliderValue}%
+          </Typography>
 
-      <Button
-        variant="contained"
-        sx={{
-          maxHeight: "30px",
-
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-        onClick={handleExport}
-        disabled={!exportOption}
-      >
-        Export
-      </Button>
-      <Box sx={{width:'35%', marginLeft:'5%', marginTop:'30px', display:'flex'}}>
-        <Typography sx={{marginRight:'10px', fontWeight:"550"}}>Anomaly:</Typography>
-        <Typography sx={{marginRight:'30px', fontWeight:"550"}}>{sliderValue}%</Typography>
-        
-      <Slider
-        value={sliderValue}
-        onChange={handleSliderChange}
-        min={0}
-        max={100}
-        aria-labelledby="continuous-slider"
-        sx={{color:'grey'}}
-        marks={[
-          { value: 0, label: '0' },
-          { value: 100, label: '100' },
-        ]}
-      />
+          <Slider
+            value={sliderValue}
+            onChange={handleSliderChange}
+            min={0}
+            max={100}
+            aria-labelledby="continuous-slider"
+            sx={{ color: "grey" }}
+            marks={[
+              { value: 0, label: "0" },
+              { value: 100, label: "100" },
+            ]}
+          />
+        </Box>
+        {/* <Box>
+          <Button
+            onClick={anomalyHandler}
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+          >
+            Set Anomaly
+          </Button>
+        </Box> */}
       </Box>
-      <Box>
+      {location?.pathname === "/admin" && (
         <Button
-        onClick={anomalyHandler}
-        variant="contained"
-        sx={{
-          maxHeight: "30px",
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-      >
-        Set Anomaly
-      </Button>
-      </Box>
-      </Box>
-      {location?.pathname==="/admin" && 
-      <Button
-        variant="contained"
-        sx={{
-          maxHeight: "30px",
-          marginLeft: "20px",
-          marginTop: "30px",
-          backgroundColor: "grey",
-        }}
-      >
-        Approve All Deletions
-      </Button>
-}
+          variant="contained"
+          sx={{
+            maxHeight: "30px",
+            marginLeft: "20px",
+            marginTop: "30px",
+            backgroundColor: "grey",
+          }}
+        >
+          Approve All Deletions
+        </Button>
+      )}
       <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle>Edit Column Names</DialogTitle>
         <DialogContent>
           {Object.keys(excelData[0] || {})
             .filter((key) => key !== "_id")
-            .filter((key) => !deletedColumns.includes(key)) 
+            .filter((key) => !deletedColumns.includes(key))
             .map((key) => (
               <Box
                 key={key}
