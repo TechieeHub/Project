@@ -44,7 +44,7 @@ const TableComponent = ({
   const dispatch = useDispatch();
 
   const anamolyValue = useSelector((state) => state.excel.anomalyValue);
-  const anamolyDataValue =anamolyValue?anamolyValue:sliderValue
+  const anamolyDataValue = anamolyValue ? anamolyValue : sliderValue;
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
@@ -151,29 +151,31 @@ const TableComponent = ({
     const activeColumns = Object.keys(excelData[0] || {}).filter(
       (key) => !deletedColumns.includes(key) && key.startsWith("EODBalance")
     );
-  
+
     return data.map((row) => {
       const projectedBalance =
         convertToNumber(row["Available Balance"] || 0) -
         convertToNumber(row["Scheduled Out Balance"] || 0);
-  
+
       const total = activeColumns.reduce(
         (sum, columnKey) => sum + convertToNumber(row[columnKey] || 0),
         0
       );
       const average5Day =
         activeColumns.length > 0 ? total / activeColumns.length : 0;
-  
+
       const deviation5DayToday =
         average5Day === 0
           ? 0
           : ((projectedBalance - average5Day) / average5Day) * 100;
-  
+
       return {
         ...row,
         "Projected Balance": projectedBalance,
         "5-Day average": average5Day,
-        Deviation_5Day_Today: isNaN(deviation5DayToday) ? 0 : deviation5DayToday,
+        Deviation_5Day_Today: isNaN(deviation5DayToday)
+          ? 0
+          : deviation5DayToday,
         Anomaly:
           deviation5DayToday < 0
             ? "EOD Balance less than 5 day average end of day balance"
@@ -183,8 +185,15 @@ const TableComponent = ({
       };
     });
   };
-  
-  const updatedExcelData = useMemo(() => calculateColumns(excelData), [excelData, anamolyDataValue]);
+
+  useEffect(() => {
+    dispatch(setAnomalyValue(sliderValue));
+  }, [dispatch, sliderValue]);
+
+  const updatedExcelData = useMemo(
+    () => calculateColumns(excelData),
+    [excelData, anamolyDataValue]
+  );
 
   const columns = useMemo(() => {
     const defaultColumns = [
@@ -268,7 +277,7 @@ const TableComponent = ({
     () => updatedExcelData.filter((row) => !row.is_deleted),
     [excelData, anamolyDataValue]
   );
-  
+
   useEffect(() => {
     dispatch(setFilteredData(filteredData));
   }, [filteredData, dispatch]);
@@ -342,10 +351,6 @@ const TableComponent = ({
       .post("http://localhost:8000/api/add-column/", data)
       .then((response) => refreshDataHandler(true))
       .catch((error) => alert("Something went wrong"));
-  };
-
-  const anomalyHandler = () => {
-    dispatch(setAnomalyValue(sliderValue));
   };
 
   return (
@@ -473,7 +478,7 @@ const TableComponent = ({
             ]}
           />
         </Box>
-        <Box>
+        {/* <Box>
           <Button
             onClick={anomalyHandler}
             variant="contained"
@@ -486,7 +491,7 @@ const TableComponent = ({
           >
             Set Anomaly
           </Button>
-        </Box>
+        </Box> */}
       </Box>
       {location?.pathname === "/admin" && (
         <Button

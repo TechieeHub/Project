@@ -20,10 +20,11 @@ const AnomalieComponent = () => {
     (data) => data.is_deleted !== true
   );
 
-  // const filteredData = useSelector((state) => state.excel.filteredData);
+  const anamolyValue = useSelector((state) => state.excel.anomalyValue);
+  
 
 
-  console.log('lkjncxkja',excelData.filter(item=>item.Anomaly==='').length)
+  console.log('lkjncxkja',excelData)
   return (
     <TableContainer component={Paper}>
       <Typography sx={{ fontSize: "25px", fontWeight:600 , backgroundColor:'grey'}}>
@@ -54,7 +55,9 @@ const AnomalieComponent = () => {
               </TableCell>
             <TableCell>
             <Typography sx={{fontSize:'20px'}}>
-              {excelData.filter(item=>item.Anomaly==='').length}
+              {excelData.length-((excelData?.filter(data=>data?.Anomaly.includes(anamolyValue))
+            
+            ?.length)+excelData?.filter(data=>(!data?.Anomaly.includes('10%') && data.Anomaly!==''))?.length)}
               </Typography>
               </TableCell>
             <TableCell></TableCell>
@@ -68,12 +71,12 @@ const AnomalieComponent = () => {
           <TableRow>
             <TableCell>
             <Typography sx={{fontSize:'20px'}}>
-            EOD balance more than 5 day average end of day balance by 10%
+            EOD balance more than 5 day average end of day balance by {anamolyValue}%
             </Typography>
             </TableCell>
             <TableCell>
             <Typography sx={{fontSize:'20px'}}>
-            {excelData?.filter(data=>data?.Anomaly.includes('10%'))
+            {excelData?.filter(data=>data?.Anomaly.includes(anamolyValue))
             
             ?.length}</Typography></TableCell>
             <TableCell></TableCell>
