@@ -336,17 +336,17 @@ const AdminComponent = () => {
           </Box>
         </Box>
       )}
-      {filteredData.length === 0 && diffArr.length === 0 && (
+      {(filteredData.length === 0 && diffArr.length === 0) &&( !approvedDeletedRowsByAdmin&& !approvedDeletedColumnsByAdmin && !rejectedDeletedRowsByAdmin && !rejectedDeletedColumnsByAdmin) &&(
         <Typography variant="h6" align="center" sx={{ mt: 4 }}>
           No records found
         </Typography>
       )}
 
-      <TableContainer component={Paper}  sx={{ maxWidth: "700px", marginTop:'30px'}}>
+      <TableContainer component={Paper}  sx={{ maxWidth: "700px", marginTop:'30px', marginBottom:'50px', marginLeft:'10px'}}>
         <Typography
           sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
         >
-          <Box sx={{ marginLeft: "15px" }}>Records</Box>
+          <Box sx={{ marginLeft: "15px" }}>Admin Records</Box>
         </Typography>
         <Table>
           <TableHead>
@@ -356,7 +356,7 @@ const AdminComponent = () => {
                   Row Deletions Approved By Admin
                 </Typography>
               </TableCell>
-              <TableCell>{approvedDeletedRowsByAdmin?.length}</TableCell>
+              <TableCell sx={{ fontSize: "20px" }}>{approvedDeletedRowsByAdmin?.length}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
