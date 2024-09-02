@@ -53,7 +53,7 @@ const transposeData = (data) => {
 const generateColorPalette = (numColors) => {
   const colors = [
     "#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#413ea0",
-    "#d0ed57", "#ff6f6f", "#7b68ee", "#32cd32", "#dc143c"
+    "#d0ed57", "#ff6f6f", "#32cd32", "#dc143c", "#000066", "#7b68ee"
   ];
   return colors.slice(0, numColors);
 };
