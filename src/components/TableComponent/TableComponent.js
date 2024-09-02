@@ -40,7 +40,11 @@ const TableComponent = ({
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
   const [exportOption, setExportOption] = useState("");
-  const [sliderValue, setSliderValue] = useState(10);
+  const [sliderValue, setSliderValue] = useState(
+    localStorage.getItem("anamolyDataValue")
+      ? parseInt(localStorage.getItem("anamolyDataValue"), 10)
+      : 10
+  );
   const dispatch = useDispatch();
 
   const anamolyValue = useSelector((state) => state.excel.anomalyValue);
@@ -52,6 +56,7 @@ const TableComponent = ({
   };
   const handleSliderChange = (event, newValue) => {
     setSliderValue(newValue);
+    localStorage.setItem("anamolyDataValue", newValue);
   };
 
   const handleCloseDialog = () => {
