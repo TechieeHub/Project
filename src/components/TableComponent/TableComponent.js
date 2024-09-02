@@ -40,7 +40,11 @@ const TableComponent = ({
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
   const [exportOption, setExportOption] = useState("");
-  const [sliderValue, setSliderValue] = useState(10);
+  const [sliderValue, setSliderValue] = useState(
+    localStorage.getItem("anamolyDataValue")
+      ? parseInt(localStorage.getItem("anamolyDataValue"), 10)
+      : 10
+  );
   const dispatch = useDispatch();
 
   const anamolyValue = useSelector((state) => state.excel.anomalyValue);
@@ -52,6 +56,7 @@ const TableComponent = ({
   };
   const handleSliderChange = (event, newValue) => {
     setSliderValue(newValue);
+    localStorage.setItem("anamolyDataValue", newValue);
   };
 
   const handleCloseDialog = () => {
@@ -171,8 +176,8 @@ const TableComponent = ({
 
       return {
         ...row,
-        "Projected Balance": projectedBalance,
-        "5-Day average": average5Day,
+        "Projected Balance": `$${projectedBalance}`,
+        "5-Day average": `$${average5Day}`,
         Deviation_5Day_Today: isNaN(deviation5DayToday)
           ? 0
           : deviation5DayToday,
@@ -459,7 +464,7 @@ const TableComponent = ({
           }}
         >
           <Typography sx={{ marginRight: "10px", fontWeight: "550" }}>
-            Anomaly:
+            Threshold:
           </Typography>
           <Typography sx={{ marginRight: "30px", fontWeight: "550" }}>
             {sliderValue}%
