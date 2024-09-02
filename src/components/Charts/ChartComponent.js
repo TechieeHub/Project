@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -57,9 +57,12 @@ const generateColorPalette = (numColors) => {
   ];
   return colors.slice(0, numColors);
 };
+
 const ChartComponent = ({ data }) => {
   const transformedData = transformData(data);
   const transposedData = transposeData(transformedData);
+
+  const [selectedDataset, setSelectedDataset] = useState(null);
 
   if (!transposedData.length) {
     return <div>No data available for charting.</div>;
@@ -76,6 +79,7 @@ const ChartComponent = ({ data }) => {
       label: accountID,
       data: transposedData.map(item => item[accountID]),
       backgroundColor: colors[index],
+      hidden: selectedDataset !== null && selectedDataset !== accountID, // Hide other datasets when one is selected
     }))
   };
 
@@ -91,6 +95,18 @@ const ChartComponent = ({ data }) => {
       },
     },
     maintainAspectRatio: false, // This allows the chart to fill the container
+    onClick: (e, activeElements) => {
+      if (activeElements.length > 0) {
+        const datasetIndex = activeElements[0].datasetIndex;
+        const clickedDatasetLabel = chartData.datasets[datasetIndex].label;
+
+        if (selectedDataset === clickedDatasetLabel) {
+          setSelectedDataset(null); // Unselect if the same dataset is clicked again
+        } else {
+          setSelectedDataset(clickedDatasetLabel); // Select the clicked dataset
+        }
+      }
+    }
   };
 
   return (
