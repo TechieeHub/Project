@@ -464,7 +464,7 @@ const TableComponent = ({
           }}
         >
           <Typography sx={{ marginRight: "10px", fontWeight: "550" }}>
-            Anomaly:
+            Threshold:
           </Typography>
           <Typography sx={{ marginRight: "30px", fontWeight: "550" }}>
             {sliderValue}%
