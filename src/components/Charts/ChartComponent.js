@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement } from 'chart.js';
 
 // Registering the necessary components for Chart.js
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement);
 
 // Helper function to clean and parse balance strings
 const parseBalance = (balanceString) => {
@@ -22,9 +22,9 @@ const transformData = (data) => {
       { date: "EODBalance-16Aug", balance: parseBalance(item["EODBalance-16Aug"]) },
       { date: "EODBalance-17Aug", balance: parseBalance(item["EODBalance-17Aug"]) },
       { date: "EODBalance-18Aug", balance: parseBalance(item["EODBalance-18Aug"]) },
-      { date: "Projected", balance: item["Projected Balance"] || 0 },
-      { date: "5DayAvg", balance: item["5-Day average"] || 0 }
-    ]
+    ],
+    projected: item["Projected Balance"] || 0,
+    avg5Day: item["5-Day average"] || 0
   }));
 };
 
@@ -75,12 +75,39 @@ const ChartComponent = ({ data }) => {
   // Preparing data for Chart.js
   const chartData = {
     labels: transposedData.map(item => item.name),
-    datasets: accountIDs.map((accountID, index) => ({
-      label: accountID,
-      data: transposedData.map(item => item[accountID]),
-      backgroundColor: colors[index],
-      hidden: selectedDataset !== null && selectedDataset !== accountID, // Hide other datasets when one is selected
-    }))
+    datasets: [
+      ...accountIDs.map((accountID, index) => ({
+        label: accountID,
+        data: transposedData.map(item => item[accountID]),
+        backgroundColor: colors[index],
+        type: 'bar',
+        hidden: selectedDataset !== null && selectedDataset !== accountID, // Hide other datasets when one is selected
+      })),
+      {
+        label: 'Projected',
+        data: transformedData.map(item => item.projected),
+        borderColor: '#FF0000',
+        backgroundColor: 'rgba(255, 0, 0, 0.1)',  // Adding a subtle fill for better visualization
+        fill: true,
+        type: 'line',
+        yAxisID: 'y-axis-2',
+        tension: 0.4,  // Adding some curvature to the line
+        pointRadius: 5,  // Increase point size for better visibility
+        pointHoverRadius: 7,  // Increase point hover size
+      },
+      {
+        label: '5-Day Average',
+        data: transformedData.map(item => item.avg5Day),
+        borderColor: '#0000FF',
+        backgroundColor: 'rgba(0, 0, 255, 0.1)',  // Adding a subtle fill for better visualization
+        fill: true,
+        type: 'line',
+        yAxisID: 'y-axis-2',
+        tension: 0.4,  // Adding some curvature to the line
+        pointRadius: 5,  // Increase point size for better visibility
+        pointHoverRadius: 7,  // Increase point hover size
+      }
+    ]
   };
 
   const options = {
@@ -93,8 +120,45 @@ const ChartComponent = ({ data }) => {
         display: true,
         text: 'Account Balances',
       },
+      tooltip: {
+        mode: 'index',
+        intersect: false, // Ensure that hovering works for both bars and lines
+        callbacks: {
+          label: (tooltipItem) => {
+            let label = tooltipItem.dataset.label || '';
+            if (label) {
+              label += ': ';
+            }
+            label += tooltipItem.raw.toLocaleString();  // Format the number with commas
+            return label;
+          }
+        }
+      }
     },
     maintainAspectRatio: false, // This allows the chart to fill the container
+    scales: {
+      y: {
+        beginAtZero: true,
+        type: 'linear',
+        position: 'left',
+        title: {
+          display: true,
+          text: 'Balance'
+        },
+      },
+      'y-axis-2': {
+        beginAtZero: true,
+        type: 'linear',
+        position: 'right',
+        title: {
+          display: true,
+          text: 'Trend'
+        },
+        grid: {
+          drawOnChartArea: false, // only want the grid lines for one axis to show up
+        },
+      },
+    },
     onClick: (e, activeElements) => {
       if (activeElements.length > 0) {
         const datasetIndex = activeElements[0].datasetIndex;
