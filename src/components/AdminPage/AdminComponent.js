@@ -251,6 +251,7 @@ const AdminComponent = () => {
             borderRadius: "20px",
           }}
         >
+          <Typography sx={{ fontWeight:'700', fontSize:"25px", padding:'20px 0px 0px 15px'}}>Rows Deleted By User</Typography>
           <Button
             variant="contained"
             sx={{
@@ -295,8 +296,12 @@ const AdminComponent = () => {
             paddingBottom: "20px",
             borderTopLeftRadius: "15px",
             borderTopRightRadius: "15px",
+            backgroundColor: "#A9A9A9",
+
           }}
         >
+          <Typography sx={{ fontWeight:'700', fontSize:"25px", padding:'20px 0px 0px 15px'}}>Columns Deleted By User</Typography>
+
           <Button
             variant="contained"
             sx={{
