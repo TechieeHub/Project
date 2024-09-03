@@ -16,7 +16,6 @@ const transformData = (data) => {
   return data.map(item => ({
     accountID: item["Account ID"],
     eodBalances: [
-      { date: "EODBalance-13Aug", balance: parseBalance(item["EODBalance-13Aug"]) },
       { date: "EODBalance-14Aug", balance: parseBalance(item["EODBalance-14Aug"]) },
       { date: "EODBalance-15Aug", balance: parseBalance(item["EODBalance-15Aug"]) },
       { date: "EODBalance-16Aug", balance: parseBalance(item["EODBalance-16Aug"]) },
@@ -81,6 +80,7 @@ const ChartComponent = ({ data }) => {
         data: transposedData.map(item => item[accountID]),
         backgroundColor: colors[index],
         type: 'bar',
+        order: 3,  // Bars are rendered first
         hidden: selectedDataset !== null && selectedDataset !== accountID, // Hide other datasets when one is selected
       })),
       {
@@ -94,6 +94,8 @@ const ChartComponent = ({ data }) => {
         tension: 0.4,  // Adding some curvature to the line
         pointRadius: 5,  // Increase point size for better visibility
         pointHoverRadius: 7,  // Increase point hover size
+        order: 1,  // Lines are rendered above bars
+        z: 10,  // Ensure this dataset is on top
       },
       {
         label: '5-Day Average',
@@ -106,10 +108,12 @@ const ChartComponent = ({ data }) => {
         tension: 0.4,  // Adding some curvature to the line
         pointRadius: 5,  // Increase point size for better visibility
         pointHoverRadius: 7,  // Increase point hover size
+        order: 2,  // Lines are rendered above bars
+        z: 10,  // Ensure this dataset is on top
       }
     ]
   };
-
+  
   const options = {
     responsive: true,
     plugins: {
@@ -163,7 +167,7 @@ const ChartComponent = ({ data }) => {
       if (activeElements.length > 0) {
         const datasetIndex = activeElements[0].datasetIndex;
         const clickedDatasetLabel = chartData.datasets[datasetIndex].label;
-
+  
         if (selectedDataset === clickedDatasetLabel) {
           setSelectedDataset(null); // Unselect if the same dataset is clicked again
         } else {
@@ -172,9 +176,9 @@ const ChartComponent = ({ data }) => {
       }
     }
   };
-
+  
   return (
-    <div style={{ width: '100%', height: '700px' }}> {/* Increase the height here */}
+    <div style={{ width: '90%', height: '700px', paddingBottom: "2rem" }}>
       <Bar data={chartData} options={options} />
     </div>
   );
