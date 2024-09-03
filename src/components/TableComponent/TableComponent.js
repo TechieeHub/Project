@@ -193,6 +193,8 @@ const TableComponent = ({
 
   useEffect(() => {
     dispatch(setAnomalyValue(sliderValue));
+
+    localStorage.setItem('anomalyValue',JSON.stringify(sliderValue))
   }, [dispatch, sliderValue]);
 
   const updatedExcelData = useMemo(
@@ -285,6 +287,8 @@ const TableComponent = ({
 
   useEffect(() => {
     dispatch(setFilteredData(filteredData));
+
+    localStorage.setItem('filteredData', JSON.stringify(filteredData))
   }, [filteredData, dispatch]);
 
   const filteredColumn = columns?.filter(
