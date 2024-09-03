@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement, Colors } from 'chart.js';
 
 // Registering the necessary components for Chart.js
-ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement);
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement, Colors);
 
 // Helper function to clean and parse balance strings
 const parseBalance = (balanceString) => {
@@ -48,13 +48,12 @@ const transposeData = (data) => {
   return transposed;
 };
 
-// Generating a color palette
+// Generate a color palette using the default Chart.js colors
 const generateColorPalette = (numColors) => {
-  const colors = [
-    "#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#413ea0",
-    "#d0ed57", "#ff6f6f", "#32cd32", "#dc143c", "#000066", "#7b68ee"
+  const baseColors = [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF', '#FF69B4', '#B0E0E6', '#8A2BE2'
   ];
-  return colors.slice(0, numColors);
+  return baseColors.slice(0, numColors);
 };
 
 const ChartComponent = ({ data }) => {
@@ -78,7 +77,7 @@ const ChartComponent = ({ data }) => {
       ...accountIDs.map((accountID, index) => ({
         label: accountID,
         data: transposedData.map(item => item[accountID]),
-        backgroundColor: colors[index],
+        backgroundColor: colors[index], // Use generated color palette
         type: 'bar',
         order: 3,  // Bars are rendered first
         hidden: selectedDataset !== null && selectedDataset !== accountID, // Hide other datasets when one is selected
@@ -86,8 +85,8 @@ const ChartComponent = ({ data }) => {
       {
         label: 'Projected',
         data: transformedData.map(item => item.projected),
-        borderColor: '#FF0000',
-        backgroundColor: 'rgba(255, 0, 0, 0.1)',  // Adding a subtle fill for better visualization
+        borderColor: '#FF0000', // Explicit color for the line
+        backgroundColor: 'rgba(255, 0, 0, 0.1)',  // Subtle fill for better visualization
         fill: true,
         type: 'line',
         yAxisID: 'y-axis-2',
@@ -100,8 +99,8 @@ const ChartComponent = ({ data }) => {
       {
         label: '5-Day Average',
         data: transformedData.map(item => item.avg5Day),
-        borderColor: '#0000FF',
-        backgroundColor: 'rgba(0, 0, 255, 0.1)',  // Adding a subtle fill for better visualization
+        borderColor: '#0000FF', // Explicit color for the line
+        backgroundColor: 'rgba(0, 0, 255, 0.1)',  // Subtle fill for better visualization
         fill: true,
         type: 'line',
         yAxisID: 'y-axis-2',
