@@ -32,7 +32,7 @@ const ChartData = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', gap: '10px', marginTop: '10px', marginLeft: '5px', marginRight: '5px' }}>
+      <Box sx={{ display: 'flex', gap: '10px', marginTop: '10px', marginLeft: '5px', marginRight: '5px', padding: "1.5rem" }}>
         <VisualizationComponent onView={handleView} />
         <AnomalieComponent onView={handleView} />
       </Box>
