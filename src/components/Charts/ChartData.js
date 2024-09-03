@@ -17,6 +17,9 @@ const ChartData = () => {
     (data) => data.is_deleted !== true
   );
 
+
+
+  
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/data/")
