@@ -86,7 +86,7 @@ const UploadExcel = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{margin:'1rem'}}>
       <Box
         sx={{
           display: "flex",

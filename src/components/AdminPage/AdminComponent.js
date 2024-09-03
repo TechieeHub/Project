@@ -240,7 +240,7 @@ const AdminComponent = () => {
   };
 
   return (
-    <>
+    <Box sx={{margin:'1rem'}}>
       {filteredData.length > 0 && (
         <Box
           sx={{
@@ -410,7 +410,7 @@ const AdminComponent = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </Box>
   );
 };
 
