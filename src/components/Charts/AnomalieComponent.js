@@ -59,14 +59,8 @@ const AnomalieComponent = ({ onView }) => {
             </TableCell>
             <TableCell>
               <Typography sx={{ fontSize: "20px" }}>
-                {excelData.length -
-                  (excelData?.filter((data) =>
-                    data?.Anomaly.includes(anomalyValue)
-                  )?.length +
-                    excelData?.filter(
-                      (data) =>
-                        !data?.Anomaly.includes("10%") && data.Anomaly !== ""
-                    ).length)}
+                {/* {excelData.filter((item)=>item.Anomaly)} */}
+                {excelData.filter((item)=>item.Anomaly==='')?.length}
               </Typography>
             </TableCell>
             <TableCell></TableCell>
@@ -119,7 +113,7 @@ const AnomalieComponent = ({ onView }) => {
                 {
                   excelData?.filter(
                     (data) =>
-                      !data?.Anomaly.includes("10%") && data.Anomaly !== ""
+                      !data?.Anomaly?.includes(anomalyValue) && data.Anomaly !== ""
                   )?.length
                 }
               </Typography>
