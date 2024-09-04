@@ -171,8 +171,8 @@ const TableComponent = ({
 
       return {
         ...row,
-        "Projected Balance": projectedBalance,
-        "5-Day average": average5Day,
+        "Projected Balance": `$${projectedBalance}`,
+        "5-Day average": `$${average5Day}`,
         Deviation_5Day_Today: isNaN(deviation5DayToday)
           ? 0
           : deviation5DayToday,
