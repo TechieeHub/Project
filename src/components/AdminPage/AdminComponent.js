@@ -1,4 +1,16 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import React, { useEffect, useMemo, useState } from "react";
@@ -13,12 +25,24 @@ const AdminComponent = () => {
   const [refreshData, setRefreshData] = useState(false);
   const [deletedColumnData, setDeletedColumnData] = useState([]);
   const [deletedColumnByAdmin, setDeletedColumnByAdmin] = useState([]);
+  const [approvedDeletedRowsByAdmin,setApprovedDeletedRowsByAdmin]=useState([])
+  const [approvedDeletedColumnsByAdmin,setApprovedDeletedColumnsByAdmin]=useState([])
+  const [rejectedDeletedRowsByAdmin,setRejectedDeletedRowsByAdmin]=useState([])
+  const [rejectedDeletedColumnsByAdmin,setRejectedDeletedColumnsByAdmin]=useState([])
 
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/data/")
       .then((response) => {
         setExcelData(response?.data?.records);
+
+
+        setApprovedDeletedRowsByAdmin(response?.data?.deleted_by_admin_records)
+        setApprovedDeletedColumnsByAdmin(response?.data?.deleted_by_admin_columns)
+        setRejectedDeletedRowsByAdmin(response?.data?.rejected_by_admin_records)
+        setRejectedDeletedColumnsByAdmin(response?.data?.rejected_by_admin_columns)
+
+
         setDeletedColumnData(response?.data?.deleted_columns);
         setDeletedColumnByAdmin(response?.data?.deleted_by_admin_columns);
       })
@@ -137,10 +161,10 @@ const AdminComponent = () => {
     enableEditing: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
-    enableFullScreenToggle:false,
-    enableColumnActions:false,
-    enableColumnFilters:false,
-    enableHiding:'false',
+    enableFullScreenToggle: false,
+    enableColumnActions: false,
+    enableColumnFilters: false,
+    enableHiding: "false",
 
     muiTableHeadCellProps: {
       sx: {
@@ -161,10 +185,10 @@ const AdminComponent = () => {
     enableEditing: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
-    enableFullScreenToggle:false,
-    enableColumnActions:false,
-    enableColumnFilters:false,
-    enableHiding:'false',
+    enableFullScreenToggle: false,
+    enableColumnActions: false,
+    enableColumnFilters: false,
+    enableHiding: "false",
     muiTableHeadCellProps: {
       sx: {
         backgroundColor: "#818589",
@@ -216,11 +240,18 @@ const AdminComponent = () => {
   };
 
   return (
-    <>
+    <Box sx={{margin:'1rem'}}>
       {filteredData.length > 0 && (
         <Box
-        sx={{marginTop:'20px',backgroundColor:'#A9A9A9', paddingBottom:'20px', marginBottom:'15px', borderRadius:"20px"}}
+          sx={{
+            marginTop: "20px",
+            backgroundColor: "#A9A9A9",
+            paddingBottom: "20px",
+            marginBottom: "15px",
+            borderRadius: "20px",
+          }}
         >
+          <Typography sx={{ fontWeight:'700', fontSize:"25px", padding:'20px 0px 0px 15px'}}>Rows Deleted By User</Typography>
           <Button
             variant="contained"
             sx={{
@@ -245,7 +276,7 @@ const AdminComponent = () => {
             }}
             onClick={handleRejectAllRowDeletions}
           >
-            Reject All 
+            Reject All
           </Button>
           <Box
             sx={{
@@ -261,11 +292,18 @@ const AdminComponent = () => {
       )}
       {diffArr.length > 0 && (
         <Box
-        sx={{ paddingBottom:'20px',
-          borderTopLeftRadius:'15px',borderTopRightRadius:'15px'
-        }}
-        
+          sx={{
+            paddingBottom: "20px",
+            // borderTopLeftRadius: "15px",
+            // borderTopRightRadius: "15px",
+            borderRadius: "20px",
+
+            backgroundColor: "#A9A9A9",
+
+          }}
         >
+          <Typography sx={{ fontWeight:'700', fontSize:"25px", padding:'20px 0px 0px 15px'}}>Columns Deleted By User</Typography>
+
           <Button
             variant="contained"
             sx={{
@@ -277,7 +315,7 @@ const AdminComponent = () => {
             }}
             onClick={handleApproveAllColumnDeletions}
           >
-            Approve All 
+            Approve All
           </Button>
           <Button
             variant="contained"
@@ -290,12 +328,12 @@ const AdminComponent = () => {
             }}
             onClick={handleRejectAllColumnDeletions}
           >
-            Reject All 
+            Reject All
           </Button>
           <Box
             sx={{
               width: "100%",
-              maxWidth: "500px", 
+              maxWidth: "500px",
               marginLeft: "10px",
               marginRight: "30px",
               marginTop: "10px",
@@ -305,12 +343,76 @@ const AdminComponent = () => {
           </Box>
         </Box>
       )}
-      {filteredData.length === 0 && diffArr.length === 0 && (
+      {(filteredData.length === 0 && diffArr.length === 0) &&( !approvedDeletedRowsByAdmin&& !approvedDeletedColumnsByAdmin && !rejectedDeletedRowsByAdmin && !rejectedDeletedColumnsByAdmin) &&(
         <Typography variant="h6" align="center" sx={{ mt: 4 }}>
           No records found
         </Typography>
       )}
-    </>
+
+      <TableContainer component={Paper}  sx={{ maxWidth: "700px", marginTop:'30px', marginBottom:'50px', marginLeft:'10px'}}>
+        <Typography
+          sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
+        >
+          <Box sx={{ marginLeft: "15px" }}>Admin Records</Box>
+        </Typography>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontSize: "17px" }}>
+                <Typography sx={{ fontSize: "20px" }}>
+                  Row Deletions Approved By Admin
+                </Typography>
+              </TableCell>
+              <TableCell sx={{ fontSize: "20px" }}>{approvedDeletedRowsByAdmin?.length}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                <Typography sx={{ fontSize: "20px" }}>
+                  Column Deletions Approved By Admin
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontSize: "20px" }}>
+                  {
+                   approvedDeletedColumnsByAdmin?.length
+                  }
+                </Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography sx={{ fontSize: "20px" }}>
+                  Row Deletions Rejected By Admin
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontSize: "20px" }}>
+                  {
+                    rejectedDeletedRowsByAdmin?.length
+                  }
+                </Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography sx={{ fontSize: "20px" }}>
+                  Column Deletions Rejected By Admin
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontSize: "20px" }}>
+                  {
+                    rejectedDeletedColumnsByAdmin?.length
+                  }
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 

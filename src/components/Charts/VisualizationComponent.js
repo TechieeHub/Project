@@ -46,7 +46,7 @@ const VisualizationComponent = ({ onView }) => {
                 Total MDM IDs
               </Typography>
             </TableCell>
-            <TableCell>{excelData?.length}</TableCell>
+            <TableCell sx={{ fontSize: '20px' }}>{excelData?.length}</TableCell>
             <TableCell></TableCell>
             <TableCell>
               <Button

@@ -188,6 +188,8 @@ const TableComponent = ({
 
   useEffect(() => {
     dispatch(setAnomalyValue(sliderValue));
+
+    localStorage.setItem('anomalyValue',JSON.stringify(sliderValue))
   }, [dispatch, sliderValue]);
 
   const updatedExcelData = useMemo(
@@ -280,6 +282,8 @@ const TableComponent = ({
 
   useEffect(() => {
     dispatch(setFilteredData(filteredData));
+
+    localStorage.setItem('filteredData', JSON.stringify(filteredData))
   }, [filteredData, dispatch]);
 
   const filteredColumn = columns?.filter(
@@ -354,7 +358,7 @@ const TableComponent = ({
   };
 
   return (
-    <>
+    <Box sx={{margin:'1rem'}}>
       <Box sx={{ display: "flex" }}>
         <Button
           variant="contained"
@@ -581,7 +585,7 @@ const TableComponent = ({
       </Dialog>
 
       <MaterialReactTable table={table} />
-    </>
+    </Box>
   );
 };
 

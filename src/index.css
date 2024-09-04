@@ -11,3 +11,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+/* For WebKit browsers (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust the width as desired */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar thumb color */
+  border-radius: 4px; /* Rounded edges */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent; /* Thumb color and track color */
+}
+
+/* For IE10+ and Edge */
+.scroll-container {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
