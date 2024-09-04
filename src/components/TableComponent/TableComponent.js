@@ -221,7 +221,10 @@ const TableComponent = ({
       },
       { accessorKey: "Anomaly", header: "Anomaly", size: 250 },
     ];
-    const dynamicColumns = Object.keys(excelData[0] || {}).map((key) => ({
+
+    const dynamicColumns = Object.keys(excelData[0] || {})
+    .filter((key) => key !== "deleted_by_admin") // Hide deleted_by_admin column
+    .map((key) => ({
       accessorKey: key,
       header: editedColumns[key] || key,
       size: 250,
@@ -238,8 +241,28 @@ const TableComponent = ({
       isVisible: key !== ("_id" && "is_deleted"),
     }));
 
-    return [...dynamicColumns, ...defaultColumns];
-  }, [excelData, editedColumns, deletedColumns]);
+  return [...dynamicColumns, ...defaultColumns];
+}, [excelData, editedColumns, deletedColumns]);
+
+  //   const dynamicColumns = Object.keys(excelData[0] || {}).map((key) => ({
+  //     accessorKey: key,
+  //     header: editedColumns[key] || key,
+  //     size: 250,
+  //     enableEditing: key !== "_id",
+  //     muiTableBodyCellProps: () => ({
+  //       sx: {
+  //         backgroundColor: deletedColumns.includes(key)
+  //           ? "#FFB7C5"
+  //           : "transparent",
+  //         color: deletedColumns.includes(key) ? "black" : "black",
+  //         opacity: deletedColumns.includes(key) ? 0.8 : 1,
+  //       },
+  //     }),
+  //     isVisible: key !== ("_id" && "is_deleted"),
+  //   }));
+
+  //   return [...dynamicColumns, ...defaultColumns];
+  // }, [excelData, editedColumns, deletedColumns]);
 
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
