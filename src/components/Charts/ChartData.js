@@ -10,6 +10,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 const ChartData = () => {
+  const [filteredChartData, setFilteredChartData] = useState(null);
   const [initialChartData, setInitialChartData] = useState(null);
 
   const dispatch = useDispatch();
@@ -30,6 +31,9 @@ const ChartData = () => {
       .catch((error) => console.log("error", error));
   }, []);
 
+  const handleView = (data) => {
+    setFilteredChartData(data);
+  }
   const handleExport = () => {
     const input = document.getElementById("contentToExport");
 
@@ -104,7 +108,11 @@ const ChartData = () => {
             marginTop: "30px",
           }}
         >
-          {initialChartData?.length > 0 && <ChartComponent data={excelData} />}
+              {filteredChartData?.length > 0 ? (
+          <ChartComponent data={filteredChartData} />
+        ) : (
+          initialChartData?.length > 0 && <ChartComponent data={excelData} />
+        )}
         </Box>
       </Box>
     </Box>
