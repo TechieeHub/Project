@@ -181,10 +181,10 @@ const TableComponent = ({
       return {
         ...row,
         "Projected Balance": `$${projectedBalance}`,
-        "5-Day average": `$${average5Day}`,
+        "5-Day average": `$${ Math.round(average5Day * 100) / 100}`,
         Deviation_5Day_Today: isNaN(deviation5DayToday)
           ? 0
-          : deviation5DayToday,
+          : Math.round(deviation5DayToday* 100) / 100,
         Anomaly:
           deviation5DayToday < 0
             ? "EOD Balance less than 5 day average end of day balance"
