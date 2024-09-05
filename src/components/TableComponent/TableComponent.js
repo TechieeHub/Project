@@ -180,8 +180,8 @@ const TableComponent = ({
 
       return {
         ...row,
-        "Projected Balance": `$${projectedBalance}`,
-        "5-Day average": `$${ Math.round(average5Day * 100) / 100}`,
+        "Projected Balance": projectedBalance,
+        "5-Day average":  Math.round(average5Day * 100) / 100,
         Deviation_5Day_Today: isNaN(deviation5DayToday)
           ? 0
           : Math.round(deviation5DayToday* 100) / 100,
