@@ -247,7 +247,7 @@ const AdminComponent = () => {
         <Box
           sx={{
             marginTop: "20px",
-            backgroundColor: "#A9A9A9",
+            backgroundColor: "#D3D3D3",
             paddingBottom: "20px",
             marginBottom: "15px",
             borderRadius: "20px",
@@ -300,7 +300,7 @@ const AdminComponent = () => {
             // borderTopRightRadius: "15px",
             borderRadius: "20px",
 
-            backgroundColor: "#A9A9A9",
+            backgroundColor: "#D3D3D3",
 
           }}
         >

@@ -180,8 +180,8 @@ const TableComponent = ({
 
       return {
         ...row,
-        "Projected Balance": `$${projectedBalance}`,
-        "5-Day average": `$${ Math.round(average5Day * 100) / 100}`,
+        "Projected Balance": projectedBalance,
+        "5-Day average": Math.round(average5Day * 100) / 100,
         Deviation_5Day_Today: isNaN(deviation5DayToday)
           ? 0
           : Math.round(deviation5DayToday* 100) / 100,
@@ -212,57 +212,62 @@ const TableComponent = ({
         accessorKey: "Projected Balance",
         header: "Projected Balance",
         size: 250,
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+          }).format(value);
+        },
       },
-      { accessorKey: "5-Day average", header: "5-Day average", size: 250 },
+      {
+        accessorKey: "5-Day average",
+        header: "5-Day average",
+        size: 250,
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+          }).format(value);
+        },
+      },
       {
         accessorKey: "Deviation_5Day_Today",
         header: "Deviation_5Day_Today",
         size: 250,
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          return `${value}%`;
+        },
       },
       { accessorKey: "Anomaly", header: "Anomaly", size: 250 },
     ];
-
+  
     const dynamicColumns = Object.keys(excelData[0] || {})
-    .filter((key) => key !== "deleted_by_admin") // Hide deleted_by_admin column
-    .map((key) => ({
-      accessorKey: key,
-      header: editedColumns[key] || key,
-      size: 250,
-      enableEditing: key !== "_id",
-      muiTableBodyCellProps: () => ({
-        sx: {
-          backgroundColor: deletedColumns.includes(key)
-            ? "#FFB7C5"
-            : "transparent",
-          color: deletedColumns.includes(key) ? "black" : "black",
-          opacity: deletedColumns.includes(key) ? 0.8 : 1,
-        },
-      }),
-      isVisible: key !== ("_id" && "is_deleted"),
-    }));
+      .filter((key) => key !== "deleted_by_admin")
+      .map((key) => ({
+        accessorKey: key,
+        header: editedColumns[key] || key,
+        size: 250,
+        enableEditing: key !== "_id",
+        muiTableBodyCellProps: () => ({
+          sx: {
+            backgroundColor: deletedColumns.includes(key)
+              ? "#FFB7C5"
+              : "transparent",
+            color: deletedColumns.includes(key) ? "black" : "black",
+            opacity: deletedColumns.includes(key) ? 0.8 : 1,
+          },
+        }),
+        isVisible: key !== ("_id" && "is_deleted"),
+      }));
+  
+    return [...dynamicColumns, ...defaultColumns];
+  }, [excelData, editedColumns, deletedColumns]);
 
-  return [...dynamicColumns, ...defaultColumns];
-}, [excelData, editedColumns, deletedColumns]);
-
-  //   const dynamicColumns = Object.keys(excelData[0] || {}).map((key) => ({
-  //     accessorKey: key,
-  //     header: editedColumns[key] || key,
-  //     size: 250,
-  //     enableEditing: key !== "_id",
-  //     muiTableBodyCellProps: () => ({
-  //       sx: {
-  //         backgroundColor: deletedColumns.includes(key)
-  //           ? "#FFB7C5"
-  //           : "transparent",
-  //         color: deletedColumns.includes(key) ? "black" : "black",
-  //         opacity: deletedColumns.includes(key) ? 0.8 : 1,
-  //       },
-  //     }),
-  //     isVisible: key !== ("_id" && "is_deleted"),
-  //   }));
-
-  //   return [...dynamicColumns, ...defaultColumns];
-  // }, [excelData, editedColumns, deletedColumns]);
 
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
