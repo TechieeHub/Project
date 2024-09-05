@@ -17,9 +17,15 @@ import { setChartDisplayData } from "../../Store/excelSlice";
 
 const VisualizationComponent = ({ onView }) => {
   const dispatch = useDispatch();
-  const excelData = useSelector((state) => state.excel.data)?.filter(
-    (data) => data.is_deleted !== true
-  );
+  // const excelData = useSelector((state) => state.excel.data)?.filter(
+  //   (data) => data.is_deleted !== true
+  // );
+
+
+  const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
+
+  console.log('excelDataiuyiy',excelData)
+
 
   const largeRunViewHandler = () => {
     const data = excelData.filter((data) => data.AccountRefresh === "Large run");
