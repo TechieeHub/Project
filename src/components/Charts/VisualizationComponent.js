@@ -34,10 +34,10 @@ const VisualizationComponent = ({ onView }) => {
 
   return (
     <TableContainer component={Paper} sx={{ height: '100%' }}>
-      <Typography sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey", color: "white" }}>
-        <Box sx={{ marginLeft: "15px", padding: "0.5rem" }}>Account Monitored</Box>
+      <Typography sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey", color: "white", fontFamily: 'Roboto' }}>
+        <Box sx={{ marginLeft: "15px", padding: "0.5rem", fontFamily: 'Roboto' }}>Account Monitored</Box>
       </Typography>
-      <Table sx={{ "& .MuiTableRow-root": { height: "80px" } }}>
+      <Table sx={{ "& .MuiTableRow-root": { height: "80px", fontFamily: 'Roboto' } }}>
 
         <TableHead>
           <TableRow>
@@ -67,7 +67,7 @@ const VisualizationComponent = ({ onView }) => {
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell><Typography sx={{ fontSize: '20px' }}>Large run</Typography></TableCell>
+            <TableCell><Typography sx={{ fontSize: '20px', fontFamily: 'Roboto' }}>Large run</Typography></TableCell>
             <TableCell>
               <Typography sx={{ fontSize: '20px' }}>
                 {excelData?.filter((data) => data.AccountRefresh === "Large run")?.length}
@@ -91,7 +91,7 @@ const VisualizationComponent = ({ onView }) => {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography sx={{ fontSize: '20px' }}>
+              <Typography sx={{ fontSize: '20px' , fontFamily: 'Roboto'}}>
                 Quick run
               </Typography>
             </TableCell>

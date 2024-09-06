@@ -76,7 +76,7 @@ const AdminComponent = () => {
       accessorKey: "actions",
       header: "Actions",
       Cell: ({ row }) => (
-        <Box sx={{ display: "flex", gap: "0.5rem" }}>
+        <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: 'Roboto' }}>
           <IconButton
             color="success"
             onClick={() => {
@@ -122,7 +122,7 @@ const AdminComponent = () => {
         accessorKey: "actions",
         header: "Actions",
         Cell: ({ row }) => (
-          <Box sx={{ display: "flex", gap: "0.5rem" }}>
+          <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: 'Roboto' }}>
             <IconButton
               color="success"
               onClick={() => {
@@ -220,6 +220,8 @@ const AdminComponent = () => {
         backgroundColor: "#818589",
         color: "#ffffff",
         fontWeight: "bold",
+        fontFamily: 'Roboto',
+        height: "10px",
       },
     },
   });
@@ -243,7 +245,8 @@ const AdminComponent = () => {
       sx: {
         backgroundColor: "#818589",
         color: "#ffffff",
-        fontWeight: "bold",
+        fontWeight: "bold", fontFamily: 'Roboto',
+        height:"48px"
       },
     },
   });
@@ -576,7 +579,7 @@ const AdminComponent = () => {
         !approvedDeletedColumnsByAdmin &&
         !rejectedDeletedRowsByAdmin &&
         !rejectedDeletedColumnsByAdmin && (
-          <Typography variant="h6" align="center" sx={{ mt: 4 }}>
+          <Typography variant="h6" align="center" sx={{ mt: 4 , fontFamily: 'Roboto'}}>
             No records found
           </Typography>
         )}

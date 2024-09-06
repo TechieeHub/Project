@@ -12,7 +12,6 @@ import {
   Box,
 } from "@mui/material";
 import BarChartIcon from '@mui/icons-material/BarChart';
-
 const AnomalieComponent = ({ onView }) => {
   const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
   const anomalyValue = JSON.parse(localStorage.getItem("anomalyValue")) || [];
@@ -32,39 +31,51 @@ const AnomalieComponent = ({ onView }) => {
   };
 
   return (
-    <TableContainer component={Paper} sx={{ height: '100%' }}>
+    <TableContainer component={Paper} sx={{ height: '100%', fontFamily: 'Roboto' }}> {/* Set font to Roboto */}
       <Typography
-        sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey", color: "white" }}
+        sx={{
+          fontSize: "25px",
+          fontWeight: 600,
+          backgroundColor: "grey",
+          color: "white",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0.5rem",
+          fontFamily: 'Roboto',  // Set Roboto for this Typography component
+        }}
       >
-        <Box sx={{ marginLeft: "15px", padding: "0.5rem" }}>Anomalies</Box>
+        <Box sx={{ marginLeft: "15px", fontFamily: 'Roboto' }}>Anomalies</Box>
+        <Box sx={{ marginRight: "15px", fontSize: "15px", color: "lightgrey", fontFamily: 'Roboto' }}>
+          Last refresh: {new Date().toLocaleString()}
+        </Box>
       </Typography>
 
-      <Table sx={{ "& .MuiTableRow-root": { height: "80px" } }}>
+      <Table sx={{ "& .MuiTableRow-root": { height: "80px", fontFamily: 'Roboto' } }}>
         <TableHead>
-        <TableRow sx={{ height: "20px" }}>
-  <TableCell sx={{ height: "70px" }}> {/* Ensures cell height matches */}
-    <Typography sx={{ fontSize: "20px", height: "20px", display: "flex", alignItems: "center" }}> {/* Vertically aligns content */}
-      Accounts with no anomalies
-    </Typography>
-  </TableCell>
-  <TableCell sx={{ height: "40px" }}> {/* Ensures cell height matches */}
-    <Typography sx={{ fontSize: "20px", height: "40px", display: "flex", alignItems: "center" }}>
-      {excelData.filter((item) => item.Anomaly === '')?.length}
-    </Typography>
-  </TableCell>
-  <TableCell ></TableCell>
-</TableRow>
-
+          <TableRow sx={{ height: "20px", fontFamily: 'Roboto' }}>
+            <TableCell sx={{ height: "70px" }}>
+              <Typography sx={{ fontSize: "20px", height: "20px", display: "flex", alignItems: "center", fontFamily: 'Roboto' }}>
+                Accounts with no anomalies
+              </Typography>
+            </TableCell>
+            <TableCell sx={{ height: "40px" }}>
+              <Typography sx={{ fontSize: "20px", height: "40px", display: "flex", alignItems: "center" }}>
+                {excelData.filter((item) => item.Anomaly === '')?.length}
+              </Typography>
+            </TableCell>
+            <TableCell ></TableCell>
+          </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
             <TableCell>
-              <Typography sx={{ fontSize: "20px" }}>
+              <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                 EOD balance more than 5 day average end of day balance by {anomalyValue}%
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography sx={{ fontSize: "20px" }}>
+              <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                 {
                   excelData?.filter((data) =>
                     data?.Anomaly.includes(anomalyValue)
@@ -90,12 +101,12 @@ const AnomalieComponent = ({ onView }) => {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography sx={{ fontSize: "20px" }}>
+              <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                 EOD Balance less than 5 day average end of day balance
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography sx={{ fontSize: "20px" }}>
+              <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                 {
                   excelData?.filter(
                     (data) =>

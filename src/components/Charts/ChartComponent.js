@@ -87,9 +87,9 @@ const ChartComponent = ({ data }) => {
         data: transformedData.map(item => item.projected),
         borderColor: '#FF0000', // Explicit color for the line
         backgroundColor: '#FF0000',  // Solid color for the legend box
-        fill: true,
+        fill: false,  // No fill to make the line stand out
         type: 'line',
-        yAxisID: 'y-axis-2',
+        yAxisID: 'y',  // Use the left axis
         tension: 0.4,  // Adding some curvature to the line
         pointRadius: 5,  // Increase point size for better visibility
         pointHoverRadius: 7,  // Increase point hover size
@@ -101,19 +101,18 @@ const ChartComponent = ({ data }) => {
         data: transformedData.map(item => item.avg5Day),
         borderColor: '#0000FF', // Explicit color for the line
         backgroundColor: '#0000FF',  // Solid color for the legend box
-        fill: true,
+        fill: false,  // No fill to make the line stand out
         type: 'line',
-        yAxisID: 'y-axis-2',
+        yAxisID: 'y',  // Use the left axis
         tension: 0.4,  // Adding some curvature to the line
         pointRadius: 5,  // Increase point size for better visibility
         pointHoverRadius: 7,  // Increase point hover size
         order: 2,  // Lines are rendered above bars
         z: 10,  // Ensure this dataset is on top
-      }
+      }      
       
     ]
   };
-  
   const options = {
     responsive: true,
     plugins: {
@@ -149,19 +148,7 @@ const ChartComponent = ({ data }) => {
           display: true,
           text: 'Balance'
         },
-      },
-      'y-axis-2': {
-        beginAtZero: true,
-        type: 'linear',
-        position: 'right',
-        title: {
-          display: true,
-          text: 'Trend'
-        },
-        grid: {
-          drawOnChartArea: false, // only want the grid lines for one axis to show up
-        },
-      },
+      }
     },
     onClick: (e, activeElements) => {
       if (activeElements.length > 0) {
@@ -176,6 +163,7 @@ const ChartComponent = ({ data }) => {
       }
     }
   };
+  
   
   return (
     <div style={{ width: '90%', height: '700px', paddingBottom: "2rem" }}>

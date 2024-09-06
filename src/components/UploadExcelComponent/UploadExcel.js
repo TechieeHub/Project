@@ -4,9 +4,9 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 import TableComponent from "../TableComponent/TableComponent";
 import { useDispatch } from "react-redux";
-
 import { setTableData } from "../../Store/excelSlice";
 import { useLocation } from "react-router-dom";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 const UploadExcel = () => {
   const [excelFile, setExcelFile] = useState(null);
@@ -110,6 +110,7 @@ const UploadExcel = () => {
               }}
             >
               UPLOAD
+              <FileUploadIcon sx={{ marginRight: "3px", fontSize: "20px" }} />
             </Button>
             {typeError && <Box>{typeError}</Box>}
           </form>

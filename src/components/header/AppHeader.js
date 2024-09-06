@@ -17,8 +17,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const pages = [
-  { name: 'Accounts', path: '/' },
-  { name: 'Summary and Visualization', path: '/charts' },
+  { name: 'Dashboard', path: '/' },
+  { name: 'Accounts', path: '/accounts' },
   { name: 'Admin', path: '/admin' }
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -49,7 +49,7 @@ const AppHeader = () => {
   const currentTab = pages.findIndex((page) => page.path === location.pathname);
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#484848' ,paddingLeft: 0, paddingRight: 0}}>
+    <AppBar position="static" sx={{ backgroundColor: '#484848' ,paddingLeft: 0, paddingRight: 0, fontFamily: 'Roboto'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -61,7 +61,7 @@ const AppHeader = () => {
                 aria-label="navigation tabs"
                 sx={{
                   '& .MuiTabs-indicator': {
-                    backgroundColor: 'white', 
+                    backgroundColor: 'white', fontFamily: 'Roboto'
                   },
                 }}
               >
@@ -72,7 +72,7 @@ const AppHeader = () => {
                     to={page.path}
                     label={page.name}
                     sx={{
-                      color: location.pathname === page.path ? 'white' : 'white',
+                      color: location.pathname === page.path ? 'white' : 'white', fontFamily: 'Roboto'
                     }}
                   />
                 ))}

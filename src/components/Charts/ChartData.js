@@ -84,7 +84,7 @@ const ChartData = () => {
     width: "12%",
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center', fontFamily: 'Roboto',
     '& .button-text': {
       display: 'inline',
       marginLeft: '8px', // Adds some space between the icon and the text
