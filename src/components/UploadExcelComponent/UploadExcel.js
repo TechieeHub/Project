@@ -97,7 +97,7 @@ const UploadExcel = () => {
         }}
       >
         <Box>
-          <Typography variant="h6">Upload & View Excel Sheets</Typography>
+          <Typography variant="h6">You can upload your Excel Sheet here</Typography>
           <form onSubmit={handleFileSubmit}>
             <input type="file" required onChange={handleFile} />
             <Button
@@ -114,8 +114,12 @@ const UploadExcel = () => {
             </Button>
             {typeError && <Box>{typeError}</Box>}
           </form>
+          <Box>
+      < Typography sx={{ color:"white", fontSize: "10px" }}>Note: You can upload only one documents</Typography>
+      </Box>
         </Box>
       </Box>
+     
       {excelData?.length > 0 ? (
         <Box>
           <TableComponent
@@ -145,6 +149,7 @@ const UploadExcel = () => {
         </Box>
       )}
     </Box>
+    
   );
 };
 
