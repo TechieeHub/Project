@@ -552,7 +552,7 @@ const TableComponent = ({
             
             <FileDownloadIcon sx={{ marginRight: "3px", fontSize: "20px" }} />
           </Button>
-          <Box
+          {/* <Box
             sx={{
               width: "35%",
               marginLeft: "5%",
@@ -579,7 +579,7 @@ const TableComponent = ({
                 { value: 100, label: "100" },
               ]}
             />
-          </Box>
+          </Box> */}
           {/* <Box>
           <Button
             onClick={anomalyHandler}

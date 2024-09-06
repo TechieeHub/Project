@@ -46,9 +46,7 @@ const AnomalieComponent = ({ onView }) => {
         }}
       >
         <Box sx={{ marginLeft: "15px", fontFamily: 'Roboto' }}>Anomalies</Box>
-        <Box sx={{ marginRight: "15px", fontSize: "15px", color: "lightgrey", fontFamily: 'Roboto' }}>
-          Last refresh: {new Date().toLocaleString()}
-        </Box>
+
       </Typography>
 
       <Table sx={{ "& .MuiTableRow-root": { height: "80px", fontFamily: 'Roboto' } }}>
