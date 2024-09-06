@@ -34,26 +34,42 @@ const AnomalieComponent = ({ onView }) => {
   return (
     <TableContainer component={Paper} sx={{ height: '100%' }}>
       <Typography
-        sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey", color: "white" }}
+        sx={{
+          fontSize: "25px",
+          fontWeight: 600,
+          backgroundColor: "grey",
+          color: "white",
+          display: "flex",          // Flexbox layout for aligning the text
+          justifyContent: "space-between",  // Space between "Anomalies" and "Last refresh"
+          alignItems: "center",     // Vertically center the items
+          padding: "0.5rem"         // Padding around the container
+        }}
       >
-        <Box sx={{ marginLeft: "15px", padding: "0.5rem" }}>Anomalies</Box>
+        {/* Left side - Anomalies */}
+        <Box sx={{ marginLeft: "15px" }}>Anomalies</Box>
+
+        {/* Right side - Last refresh */}
+        <Box sx={{ marginRight: "15px", fontSize: "15px", color: "lightgrey" }}>
+          Last refresh: {new Date().toLocaleString()} 
+        </Box>
       </Typography>
+
 
       <Table sx={{ "& .MuiTableRow-root": { height: "80px" } }}>
         <TableHead>
-        <TableRow sx={{ height: "20px" }}>
-  <TableCell sx={{ height: "70px" }}> {/* Ensures cell height matches */}
-    <Typography sx={{ fontSize: "20px", height: "20px", display: "flex", alignItems: "center" }}> {/* Vertically aligns content */}
-      Accounts with no anomalies
-    </Typography>
-  </TableCell>
-  <TableCell sx={{ height: "40px" }}> {/* Ensures cell height matches */}
-    <Typography sx={{ fontSize: "20px", height: "40px", display: "flex", alignItems: "center" }}>
-      {excelData.filter((item) => item.Anomaly === '')?.length}
-    </Typography>
-  </TableCell>
-  <TableCell ></TableCell>
-</TableRow>
+          <TableRow sx={{ height: "20px" }}>
+            <TableCell sx={{ height: "70px" }}> {/* Ensures cell height matches */}
+              <Typography sx={{ fontSize: "20px", height: "20px", display: "flex", alignItems: "center" }}> {/* Vertically aligns content */}
+                Accounts with no anomalies
+              </Typography>
+            </TableCell>
+            <TableCell sx={{ height: "40px" }}> {/* Ensures cell height matches */}
+              <Typography sx={{ fontSize: "20px", height: "40px", display: "flex", alignItems: "center" }}>
+                {excelData.filter((item) => item.Anomaly === '')?.length}
+              </Typography>
+            </TableCell>
+            <TableCell ></TableCell>
+          </TableRow>
 
         </TableHead>
         <TableBody>

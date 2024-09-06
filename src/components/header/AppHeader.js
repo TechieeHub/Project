@@ -17,8 +17,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const pages = [
-  { name: 'Accounts', path: '/' },
-  { name: 'Summary and Visualization', path: '/charts' },
+  { name: 'Dashboard', path: '/' },
+  { name: 'Accounts', path: '/accounts' },
   { name: 'Admin', path: '/admin' }
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
