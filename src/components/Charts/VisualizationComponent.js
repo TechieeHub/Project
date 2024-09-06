@@ -12,40 +12,33 @@ import {
   Box,
 } from "@mui/material";
 import BarChartIcon from '@mui/icons-material/BarChart';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { setChartDisplayData } from "../../Store/excelSlice";
 
 const VisualizationComponent = ({ onView }) => {
   const dispatch = useDispatch();
-  // const excelData = useSelector((state) => state.excel.data)?.filter(
-  //   (data) => data.is_deleted !== true
-  // );
-
-
   const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
-
-  console.log('excelDataiuyiy', excelData)
-
 
   const largeRunViewHandler = () => {
     const data = excelData.filter((data) => data.AccountRefresh === "Large run");
     dispatch(setChartDisplayData(data));
-    onView(data); // Pass filtered data to parent component
+    onView(data);
   };
 
   const quickRunViewHandler = () => {
     const data = excelData.filter((data) => data.AccountRefresh === "Quick run");
     dispatch(setChartDisplayData(data));
-    onView(data); // Pass filtered data to parent component
+    onView(data);
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Typography sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}>
+    <TableContainer component={Paper} sx={{ height: '100%' }}>
+      <Typography sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey", color: "white" }}>
         <Box sx={{ marginLeft: "15px", padding: "0.5rem" }}>Account Monitored</Box>
       </Typography>
-      <Table>
+      <Table sx={{ "& .MuiTableRow-root": { height: "80px" } }}>
+
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontSize: "17px", fontWeight: 550 }}>
@@ -54,10 +47,8 @@ const VisualizationComponent = ({ onView }) => {
               </Typography>
             </TableCell>
             <TableCell sx={{ fontSize: '20px' }}>{excelData?.length}</TableCell>
-            {/* <TableCell></TableCell> */}
             <TableCell>
               <Button
-                key={'Add/ModifyAccountId'}
                 component={Link}
                 to={"/"}
                 sx={{
@@ -71,7 +62,6 @@ const VisualizationComponent = ({ onView }) => {
               >
                 Add/Modify Account ID
               </Button>
-
             </TableCell>
           </TableRow>
         </TableHead>
@@ -83,10 +73,8 @@ const VisualizationComponent = ({ onView }) => {
                 {excelData?.filter((data) => data.AccountRefresh === "Large run")?.length}
               </Typography>
             </TableCell>
-            {/* <TableCell></TableCell> */}
             <TableCell>
               <Button
-                key={'largeRunView'}
                 sx={{
                   my: 2,
                   display: 'block',
@@ -112,10 +100,8 @@ const VisualizationComponent = ({ onView }) => {
                 {excelData?.filter((data) => data.AccountRefresh === "Quick run")?.length}
               </Typography>
             </TableCell>
-            {/* <TableCell></TableCell> */}
             <TableCell>
               <Button
-                key={'quickRunView'}
                 sx={{
                   my: 2,
                   display: 'block',

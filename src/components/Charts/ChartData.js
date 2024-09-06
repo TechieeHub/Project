@@ -86,11 +86,11 @@ const ChartData = () => {
     alignItems: 'center',
     justifyContent: 'center',
     '& .button-text': {
-      display: 'none',
-    },
-    '&:hover .button-text': {
       display: 'inline',
       marginLeft: '8px', // Adds some space between the icon and the text
+    },
+    '&:hover .button-text': {
+      display: 'none',
     },
   }}
   onClick={() => handleExport()}
