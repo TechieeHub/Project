@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Card,
+  CardContent,
   IconButton,
   Paper,
   Table,
@@ -79,7 +81,9 @@ const AdminComponent = () => {
             color="success"
             onClick={() => {
               if (
-                window.confirm("Are you sure you want to approve this row deletion?")
+                window.confirm(
+                  "Are you sure you want to approve this row deletion?"
+                )
               ) {
                 handleApprove(row.original);
               }
@@ -87,12 +91,17 @@ const AdminComponent = () => {
           >
             <CheckCircleIcon />
           </IconButton>
-          <IconButton color="error" 
-          onClick={() => {
-            if (window.confirm("Are you sure you want to reject this row deletion?")) {
-              handleReject(row.original);
-            }
-          }}          
+          <IconButton
+            color="error"
+            onClick={() => {
+              if (
+                window.confirm(
+                  "Are you sure you want to reject this row deletion?"
+                )
+              ) {
+                handleReject(row.original);
+              }
+            }}
           >
             <CancelIcon />
           </IconButton>
@@ -118,13 +127,13 @@ const AdminComponent = () => {
               color="success"
               onClick={() => {
                 if (
-                  window.confirm("Are you sure you want to approve this column deletion?")
+                  window.confirm(
+                    "Are you sure you want to approve this column deletion?"
+                  )
                 ) {
-                  handleApproveColumn(row.original)
+                  handleApproveColumn(row.original);
                 }
               }}
-              
-              
             >
               <CheckCircleIcon />
             </IconButton>
@@ -132,9 +141,11 @@ const AdminComponent = () => {
               color="error"
               onClick={() => {
                 if (
-                  window.confirm("Are you sure you want to reject this column deletion?")
+                  window.confirm(
+                    "Are you sure you want to reject this column deletion?"
+                  )
                 ) {
-                  handleRejectColumn(row.original)
+                  handleRejectColumn(row.original);
                 }
               }}
             >
@@ -280,7 +291,12 @@ const AdminComponent = () => {
 
   const chartData = useMemo(() => {
     return {
-      labels: ["Approved Rows", "Approved Columns", "Rejected Rows", "Rejected Columns"],
+      labels: [
+        "Approved Rows",
+        "Approved Columns",
+        "Rejected Rows",
+        "Rejected Columns",
+      ],
       datasets: [
         {
           label: "Admin Actions",
@@ -310,159 +326,250 @@ const AdminComponent = () => {
     },
   };
 
-
   return (
     <Box sx={{ margin: "1rem" }}>
-      {filteredData.length > 0 && (
-        <Box
-          sx={{
-            marginTop: "20px",
-            backgroundColor: "#D3D3D3",
-            paddingBottom: "20px",
-            marginBottom: "15px",
-            borderRadius: "20px",
-          }}
-        >
-          <Typography
-            sx={{
-              fontWeight: "700",
-              fontSize: "25px",
-              padding: "20px 0px 0px 15px",
-            }}
-          >
-            Rows Deleted By User
-          </Typography>
-          <Button
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              fontSize: "9px",
-              marginLeft: "30px",
-              marginTop: "30px",
-              backgroundColor: "grey",
-            }}
-            // onClick={handleApproveAllRowDeletions}
+      <Box sx={{ display: "flex", gap: "30px" , justifyContent:'center', marginTop:'20px'}}>
+       
+        <Card variant="outlined" sx={{  borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+  <CardContent>
+    <Typography
+      gutterBottom
+      sx={{ color: "text.secondary", fontSize: '24px', textAlign: 'center' }}
+    >
+      {approvedDeletedRowsByAdmin?.length}
+    </Typography>
+    <Typography sx={{ textAlign: 'center' }}>
+      Row Deletions Approved By Admin
+    </Typography>
+  </CardContent>
+</Card>
+<Card variant="outlined" sx={{ borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+  <CardContent>
+    <Typography
+      gutterBottom
+      sx={{ color: "text.secondary", fontSize: '24px', textAlign: 'center' }}
+    >
+       {rejectedDeletedRowsByAdmin?.length}
+    </Typography>
+    <Typography sx={{ textAlign: 'center' }}>
+      Row Deletions ReJected By Admin
+    </Typography>
+  </CardContent>
+</Card>
+<Card variant="outlined" sx={{ borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+  <CardContent>
+    <Typography
+      gutterBottom
+      sx={{ color: "text.secondary", fontSize: '24px', textAlign: 'center' }}
+    >
+      {approvedDeletedColumnsByAdmin?.length}
+    </Typography>
+    <Typography sx={{ textAlign: 'center' }}>
+      Column Deletions Approved By Admin
+    </Typography>
+  </CardContent>
+</Card>
+<Card variant="outlined" sx={{borderRadius: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+  <CardContent>
+    <Typography
+      gutterBottom
+      sx={{ color: "text.secondary", fontSize: '24px', textAlign: 'center' }}
+    >
+      {rejectedDeletedColumnsByAdmin?.length}
+    </Typography>
+    <Typography sx={{ textAlign: 'center' }}>
+      Column Deletions Rejected By Admin
+    </Typography>
+  </CardContent>
+</Card>
 
-            onClick={() => {
-              if (
-                window.confirm("Are you sure you want to approve all row deletions?")
-              ) {
-                handleApproveAllRowDeletions()
-              }
-            }}
-
-
-          >
-            Approve All
-          </Button>
-          <Button
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              fontSize: "9px",
-              marginLeft: "30px",
-              marginTop: "30px",
-              backgroundColor: "grey",
-            }}
-
-            onClick={() => {
-              if (
-                window.confirm("Are you sure you want to reject all row deletions?")
-              ) {
-                // handleRejectColumn(row.original)
-                handleRejectAllRowDeletions()
-              }
-            }}
-          >
-            Reject All
-          </Button>
+       
+      </Box>
+      <Box sx={{ display: "flex", gap: "20px" }}>
+        {filteredData.length > 0 && (
           <Box
             sx={{
-              width: "98%",
-              marginLeft: "10px",
-              marginRight: "10px",
-              marginTop: "10px",
+              marginTop: "20px",
+              // backgroundColor: "#D3D3D3",
+              paddingBottom: "20px",
+              marginBottom: "15px",
+              borderRadius: "20px",
+              width: "50%",
             }}
           >
-            <MaterialReactTable table={tableRow} />
-          </Box>
-        </Box>
-      )}
-      {diffArr.length > 0 && (
-        <Box
-          sx={{
-            paddingBottom: "20px",
-            // borderTopLeftRadius: "15px",
-            // borderTopRightRadius: "15px",
-            borderRadius: "20px",
+            <Typography
+              sx={{
+                fontWeight: "700",
+                fontSize: "25px",
+                padding: "20px 0px 0px 15px",
+              }}
+            >
+              Rows Deleted By User
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                maxHeight: "30px",
+                fontSize: "9px",
+                marginLeft: "30px",
+                marginTop: "30px",
+                backgroundColor: "grey",
+              }}
+              // onClick={handleApproveAllRowDeletions}
 
-            backgroundColor: "#D3D3D3",
-          }}
-        >
-          <Typography
-            sx={{
-              fontWeight: "700",
-              fontSize: "25px",
-              padding: "20px 0px 0px 15px",
-            }}
-          >
-            Columns Deleted By User
-          </Typography>
-
-          <Button
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              fontSize: "9px",
-              marginLeft: "30px",
-              marginTop: "30px",
-              backgroundColor: "grey",
-            }}
-            // onClick={handleApproveAllColumnDeletions}
-            onClick={() => {
-              if (
-                window.confirm("Are you sure you want to approve all column deletions?")
-              ) {
-                // handleApproveColumn(row.original)
-                handleApproveAllColumnDeletions()
-              }
-            }}
-            
-          >
-            Approve All
-          </Button>
-          <Button
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              fontSize: "9px",
-              marginLeft: "30px",
-              marginTop: "30px",
-              backgroundColor: "grey",
-            }}
-            onClick={() => {
-              if (
-                window.confirm("Are you sure you want to reject all column deletions?")
-              ) {
-                handleRejectAllColumnDeletions()
-              }
-            }}
-          >
-            Reject All
-          </Button>
-          <Box
-            sx={{
-              width: "100%",
-              maxWidth: "500px",
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to approve all row deletions?"
+                  )
+                ) {
+                  handleApproveAllRowDeletions();
+                }
+              }}
+            >
+              Approve All
+            </Button>
+            <Button
+              variant="contained"
+              sx={{
+                maxHeight: "30px",
+                fontSize: "9px",
+                marginLeft: "30px",
+                marginTop: "30px",
+                backgroundColor: "grey",
+              }}
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to reject all row deletions?"
+                  )
+                ) {
+                  // handleRejectColumn(row.original)
+                  handleRejectAllRowDeletions();
+                }
+              }}
+            >
+              Reject All
+            </Button>
+            {/* <Box
+             sx={{
+              width: "50%",
+              height: "400px",
+              overflowY: "auto",
               marginLeft: "10px",
               marginRight: "30px",
               marginTop: "10px",
             }}
-          >
-            <MaterialReactTable table={tableColumn} />
+          > */}
+            <Box
+              sx={{
+                flexGrow: 1,
+                marginTop: "20px",
+                paddingBottom: "20px",
+                marginBottom: "15px",
+                borderRadius: "20px",
+              }}
+            >
+              {/* Content for the first MaterialReactTable */}
+              <MaterialReactTable table={tableRow} />
+            </Box>
+
+            {/* </Box> */}
           </Box>
-        </Box>
-      )}
+        )}
+        {diffArr.length > 0 && (
+          <Box
+            sx={{
+              marginTop: "20px",
+              // backgroundColor: "#D3D3D3",
+              paddingBottom: "20px",
+              marginBottom: "15px",
+              borderRadius: "20px",
+              width: "50%",
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: "700",
+                fontSize: "25px",
+                padding: "20px 0px 0px 15px",
+              }}
+            >
+              Columns Deleted By User
+            </Typography>
+
+            <Button
+              variant="contained"
+              sx={{
+                maxHeight: "30px",
+                fontSize: "9px",
+                marginLeft: "30px",
+                marginTop: "30px",
+                backgroundColor: "grey",
+              }}
+              // onClick={handleApproveAllColumnDeletions}
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to approve all column deletions?"
+                  )
+                ) {
+                  // handleApproveColumn(row.original)
+                  handleApproveAllColumnDeletions();
+                }
+              }}
+            >
+              Approve All
+            </Button>
+            <Button
+              variant="contained"
+              sx={{
+                maxHeight: "30px",
+                fontSize: "9px",
+                marginLeft: "30px",
+                marginTop: "30px",
+                backgroundColor: "grey",
+              }}
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to reject all column deletions?"
+                  )
+                ) {
+                  handleRejectAllColumnDeletions();
+                }
+              }}
+            >
+              Reject All
+            </Button>
+            {/* <Box
+            sx={{
+              width: "100%",
+              // maxWidth: "500px",
+              marginLeft: "10px",
+              marginRight: "30px",
+              marginTop: "10px",
+              height:'400px',
+              overflowY: 'auto'
+            }}
+          > */}
+            <Box
+              sx={{
+                flexGrow: 1,
+                marginTop: "20px",
+                paddingBottom: "20px",
+                marginBottom: "15px",
+                borderRadius: "20px",
+              }}
+            >
+              {/* Content for the first MaterialReactTable */}
+              {/* <MaterialReactTable table={tableRow} /> */}
+              <MaterialReactTable table={tableColumn} />
+            </Box>
+            {/* </Box> */}
+          </Box>
+        )}
+      </Box>
       {filteredData.length === 0 &&
         diffArr.length === 0 &&
         !approvedDeletedRowsByAdmin &&
@@ -473,92 +580,7 @@ const AdminComponent = () => {
             No records found
           </Typography>
         )}
-<Box sx={{display:'flex', gap:'50px'}}>
-      <TableContainer
-        component={Paper}
-        // sx={{
-        //   maxWidth: "700px",
-        //   marginTop: "30px",
-        //   marginBottom: "50px",
-        //   marginLeft: "10px",
-        // }}
-        sx={{
-          maxWidth: "50%",  // Adjust to ensure equal width with the chart
-          flexGrow: 1,      // Allows the table to grow equally with the chart
-          marginTop: "30px",
-          marginBottom: "50px",
-          marginLeft: "10px",
-        }}
-      >
-        <Typography
-          sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
-        >
-          <Box sx={{ marginLeft: "15px" }}>Admin Records</Box>
-        </Typography>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontSize: "17px" }}>
-                <Typography sx={{ fontSize: "20px" }}>
-                  Row Deletions Approved By Admin
-                </Typography>
-              </TableCell>
-              <TableCell sx={{ fontSize: "20px" }}>
-                {approvedDeletedRowsByAdmin?.length}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
-                  Column Deletions Approved By Admin
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
-                  {approvedDeletedColumnsByAdmin?.length}
-                </Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
-                  Row Deletions Rejected By Admin
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
-                  {rejectedDeletedRowsByAdmin?.length}
-                </Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
-                  Column Deletions Rejected By Admin
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
-                  {rejectedDeletedColumnsByAdmin?.length}
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Box 
-      sx={{
-        flexGrow: 1,      // Allows the chart to grow equally with the table
-        maxWidth: "50%",  // Adjust to ensure equal width with the table
-        marginTop: "20px",
-      }}      
-      >
-        <Typography sx={{ fontSize: "25px", fontWeight: 600 }}>Admin Actions Overview</Typography>
-        <Bar data={chartData} options={chartOptions} />
-      </Box>
-    </Box>
+      
     </Box>
   );
 };
