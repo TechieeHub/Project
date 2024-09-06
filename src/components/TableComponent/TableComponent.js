@@ -21,7 +21,9 @@ import {
   Slider,
   Menu,
 } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 import EditIcon from "@mui/icons-material/Edit";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -72,9 +74,9 @@ const TableComponent = ({
     setContextMenu(
       contextMenu === null
         ? {
-            mouseX: event.clientX - 2,
-            mouseY: event.clientY - 4,
-          }
+          mouseX: event.clientX - 2,
+          mouseY: event.clientY - 4,
+        }
         : null
     );
   };
@@ -232,8 +234,8 @@ const TableComponent = ({
           deviation5DayToday < 0
             ? "EOD Balance less than 5 day average end of day balance"
             : deviation5DayToday > anamolyDataValue
-            ? `EOD balance more than 5 day average end of day balance by ${anamolyDataValue}%`
-            : "",
+              ? `EOD balance more than 5 day average end of day balance by ${anamolyDataValue}%`
+              : "",
       };
     });
   };
@@ -407,7 +409,7 @@ const TableComponent = ({
       sx: {
         backgroundColor: "#818589",
         color: "#ffffff",
-        fontWeight: "bold", fontFamily: 'Roboto' 
+        fontWeight: "bold", fontFamily: 'Roboto'
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -446,10 +448,11 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey", fontFamily: 'Roboto' 
+              backgroundColor: "grey", fontFamily: 'Roboto'
             }}
             onClick={handleOpenDialog}
           >
+            <EditIcon sx={{ marginRight: "3px", fontSize: "20px" }} />
             Edit columns
           </Button>
           <Button
@@ -458,10 +461,11 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey", fontFamily: 'Roboto' 
+              backgroundColor: "grey", fontFamily: 'Roboto'
             }}
             onClick={handleOpenAddColumnDialog}
           >
+            <AddIcon sx={{ marginRight: "3px", fontSize: "20px" }} />
             Add Column
           </Button>
           <Button
@@ -471,10 +475,14 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey", fontFamily: 'Roboto' 
+              backgroundColor: "grey",
+              fontFamily: 'Roboto',
+              display: "flex", // Ensure flexbox is applied for alignment
+              alignItems: "center"
             }}
           >
-            Add New Row
+            <AddIcon sx={{ marginRight: "3px", fontSize: "20px" }} /> {/* Add the icon with spacing */}
+            Add Row
           </Button>
 
           <FormControl
@@ -490,11 +498,12 @@ const TableComponent = ({
               sx={{
                 fontSize: "14px",
                 lineHeight: "1.2",
-                transform: "translate(14px, 8px) scale(1)", fontFamily: 'Roboto' 
+                transform: "translate(14px, 8px) scale(1)", fontFamily: 'Roboto'
               }}
               id="export-select-label"
             >
               Export
+
             </InputLabel>
             <Select
               labelId="export-select-label"
@@ -507,7 +516,7 @@ const TableComponent = ({
                 minHeight: "30px",
                 fontSize: "14px",
                 paddingTop: "2px",
-                paddingBottom: "2px", fontFamily: 'Roboto' 
+                paddingBottom: "2px", fontFamily: 'Roboto'
               }}
               MenuProps={{
                 PaperProps: {
@@ -516,7 +525,7 @@ const TableComponent = ({
                     width: 120,
                     "& .MuiMenuItem-root": {
                       fontSize: "14px",
-                      padding: "4px 8px", fontFamily: 'Roboto' 
+                      padding: "4px 8px", fontFamily: 'Roboto'
                     },
                   },
                 },
@@ -540,6 +549,8 @@ const TableComponent = ({
             disabled={!exportOption}
           >
             Export
+            
+            <FileDownloadIcon sx={{ marginRight: "3px", fontSize: "20px" }} />
           </Button>
           <Box
             sx={{
@@ -549,10 +560,10 @@ const TableComponent = ({
               display: "flex",
             }}
           >
-            <Typography sx={{ marginRight: "10px", fontWeight: "550", fontFamily: 'Roboto'  }}>
+            <Typography sx={{ marginRight: "10px", fontWeight: "550", fontFamily: 'Roboto' }}>
               Threshold:
             </Typography>
-            <Typography sx={{ marginRight: "30px", fontWeight: "550", fontFamily: 'Roboto'  }}>
+            <Typography sx={{ marginRight: "30px", fontWeight: "550", fontFamily: 'Roboto' }}>
               {sliderValue}%
             </Typography>
 
@@ -591,7 +602,7 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey", fontFamily: 'Roboto' 
+              backgroundColor: "grey", fontFamily: 'Roboto'
             }}
           >
             Approve All Deletions
