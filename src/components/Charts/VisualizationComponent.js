@@ -11,6 +11,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { setChartDisplayData } from "../../Store/excelSlice";
@@ -95,7 +96,7 @@ const VisualizationComponent = ({ onView }) => {
                 }}
                 onClick={largeRunViewHandler}
               >
-                View
+               <BarChartIcon />
               </Button>
             </TableCell>
           </TableRow>
@@ -124,7 +125,7 @@ const VisualizationComponent = ({ onView }) => {
                 }}
                 onClick={quickRunViewHandler}
               >
-                View
+                <BarChartIcon />
               </Button>
             </TableCell>
           </TableRow>

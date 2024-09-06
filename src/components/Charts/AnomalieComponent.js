@@ -11,6 +11,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 const AnomalieComponent = ({ onView }) => {
   const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
@@ -98,7 +99,7 @@ const AnomalieComponent = ({ onView }) => {
                 }}
                 onClick={handleViewMoreThan5DayAvg}
               >
-                View
+               <BarChartIcon />
               </Button>
             </TableCell>
           </TableRow>
@@ -132,7 +133,7 @@ const AnomalieComponent = ({ onView }) => {
                 }}
                 onClick={handleViewLessThan5DayAvg}
               >
-                View
+                <BarChartIcon />
               </Button>
             </TableCell>
           </TableRow>
