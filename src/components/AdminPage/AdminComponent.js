@@ -25,10 +25,16 @@ const AdminComponent = () => {
   const [refreshData, setRefreshData] = useState(false);
   const [deletedColumnData, setDeletedColumnData] = useState([]);
   const [deletedColumnByAdmin, setDeletedColumnByAdmin] = useState([]);
-  const [approvedDeletedRowsByAdmin,setApprovedDeletedRowsByAdmin]=useState([])
-  const [approvedDeletedColumnsByAdmin,setApprovedDeletedColumnsByAdmin]=useState([])
-  const [rejectedDeletedRowsByAdmin,setRejectedDeletedRowsByAdmin]=useState([])
-  const [rejectedDeletedColumnsByAdmin,setRejectedDeletedColumnsByAdmin]=useState([])
+  const [approvedDeletedRowsByAdmin, setApprovedDeletedRowsByAdmin] = useState(
+    []
+  );
+  const [approvedDeletedColumnsByAdmin, setApprovedDeletedColumnsByAdmin] =
+    useState([]);
+  const [rejectedDeletedRowsByAdmin, setRejectedDeletedRowsByAdmin] = useState(
+    []
+  );
+  const [rejectedDeletedColumnsByAdmin, setRejectedDeletedColumnsByAdmin] =
+    useState([]);
 
   useEffect(() => {
     axios
@@ -36,12 +42,16 @@ const AdminComponent = () => {
       .then((response) => {
         setExcelData(response?.data?.records);
 
-
-        setApprovedDeletedRowsByAdmin(response?.data?.deleted_by_admin_records)
-        setApprovedDeletedColumnsByAdmin(response?.data?.deleted_by_admin_columns)
-        setRejectedDeletedRowsByAdmin(response?.data?.rejected_by_admin_records)
-        setRejectedDeletedColumnsByAdmin(response?.data?.rejected_by_admin_columns)
-
+        setApprovedDeletedRowsByAdmin(response?.data?.deleted_by_admin_records);
+        setApprovedDeletedColumnsByAdmin(
+          response?.data?.deleted_by_admin_columns
+        );
+        setRejectedDeletedRowsByAdmin(
+          response?.data?.rejected_by_admin_records
+        );
+        setRejectedDeletedColumnsByAdmin(
+          response?.data?.rejected_by_admin_columns
+        );
 
         setDeletedColumnData(response?.data?.deleted_columns);
         setDeletedColumnByAdmin(response?.data?.deleted_by_admin_columns);
@@ -66,11 +76,23 @@ const AdminComponent = () => {
         <Box sx={{ display: "flex", gap: "0.5rem" }}>
           <IconButton
             color="success"
-            onClick={() => handleApprove(row.original)}
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to approve this row deletion?")
+              ) {
+                handleApprove(row.original);
+              }
+            }}
           >
             <CheckCircleIcon />
           </IconButton>
-          <IconButton color="error" onClick={() => handleReject(row.original)}>
+          <IconButton color="error" 
+          onClick={() => {
+            if (window.confirm("Are you sure you want to reject this row deletion?")) {
+              handleReject(row.original);
+            }
+          }}          
+          >
             <CancelIcon />
           </IconButton>
         </Box>
@@ -93,13 +115,27 @@ const AdminComponent = () => {
           <Box sx={{ display: "flex", gap: "0.5rem" }}>
             <IconButton
               color="success"
-              onClick={() => handleApproveColumn(row.original)}
+              onClick={() => {
+                if (
+                  window.confirm("Are you sure you want to approve this column deletion?")
+                ) {
+                  handleApproveColumn(row.original)
+                }
+              }}
+              
+              
             >
               <CheckCircleIcon />
             </IconButton>
             <IconButton
               color="error"
-              onClick={() => handleRejectColumn(row.original)}
+              onClick={() => {
+                if (
+                  window.confirm("Are you sure you want to reject this column deletion?")
+                ) {
+                  handleRejectColumn(row.original)
+                }
+              }}
             >
               <CancelIcon />
             </IconButton>
@@ -159,7 +195,7 @@ const AdminComponent = () => {
     initialState: { columnVisibility: { _id: false, is_deleted: false } },
     data: filteredData,
     enableEditing: false,
-    enableFilters:false,
+    enableFilters: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
     enableFullScreenToggle: false,
@@ -187,7 +223,7 @@ const AdminComponent = () => {
     enableDensityToggle: false,
     enableColumnOrdering: false,
     enableFullScreenToggle: false,
-    enableFilters:false,
+    enableFilters: false,
     enableColumnActions: false,
     enableColumnFilters: false,
     enableHiding: "false",
@@ -242,7 +278,7 @@ const AdminComponent = () => {
   };
 
   return (
-    <Box sx={{margin:'1rem'}}>
+    <Box sx={{ margin: "1rem" }}>
       {filteredData.length > 0 && (
         <Box
           sx={{
@@ -253,7 +289,15 @@ const AdminComponent = () => {
             borderRadius: "20px",
           }}
         >
-          <Typography sx={{ fontWeight:'700', fontSize:"25px", padding:'20px 0px 0px 15px'}}>Rows Deleted By User</Typography>
+          <Typography
+            sx={{
+              fontWeight: "700",
+              fontSize: "25px",
+              padding: "20px 0px 0px 15px",
+            }}
+          >
+            Rows Deleted By User
+          </Typography>
           <Button
             variant="contained"
             sx={{
@@ -263,7 +307,17 @@ const AdminComponent = () => {
               marginTop: "30px",
               backgroundColor: "grey",
             }}
-            onClick={handleApproveAllRowDeletions}
+            // onClick={handleApproveAllRowDeletions}
+
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to approve all row deletions?")
+              ) {
+                handleApproveAllRowDeletions()
+              }
+            }}
+
+
           >
             Approve All
           </Button>
@@ -276,7 +330,15 @@ const AdminComponent = () => {
               marginTop: "30px",
               backgroundColor: "grey",
             }}
-            onClick={handleRejectAllRowDeletions}
+
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to reject all row deletions?")
+              ) {
+                // handleRejectColumn(row.original)
+                handleRejectAllRowDeletions()
+              }
+            }}
           >
             Reject All
           </Button>
@@ -301,10 +363,17 @@ const AdminComponent = () => {
             borderRadius: "20px",
 
             backgroundColor: "#D3D3D3",
-
           }}
         >
-          <Typography sx={{ fontWeight:'700', fontSize:"25px", padding:'20px 0px 0px 15px'}}>Columns Deleted By User</Typography>
+          <Typography
+            sx={{
+              fontWeight: "700",
+              fontSize: "25px",
+              padding: "20px 0px 0px 15px",
+            }}
+          >
+            Columns Deleted By User
+          </Typography>
 
           <Button
             variant="contained"
@@ -315,7 +384,16 @@ const AdminComponent = () => {
               marginTop: "30px",
               backgroundColor: "grey",
             }}
-            onClick={handleApproveAllColumnDeletions}
+            // onClick={handleApproveAllColumnDeletions}
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to approve all column deletions?")
+              ) {
+                // handleApproveColumn(row.original)
+                handleApproveAllColumnDeletions()
+              }
+            }}
+            
           >
             Approve All
           </Button>
@@ -328,7 +406,13 @@ const AdminComponent = () => {
               marginTop: "30px",
               backgroundColor: "grey",
             }}
-            onClick={handleRejectAllColumnDeletions}
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to reject all column deletions?")
+              ) {
+                handleRejectAllColumnDeletions()
+              }
+            }}
           >
             Reject All
           </Button>
@@ -345,13 +429,26 @@ const AdminComponent = () => {
           </Box>
         </Box>
       )}
-      {(filteredData.length === 0 && diffArr.length === 0) &&( !approvedDeletedRowsByAdmin&& !approvedDeletedColumnsByAdmin && !rejectedDeletedRowsByAdmin && !rejectedDeletedColumnsByAdmin) &&(
-        <Typography variant="h6" align="center" sx={{ mt: 4 }}>
-          No records found
-        </Typography>
-      )}
+      {filteredData.length === 0 &&
+        diffArr.length === 0 &&
+        !approvedDeletedRowsByAdmin &&
+        !approvedDeletedColumnsByAdmin &&
+        !rejectedDeletedRowsByAdmin &&
+        !rejectedDeletedColumnsByAdmin && (
+          <Typography variant="h6" align="center" sx={{ mt: 4 }}>
+            No records found
+          </Typography>
+        )}
 
-      <TableContainer component={Paper}  sx={{ maxWidth: "700px", marginTop:'30px', marginBottom:'50px', marginLeft:'10px'}}>
+      <TableContainer
+        component={Paper}
+        sx={{
+          maxWidth: "700px",
+          marginTop: "30px",
+          marginBottom: "50px",
+          marginLeft: "10px",
+        }}
+      >
         <Typography
           sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
         >
@@ -365,7 +462,9 @@ const AdminComponent = () => {
                   Row Deletions Approved By Admin
                 </Typography>
               </TableCell>
-              <TableCell sx={{ fontSize: "20px" }}>{approvedDeletedRowsByAdmin?.length}</TableCell>
+              <TableCell sx={{ fontSize: "20px" }}>
+                {approvedDeletedRowsByAdmin?.length}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -377,9 +476,7 @@ const AdminComponent = () => {
               </TableCell>
               <TableCell>
                 <Typography sx={{ fontSize: "20px" }}>
-                  {
-                   approvedDeletedColumnsByAdmin?.length
-                  }
+                  {approvedDeletedColumnsByAdmin?.length}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -391,9 +488,7 @@ const AdminComponent = () => {
               </TableCell>
               <TableCell>
                 <Typography sx={{ fontSize: "20px" }}>
-                  {
-                    rejectedDeletedRowsByAdmin?.length
-                  }
+                  {rejectedDeletedRowsByAdmin?.length}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -405,9 +500,7 @@ const AdminComponent = () => {
               </TableCell>
               <TableCell>
                 <Typography sx={{ fontSize: "20px" }}>
-                  {
-                    rejectedDeletedColumnsByAdmin?.length
-                  }
+                  {rejectedDeletedColumnsByAdmin?.length}
                 </Typography>
               </TableCell>
             </TableRow>
