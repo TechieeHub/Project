@@ -25,7 +25,7 @@ const VisualizationComponent = ({ onView }) => {
 
   const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
 
-  console.log('excelDataiuyiy',excelData)
+  console.log('excelDataiuyiy', excelData)
 
 
   const largeRunViewHandler = () => {
@@ -43,18 +43,18 @@ const VisualizationComponent = ({ onView }) => {
   return (
     <TableContainer component={Paper}>
       <Typography sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}>
-        <Box sx={{ marginLeft: "15px" }}>Account Monitored</Box>
+        <Box sx={{ marginLeft: "15px", padding: "0.5rem" }}>Account Monitored</Box>
       </Typography>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontSize: "17px", fontWeight: 550 }}>
               <Typography sx={{ fontSize: '20px', fontWeight: 550 }}>
-                Total MDM IDs
+                Total Accounts
               </Typography>
             </TableCell>
             <TableCell sx={{ fontSize: '20px' }}>{excelData?.length}</TableCell>
-            <TableCell></TableCell>
+            {/* <TableCell></TableCell> */}
             <TableCell>
               <Button
                 key={'Add/ModifyAccountId'}
@@ -63,14 +63,15 @@ const VisualizationComponent = ({ onView }) => {
                 sx={{
                   my: 2,
                   display: 'block',
-                  textDecoration: 'underline',
+                  textDecoration: 'none', 
                   '&:hover': {
-                    textDecoration: 'underline',
+                    textDecoration: 'none', 
                   },
                 }}
               >
                 Add/Modify Account ID
               </Button>
+
             </TableCell>
           </TableRow>
         </TableHead>
@@ -82,7 +83,7 @@ const VisualizationComponent = ({ onView }) => {
                 {excelData?.filter((data) => data.AccountRefresh === "Large run")?.length}
               </Typography>
             </TableCell>
-            <TableCell></TableCell>
+            {/* <TableCell></TableCell> */}
             <TableCell>
               <Button
                 key={'largeRunView'}
@@ -96,7 +97,7 @@ const VisualizationComponent = ({ onView }) => {
                 }}
                 onClick={largeRunViewHandler}
               >
-               <BarChartIcon />
+                <BarChartIcon />
               </Button>
             </TableCell>
           </TableRow>
@@ -111,7 +112,7 @@ const VisualizationComponent = ({ onView }) => {
                 {excelData?.filter((data) => data.AccountRefresh === "Quick run")?.length}
               </Typography>
             </TableCell>
-            <TableCell></TableCell>
+            {/* <TableCell></TableCell> */}
             <TableCell>
               <Button
                 key={'quickRunView'}

@@ -94,6 +94,7 @@ const ChartData = () => {
             marginTop: "10px",
             marginLeft: "5px",
             marginRight: "5px",
+            padding: "0.5rem",
           }}
         >
            <VisualizationComponent onView={handleView} />

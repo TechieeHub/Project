@@ -37,24 +37,17 @@ const AnomalieComponent = ({ onView }) => {
       <Typography
         sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
       >
-        <Box sx={{ marginLeft: "15px" }}>Anomalies</Box>
+        <Box sx={{ marginLeft: "15px"  , padding:"0.5rem"  }}>Anomalies</Box>
       </Typography>
 
       <Table>
         <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontSize: "20px", fontWeight: 600 }}>
-              Count in latest run
-            </TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-          </TableRow>
+         
         </TableHead>
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography sx={{ fontSize: "20px", fontWeight: 550 }}>
+              <Typography sx={{ fontSize: "20px" }}>
                 No anomalies
               </Typography>
             </TableCell>
@@ -65,7 +58,7 @@ const AnomalieComponent = ({ onView }) => {
               </Typography>
             </TableCell>
             <TableCell></TableCell>
-            <TableCell></TableCell>
+            {/* <TableCell></TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -85,7 +78,7 @@ const AnomalieComponent = ({ onView }) => {
                 }
               </Typography>
             </TableCell>
-            <TableCell></TableCell>
+            {/* <TableCell></TableCell> */}
             <TableCell>
               <Button
                 key={"eodBalanceMoreThen5days"}
@@ -119,7 +112,7 @@ const AnomalieComponent = ({ onView }) => {
                 }
               </Typography>
             </TableCell>
-            <TableCell></TableCell>
+            {/* <TableCell></TableCell> */}
             <TableCell>
               <Button
                 key={"eodBalanceLessThen5days"}
