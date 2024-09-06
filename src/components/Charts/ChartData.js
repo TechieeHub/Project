@@ -8,6 +8,7 @@ import axios from "axios";
 import { setTableData } from "../../Store/excelSlice";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 const ChartData = () => {
   const [filteredChartData, setFilteredChartData] = useState(null);
@@ -20,7 +21,7 @@ const ChartData = () => {
 
 
 
-  
+
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/data/")
@@ -67,24 +68,36 @@ const ChartData = () => {
 
   return (
     <Box>
-      <Box 
-        sx={{ 
-          display: "flex", 
-          justifyContent: "flex-end",  
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
           marginRight: '1%'
         }}
       >
-        <Button
-          variant="contained"
-          sx={{
-            marginTop: "30px",
-            backgroundColor: "grey",
-            width: "15%",
-          }}
-          onClick={() => handleExport()}
-        >
-          Export to Pdf
-        </Button>
+       
+<Button
+  variant="contained"
+  sx={{
+    marginTop: "30px",
+    backgroundColor: "grey",
+    width: "12%",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '& .button-text': {
+      display: 'inline',
+      marginLeft: '8px', // Adds some space between the icon and the text
+    },
+    '&:hover .button-text': {
+      display: 'none',
+    },
+  }}
+  onClick={() => handleExport()}
+>
+  <PictureAsPdfIcon />
+  <span className="button-text">Export to PDF</span> {/* Text will only appear on hover */}
+</Button>
       </Box>
       <Box id={"contentToExport"}>  {/* Content to be exported to PDF */}
         <Box
@@ -94,10 +107,11 @@ const ChartData = () => {
             marginTop: "10px",
             marginLeft: "5px",
             marginRight: "5px",
+            padding: "0.5rem",
           }}
         >
-           <VisualizationComponent onView={handleView} />
-           <AnomalieComponent onView={handleView} />
+          <VisualizationComponent onView={handleView} />
+          <AnomalieComponent onView={handleView} />
         </Box>
         <Box
           sx={{
@@ -108,11 +122,11 @@ const ChartData = () => {
             marginTop: "30px",
           }}
         >
-              {filteredChartData?.length > 0 ? (
-          <ChartComponent data={filteredChartData} />
-        ) : (
-          initialChartData?.length > 0 && <ChartComponent data={excelData} />
-        )}
+          {filteredChartData?.length > 0 ? (
+            <ChartComponent data={filteredChartData} />
+          ) : (
+            initialChartData?.length > 0 && <ChartComponent data={excelData} />
+          )}
         </Box>
       </Box>
     </Box>

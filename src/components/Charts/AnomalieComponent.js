@@ -11,10 +11,10 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 const AnomalieComponent = ({ onView }) => {
   const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
-
   const anomalyValue = JSON.parse(localStorage.getItem("anomalyValue")) || [];
 
   const handleViewMoreThan5DayAvg = () => {
@@ -32,47 +32,35 @@ const AnomalieComponent = ({ onView }) => {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ height: '100%' }}>
       <Typography
-        sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
+        sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey", color: "white" }}
       >
-        <Box sx={{ marginLeft: "15px" }}>Anomalies</Box>
+        <Box sx={{ marginLeft: "15px", padding: "0.5rem" }}>Anomalies</Box>
       </Typography>
 
-      <Table>
+      <Table sx={{ "& .MuiTableRow-root": { height: "80px" } }}>
         <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontSize: "20px", fontWeight: 600 }}>
-              Count in latest run
-            </TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <Typography sx={{ fontSize: "20px", fontWeight: 550 }}>
-                No anomalies
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography sx={{ fontSize: "20px" }}>
-                {/* {excelData.filter((item)=>item.Anomaly)} */}
-                {excelData.filter((item)=>item.Anomaly==='')?.length}
-              </Typography>
-            </TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-          </TableRow>
+        <TableRow sx={{ height: "20px" }}>
+  <TableCell sx={{ height: "70px" }}> {/* Ensures cell height matches */}
+    <Typography sx={{ fontSize: "20px", height: "20px", display: "flex", alignItems: "center" }}> {/* Vertically aligns content */}
+      Accounts with no anomalies
+    </Typography>
+  </TableCell>
+  <TableCell sx={{ height: "40px" }}> {/* Ensures cell height matches */}
+    <Typography sx={{ fontSize: "20px", height: "40px", display: "flex", alignItems: "center" }}>
+      {excelData.filter((item) => item.Anomaly === '')?.length}
+    </Typography>
+  </TableCell>
+  <TableCell ></TableCell>
+</TableRow>
+
         </TableHead>
         <TableBody>
           <TableRow>
             <TableCell>
               <Typography sx={{ fontSize: "20px" }}>
-                EOD balance more than 5 day average end of day balance by{" "}
-                {anomalyValue}%
+                EOD balance more than 5 day average end of day balance by {anomalyValue}%
               </Typography>
             </TableCell>
             <TableCell>
@@ -84,10 +72,8 @@ const AnomalieComponent = ({ onView }) => {
                 }
               </Typography>
             </TableCell>
-            <TableCell></TableCell>
             <TableCell>
               <Button
-                key={"eodBalanceMoreThen5days"}
                 sx={{
                   my: 2,
                   display: "block",
@@ -98,7 +84,7 @@ const AnomalieComponent = ({ onView }) => {
                 }}
                 onClick={handleViewMoreThan5DayAvg}
               >
-                View
+                <BarChartIcon />
               </Button>
             </TableCell>
           </TableRow>
@@ -118,10 +104,8 @@ const AnomalieComponent = ({ onView }) => {
                 }
               </Typography>
             </TableCell>
-            <TableCell></TableCell>
             <TableCell>
               <Button
-                key={"eodBalanceLessThen5days"}
                 sx={{
                   my: 2,
                   display: "block",
@@ -132,7 +116,7 @@ const AnomalieComponent = ({ onView }) => {
                 }}
                 onClick={handleViewLessThan5DayAvg}
               >
-                View
+                <BarChartIcon />
               </Button>
             </TableCell>
           </TableRow>

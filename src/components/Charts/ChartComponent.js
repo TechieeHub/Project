@@ -86,7 +86,7 @@ const ChartComponent = ({ data }) => {
         label: 'Projected',
         data: transformedData.map(item => item.projected),
         borderColor: '#FF0000', // Explicit color for the line
-        backgroundColor: 'rgba(255, 0, 0, 0.1)',  // Subtle fill for better visualization
+        backgroundColor: '#FF0000',  // Solid color for the legend box
         fill: true,
         type: 'line',
         yAxisID: 'y-axis-2',
@@ -100,7 +100,7 @@ const ChartComponent = ({ data }) => {
         label: '5-Day Average',
         data: transformedData.map(item => item.avg5Day),
         borderColor: '#0000FF', // Explicit color for the line
-        backgroundColor: 'rgba(0, 0, 255, 0.1)',  // Subtle fill for better visualization
+        backgroundColor: '#0000FF',  // Solid color for the legend box
         fill: true,
         type: 'line',
         yAxisID: 'y-axis-2',
@@ -110,6 +110,7 @@ const ChartComponent = ({ data }) => {
         order: 2,  // Lines are rendered above bars
         z: 10,  // Ensure this dataset is on top
       }
+      
     ]
   };
   
