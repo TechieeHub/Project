@@ -19,6 +19,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
+import { Bar } from "react-chartjs-2";
 
 const AdminComponent = () => {
   const [excelData, setExcelData] = useState([]);
@@ -277,6 +278,39 @@ const AdminComponent = () => {
     }
   };
 
+  const chartData = useMemo(() => {
+    return {
+      labels: ["Approved Rows", "Approved Columns", "Rejected Rows", "Rejected Columns"],
+      datasets: [
+        {
+          label: "Admin Actions",
+          data: [
+            approvedDeletedRowsByAdmin.length,
+            approvedDeletedColumnsByAdmin.length,
+            rejectedDeletedRowsByAdmin.length,
+            rejectedDeletedColumnsByAdmin.length,
+          ],
+          backgroundColor: ["#4caf50", "#2196f3", "#f44336", "#ff9800"],
+        },
+      ],
+    };
+  }, [
+    approvedDeletedRowsByAdmin,
+    approvedDeletedColumnsByAdmin,
+    rejectedDeletedRowsByAdmin,
+    rejectedDeletedColumnsByAdmin,
+  ]);
+
+  const chartOptions = {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
+
   return (
     <Box sx={{ margin: "1rem" }}>
       {filteredData.length > 0 && (
@@ -439,11 +473,18 @@ const AdminComponent = () => {
             No records found
           </Typography>
         )}
-
+<Box sx={{display:'flex', gap:'50px'}}>
       <TableContainer
         component={Paper}
+        // sx={{
+        //   maxWidth: "700px",
+        //   marginTop: "30px",
+        //   marginBottom: "50px",
+        //   marginLeft: "10px",
+        // }}
         sx={{
-          maxWidth: "700px",
+          maxWidth: "50%",  // Adjust to ensure equal width with the chart
+          flexGrow: 1,      // Allows the table to grow equally with the chart
           marginTop: "30px",
           marginBottom: "50px",
           marginLeft: "10px",
@@ -507,6 +548,17 @@ const AdminComponent = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Box 
+      sx={{
+        flexGrow: 1,      // Allows the chart to grow equally with the table
+        maxWidth: "50%",  // Adjust to ensure equal width with the table
+        marginTop: "20px",
+      }}      
+      >
+        <Typography sx={{ fontSize: "25px", fontWeight: 600 }}>Admin Actions Overview</Typography>
+        <Bar data={chartData} options={chartOptions} />
+      </Box>
+    </Box>
     </Box>
   );
 };
