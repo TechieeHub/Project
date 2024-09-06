@@ -74,7 +74,7 @@ const AdminComponent = () => {
       accessorKey: "actions",
       header: "Actions",
       Cell: ({ row }) => (
-        <Box sx={{ display: "flex", gap: "0.5rem" }}>
+        <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: 'Roboto' }}>
           <IconButton
             color="success"
             onClick={() => {
@@ -113,7 +113,7 @@ const AdminComponent = () => {
         accessorKey: "actions",
         header: "Actions",
         Cell: ({ row }) => (
-          <Box sx={{ display: "flex", gap: "0.5rem" }}>
+          <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: 'Roboto' }}>
             <IconButton
               color="success"
               onClick={() => {
@@ -209,6 +209,7 @@ const AdminComponent = () => {
         backgroundColor: "#818589",
         color: "#ffffff",
         fontWeight: "bold",
+        fontFamily: 'Roboto'
       },
     },
   });
@@ -232,7 +233,7 @@ const AdminComponent = () => {
       sx: {
         backgroundColor: "#818589",
         color: "#ffffff",
-        fontWeight: "bold",
+        fontWeight: "bold", fontFamily: 'Roboto'
       },
     },
   });
@@ -327,7 +328,7 @@ const AdminComponent = () => {
             sx={{
               fontWeight: "700",
               fontSize: "25px",
-              padding: "20px 0px 0px 15px",
+              padding: "20px 0px 0px 15px", fontFamily: 'Roboto'
             }}
           >
             Rows Deleted By User
@@ -339,7 +340,7 @@ const AdminComponent = () => {
               fontSize: "9px",
               marginLeft: "30px",
               marginTop: "30px",
-              backgroundColor: "grey",
+              backgroundColor: "grey", fontFamily: 'Roboto'
             }}
             // onClick={handleApproveAllRowDeletions}
 
@@ -362,7 +363,7 @@ const AdminComponent = () => {
               fontSize: "9px",
               marginLeft: "30px",
               marginTop: "30px",
-              backgroundColor: "grey",
+              backgroundColor: "grey", fontFamily: 'Roboto'
             }}
 
             onClick={() => {
@@ -403,7 +404,7 @@ const AdminComponent = () => {
             sx={{
               fontWeight: "700",
               fontSize: "25px",
-              padding: "20px 0px 0px 15px",
+              padding: "20px 0px 0px 15px" , fontFamily: 'Roboto'
             }}
           >
             Columns Deleted By User
@@ -416,7 +417,7 @@ const AdminComponent = () => {
               fontSize: "9px",
               marginLeft: "30px",
               marginTop: "30px",
-              backgroundColor: "grey",
+              backgroundColor: "grey", fontFamily: 'Roboto'
             }}
             // onClick={handleApproveAllColumnDeletions}
             onClick={() => {
@@ -438,7 +439,7 @@ const AdminComponent = () => {
               fontSize: "9px",
               marginLeft: "30px",
               marginTop: "30px",
-              backgroundColor: "grey",
+              backgroundColor: "grey", fontFamily: 'Roboto'
             }}
             onClick={() => {
               if (
@@ -469,7 +470,7 @@ const AdminComponent = () => {
         !approvedDeletedColumnsByAdmin &&
         !rejectedDeletedRowsByAdmin &&
         !rejectedDeletedColumnsByAdmin && (
-          <Typography variant="h6" align="center" sx={{ mt: 4 }}>
+          <Typography variant="h6" align="center" sx={{ mt: 4 , fontFamily: 'Roboto'}}>
             No records found
           </Typography>
         )}
@@ -491,19 +492,19 @@ const AdminComponent = () => {
         }}
       >
         <Typography
-          sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey" }}
+          sx={{ fontSize: "25px", fontWeight: 600, backgroundColor: "grey", fontFamily: 'Roboto' }}
         >
-          <Box sx={{ marginLeft: "15px" }}>Admin Records</Box>
+          <Box sx={{ marginLeft: "15px" , fontFamily: 'Roboto'}}>Admin Records</Box>
         </Typography>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontSize: "17px" }}>
-                <Typography sx={{ fontSize: "20px" }}>
+                <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                   Row Deletions Approved By Admin
                 </Typography>
               </TableCell>
-              <TableCell sx={{ fontSize: "20px" }}>
+              <TableCell sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                 {approvedDeletedRowsByAdmin?.length}
               </TableCell>
             </TableRow>
@@ -511,36 +512,36 @@ const AdminComponent = () => {
           <TableBody>
             <TableRow>
               <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
+                <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                   Column Deletions Approved By Admin
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
+                <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                   {approvedDeletedColumnsByAdmin?.length}
                 </Typography>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
+                <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                   Row Deletions Rejected By Admin
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
+                <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                   {rejectedDeletedRowsByAdmin?.length}
                 </Typography>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
+                <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                   Column Deletions Rejected By Admin
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography sx={{ fontSize: "20px" }}>
+                <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                   {rejectedDeletedColumnsByAdmin?.length}
                 </Typography>
               </TableCell>
@@ -555,7 +556,7 @@ const AdminComponent = () => {
         marginTop: "20px",
       }}      
       >
-        <Typography sx={{ fontSize: "25px", fontWeight: 600 }}>Admin Actions Overview</Typography>
+        <Typography sx={{ fontSize: "25px", fontWeight: 600, fontFamily: 'Roboto' }}>Admin Actions Overview</Typography>
         <Bar data={chartData} options={chartOptions} />
       </Box>
     </Box>

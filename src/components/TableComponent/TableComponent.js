@@ -407,7 +407,7 @@ const TableComponent = ({
       sx: {
         backgroundColor: "#818589",
         color: "#ffffff",
-        fontWeight: "bold",
+        fontWeight: "bold", fontFamily: 'Roboto' 
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -446,7 +446,7 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey",
+              backgroundColor: "grey", fontFamily: 'Roboto' 
             }}
             onClick={handleOpenDialog}
           >
@@ -458,7 +458,7 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey",
+              backgroundColor: "grey", fontFamily: 'Roboto' 
             }}
             onClick={handleOpenAddColumnDialog}
           >
@@ -471,7 +471,7 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey",
+              backgroundColor: "grey", fontFamily: 'Roboto' 
             }}
           >
             Add New Row
@@ -490,7 +490,7 @@ const TableComponent = ({
               sx={{
                 fontSize: "14px",
                 lineHeight: "1.2",
-                transform: "translate(14px, 8px) scale(1)",
+                transform: "translate(14px, 8px) scale(1)", fontFamily: 'Roboto' 
               }}
               id="export-select-label"
             >
@@ -507,7 +507,7 @@ const TableComponent = ({
                 minHeight: "30px",
                 fontSize: "14px",
                 paddingTop: "2px",
-                paddingBottom: "2px",
+                paddingBottom: "2px", fontFamily: 'Roboto' 
               }}
               MenuProps={{
                 PaperProps: {
@@ -516,7 +516,7 @@ const TableComponent = ({
                     width: 120,
                     "& .MuiMenuItem-root": {
                       fontSize: "14px",
-                      padding: "4px 8px",
+                      padding: "4px 8px", fontFamily: 'Roboto' 
                     },
                   },
                 },
@@ -549,10 +549,10 @@ const TableComponent = ({
               display: "flex",
             }}
           >
-            <Typography sx={{ marginRight: "10px", fontWeight: "550" }}>
+            <Typography sx={{ marginRight: "10px", fontWeight: "550", fontFamily: 'Roboto'  }}>
               Threshold:
             </Typography>
-            <Typography sx={{ marginRight: "30px", fontWeight: "550" }}>
+            <Typography sx={{ marginRight: "30px", fontWeight: "550", fontFamily: 'Roboto'  }}>
               {sliderValue}%
             </Typography>
 
@@ -591,7 +591,7 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey",
+              backgroundColor: "grey", fontFamily: 'Roboto' 
             }}
           >
             Approve All Deletions
