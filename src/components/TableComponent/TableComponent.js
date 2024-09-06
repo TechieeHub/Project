@@ -19,6 +19,7 @@ import {
   InputLabel,
   Typography,
   Slider,
+  Menu,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -39,15 +40,14 @@ const TableComponent = ({
   const [tempColumns, setTempColumns] = useState({});
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
-  const [exportOption, setExportOption] = useState("");
+  const [exportOption, setExportOption] = useState(null);
+  // const [exportOptionOnRightClick, setExportOptionOnRightClick] = useState(null);
+
+  const [contextMenu, setContextMenu] = useState(null);
   const [sliderValue, setSliderValue] = useState(
-
     localStorage.getItem("anamolyDataValue")
-
       ? parseInt(localStorage.getItem("anamolyDataValue"), 10)
-
       : 10
-
   );
   const dispatch = useDispatch();
 
@@ -67,8 +67,22 @@ const TableComponent = ({
     setOpen(false);
   };
 
+  const handleRightClick = (event) => {
+    event.preventDefault();
+    setContextMenu(
+      contextMenu === null
+        ? {
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+          }
+        : null
+    );
+  };
   const handleOpenAddColumnDialog = () => {
     setOpenAddColumnDialog(true);
+  };
+  const handleClose = () => {
+    setContextMenu(null);
   };
 
   const handleCloseAddColumnDialog = () => {
@@ -150,6 +164,35 @@ const TableComponent = ({
       console.error("Error exporting file:", error);
     }
   };
+
+  const handleExportOnRightClick = async (exportOptionOnRightClick) => {
+    try {
+      let response;
+      if (exportOptionOnRightClick === "pdf") {
+        response = await axios.get("http://localhost:8000/api/export/pdf/", {
+          responseType: "blob",
+        });
+      } else if (exportOptionOnRightClick === "excel") {
+        response = await axios.get("http://localhost:8000/api/export/excel/", {
+          responseType: "blob",
+        });
+      }
+
+      const blob = new Blob([response.data], {
+        type: response.headers["content-type"],
+      });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download =
+        exportOptionOnRightClick === "pdf" ? "export.pdf" : "export.xlsx";
+      document.body.appendChild(link);
+      link.click();
+      window.URL.revokeObjectURL(link.href);
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error exporting file:", error);
+    }
+  };
   const convertToNumber = (str) => {
     if (str == null) return 0;
     const cleanedStr = String(str).replace(/[^0-9.-]+/g, "");
@@ -184,7 +227,7 @@ const TableComponent = ({
         "5-Day average": Math.round(average5Day * 100) / 100,
         Deviation_5Day_Today: isNaN(deviation5DayToday)
           ? 0
-          : Math.round(deviation5DayToday* 100) / 100,
+          : Math.round(deviation5DayToday * 100) / 100,
         Anomaly:
           deviation5DayToday < 0
             ? "EOD Balance less than 5 day average end of day balance"
@@ -198,7 +241,7 @@ const TableComponent = ({
   useEffect(() => {
     dispatch(setAnomalyValue(sliderValue));
 
-    localStorage.setItem('anomalyValue',JSON.stringify(sliderValue))
+    localStorage.setItem("anomalyValue", JSON.stringify(sliderValue));
   }, [dispatch, sliderValue]);
 
   const updatedExcelData = useMemo(
@@ -214,9 +257,9 @@ const TableComponent = ({
         size: 250,
         Cell: ({ cell }) => {
           const value = cell.getValue();
-          return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
+          return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
             minimumFractionDigits: 2,
           }).format(value);
         },
@@ -227,9 +270,9 @@ const TableComponent = ({
         size: 250,
         Cell: ({ cell }) => {
           const value = cell.getValue();
-          return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
+          return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
             minimumFractionDigits: 2,
           }).format(value);
         },
@@ -245,7 +288,7 @@ const TableComponent = ({
       },
       { accessorKey: "Anomaly", header: "Anomaly", size: 250 },
     ];
-  
+
     const dynamicColumns = Object.keys(excelData[0] || {})
       .filter((key) => key !== "deleted_by_admin")
       .map((key) => ({
@@ -264,10 +307,9 @@ const TableComponent = ({
         }),
         isVisible: key !== ("_id" && "is_deleted"),
       }));
-  
+
     return [...dynamicColumns, ...defaultColumns];
   }, [excelData, editedColumns, deletedColumns]);
-
 
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
@@ -320,7 +362,7 @@ const TableComponent = ({
   useEffect(() => {
     dispatch(setFilteredData(filteredData));
 
-    localStorage.setItem('filteredData', JSON.stringify(filteredData))
+    localStorage.setItem("filteredData", JSON.stringify(filteredData));
   }, [filteredData, dispatch]);
 
   const filteredColumn = columns?.filter(
@@ -395,131 +437,139 @@ const TableComponent = ({
   };
 
   return (
-    <Box sx={{margin:'1rem'}}>
-      <Box sx={{ display: "flex" }}>
-        <Button
-          variant="contained"
-          sx={{
-            maxHeight: "30px",
-            marginLeft: "20px",
-            marginTop: "30px",
-            backgroundColor: "grey",
-          }}
-          onClick={handleOpenDialog}
-        >
-          Edit columns
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            maxHeight: "30px",
-            marginLeft: "20px",
-            marginTop: "30px",
-            backgroundColor: "grey",
-          }}
-          onClick={handleOpenAddColumnDialog}
-        >
-          Add Column
-        </Button>
-        <Button
-          onClick={handleAddRow}
-          variant="contained"
-          sx={{
-            maxHeight: "30px",
-            marginLeft: "20px",
-            marginTop: "30px",
-            backgroundColor: "grey",
-          }}
-        >
-          Add New Row
-        </Button>
-
-        <FormControl
-          sx={{ marginLeft: "20px", marginTop: "30px", minWidth: 120 }}
-        >
-          <InputLabel
+    <>
+      <Box sx={{ margin: "1rem" }}>
+        <Box sx={{ display: "flex" }}>
+          <Button
+            variant="contained"
             sx={{
-              fontSize: "14px",
-              lineHeight: "1.2",
-              transform: "translate(14px, 8px) scale(1)",
+              maxHeight: "30px",
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
             }}
-            id="export-select-label"
+            onClick={handleOpenDialog}
           >
-            Export
-          </InputLabel>
-          <Select
-            labelId="export-select-label"
-            id="export-select"
-            value={exportOption}
-            label="Export"
-            onChange={(e) => setExportOption(e.target.value)}
+            Edit columns
+          </Button>
+          <Button
+            variant="contained"
             sx={{
-              height: "30px",
-              minHeight: "30px",
-              fontSize: "14px",
-              paddingTop: "2px",
-              paddingBottom: "2px",
+              maxHeight: "30px",
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
             }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  maxHeight: 200,
-                  "& .MuiMenuItem-root": {
-                    fontSize: "14px",
-                    padding: "4px 8px",
+            onClick={handleOpenAddColumnDialog}
+          >
+            Add Column
+          </Button>
+          <Button
+            onClick={handleAddRow}
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+          >
+            Add New Row
+          </Button>
+
+          <FormControl
+            sx={{
+              marginLeft: "20px",
+              marginTop: "30px",
+              minWidth: 120,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <InputLabel
+              sx={{
+                fontSize: "14px",
+                lineHeight: "1.2",
+                transform: "translate(14px, 8px) scale(1)",
+              }}
+              id="export-select-label"
+            >
+              Export
+            </InputLabel>
+            <Select
+              labelId="export-select-label"
+              id="export-select"
+              value={exportOption}
+              label="Export"
+              onChange={(e) => setExportOption(e.target.value)}
+              sx={{
+                height: "30px",
+                minHeight: "30px",
+                fontSize: "14px",
+                paddingTop: "2px",
+                paddingBottom: "2px",
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    maxHeight: 200,
+                    width: 120,
+                    "& .MuiMenuItem-root": {
+                      fontSize: "14px",
+                      padding: "4px 8px",
+                    },
                   },
                 },
-              },
+              }}
+            >
+              <MenuItem value="pdf">Export to PDF</MenuItem>
+              <MenuItem value="excel">Export to Excel</MenuItem>
+            </Select>
+          </FormControl>
+
+          <Button
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+            onClick={handleExport}
+            disabled={!exportOption}
+          >
+            Export
+          </Button>
+          <Box
+            sx={{
+              width: "35%",
+              marginLeft: "5%",
+              marginTop: "30px",
+              display: "flex",
             }}
           >
-            <MenuItem value="pdf">Export to PDF</MenuItem>
-            <MenuItem value="excel">Export to Excel</MenuItem>
-          </Select>
-        </FormControl>
+            <Typography sx={{ marginRight: "10px", fontWeight: "550" }}>
+              Threshold:
+            </Typography>
+            <Typography sx={{ marginRight: "30px", fontWeight: "550" }}>
+              {sliderValue}%
+            </Typography>
 
-        <Button
-          variant="contained"
-          sx={{
-            maxHeight: "30px",
-
-            marginLeft: "20px",
-            marginTop: "30px",
-            backgroundColor: "grey",
-          }}
-          onClick={handleExport}
-          disabled={!exportOption}
-        >
-          Export
-        </Button>
-        <Box
-          sx={{
-            width: "35%",
-            marginLeft: "5%",
-            marginTop: "30px",
-            display: "flex",
-          }}
-        >
-          <Typography sx={{ marginRight: "10px", fontWeight: "550" }}>
-            Threshold:
-          </Typography>
-          <Typography sx={{ marginRight: "30px", fontWeight: "550" }}>
-            {sliderValue}%
-          </Typography>
-
-          <Slider
-            value={sliderValue}
-            onChange={handleSliderChange}
-            min={0}
-            max={100}
-            aria-labelledby="continuous-slider"
-            sx={{ color: "grey" }}
-            marks={[
-              { value: 0, label: "0" },
-              { value: 100, label: "100" },
-            ]}
-          />
-        </Box>
-        {/* <Box>
+            <Slider
+              value={sliderValue}
+              onChange={handleSliderChange}
+              min={0}
+              max={100}
+              aria-labelledby="continuous-slider"
+              sx={{ color: "grey" }}
+              marks={[
+                { value: 0, label: "0" },
+                { value: 100, label: "100" },
+              ]}
+            />
+          </Box>
+          {/* <Box>
           <Button
             onClick={anomalyHandler}
             variant="contained"
@@ -533,96 +583,130 @@ const TableComponent = ({
             Set Anomaly
           </Button>
         </Box> */}
+        </Box>
+        {location?.pathname === "/admin" && (
+          <Button
+            variant="contained"
+            sx={{
+              maxHeight: "30px",
+              marginLeft: "20px",
+              marginTop: "30px",
+              backgroundColor: "grey",
+            }}
+          >
+            Approve All Deletions
+          </Button>
+        )}
+        <Dialog open={open} onClose={handleCloseDialog}>
+          <DialogTitle>Edit Column Names</DialogTitle>
+          <DialogContent>
+            {Object.keys(excelData[0] || {})
+              .filter((key) => key !== "_id")
+              .filter((key) => !deletedColumns.includes(key))
+              .map((key) => (
+                <Box
+                  key={key}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <TextField
+                    label={`Edit ${key}`}
+                    fullWidth
+                    variant="outlined"
+                    margin="normal"
+                    value={
+                      tempColumns[key] !== undefined ? tempColumns[key] : key
+                    }
+                    onChange={(e) =>
+                      handleColumnNameChange(key, e.target.value)
+                    }
+                  />
+                  <IconButton
+                    color="error"
+                    onClick={() => handleDeleteColumn(key)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              ))}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} sx={{ color: "grey" }}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSaveChanges}
+              variant="contained"
+              sx={{ backgroundColor: "grey" }}
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog open={openAddColumnDialog} onClose={handleCloseAddColumnDialog}>
+          <DialogTitle>Add New Column</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Column Name"
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              value={newColumnName}
+              onChange={(e) => setNewColumnName(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseAddColumnDialog} sx={{ color: "grey" }}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddColumn}
+              variant="contained"
+              sx={{ backgroundColor: "grey" }}
+            >
+              Add Column
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Box onContextMenu={handleRightClick}>
+          <MaterialReactTable table={table} />
+        </Box>
       </Box>
-      {location?.pathname === "/admin" && (
-        <Button
-          variant="contained"
-          sx={{
-            maxHeight: "30px",
-            marginLeft: "20px",
-            marginTop: "30px",
-            backgroundColor: "grey",
+      <Menu
+        open={contextMenu !== null}
+        onClose={handleClose}
+        anchorReference="anchorPosition"
+        anchorPosition={
+          contextMenu !== null
+            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+            : undefined
+        }
+      >
+        <MenuItem
+          onClick={() => {
+            // setExportOptionOnRightClick("pdf");
+            handleExportOnRightClick("pdf");
+            handleClose();
           }}
         >
-          Approve All Deletions
-        </Button>
-      )}
-      <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>Edit Column Names</DialogTitle>
-        <DialogContent>
-          {Object.keys(excelData[0] || {})
-            .filter((key) => key !== "_id")
-            .filter((key) => !deletedColumns.includes(key))
-            .map((key) => (
-              <Box
-                key={key}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "8px",
-                }}
-              >
-                <TextField
-                  label={`Edit ${key}`}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  value={
-                    tempColumns[key] !== undefined ? tempColumns[key] : key
-                  }
-                  onChange={(e) => handleColumnNameChange(key, e.target.value)}
-                />
-                <IconButton
-                  color="error"
-                  onClick={() => handleDeleteColumn(key)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            ))}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} sx={{ color: "grey" }}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSaveChanges}
-            variant="contained"
-            sx={{ backgroundColor: "grey" }}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={openAddColumnDialog} onClose={handleCloseAddColumnDialog}>
-        <DialogTitle>Add New Column</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Column Name"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            value={newColumnName}
-            onChange={(e) => setNewColumnName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAddColumnDialog} sx={{ color: "grey" }}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleAddColumn}
-            variant="contained"
-            sx={{ backgroundColor: "grey" }}
-          >
-            Add Column
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <MaterialReactTable table={table} />
-    </Box>
+          Export to PDF
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            // setExportOptionOnRightClick("excel");
+            handleExportOnRightClick("excel");
+            handleClose();
+          }}
+        >
+          Export to Excel
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 
