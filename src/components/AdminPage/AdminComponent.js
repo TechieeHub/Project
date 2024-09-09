@@ -476,8 +476,8 @@ const AdminComponent = () => {
                 paddingBottom: "20px",
                 marginBottom: "15px",
                 borderRadius: "20px",
-                height: "400px", // Fixed height for the table container
-                overflowY: "auto",
+                // height: "400px", // Fixed height for the table container
+                // overflowY: "auto",
               }}
             >
               {/* Content for the first MaterialReactTable */}
@@ -570,7 +570,7 @@ const AdminComponent = () => {
                 paddingBottom: "20px",
                 marginBottom: "15px",
                 borderRadius: "20px",
-                height: "400px", // Fixed height for the table container
+                // height: "400px", // Fixed height for the table container
                 // overflowY: "auto",
               }}
             >
