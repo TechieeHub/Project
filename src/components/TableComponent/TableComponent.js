@@ -428,11 +428,16 @@ const TableComponent = ({
       sx: {
         backgroundColor: "#818589",
         color: "#ffffff",
-        fontWeight: "bold", fontFamily: 'Roboto'
+        fontWeight: "bold", 
+        fontFamily: 'Roboto',
+        height: "20px", // Set heading height here
+        fontSize: "20px"
+
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
       sx: {
+        height: "80px", // Set row height here
         backgroundColor: row.original.is_deleted && "#F8C8DC",
         opacity: row.original.is_deleted && 0.8,
       },
