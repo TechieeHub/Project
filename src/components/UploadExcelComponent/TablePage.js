@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 
 const TablePage = () => {
   const [excelData, setExcelData] = useState(null);
+  const [refreshData,setRefreshData]=useState(false)
   const [deletedColumns, setDeletedColumns] = useState(null);
   const [loading, setLoading] = useState(true); // Added loading state
   const dispatch = useDispatch();
@@ -27,7 +28,8 @@ const TablePage = () => {
         console.log("error", error);
         setLoading(false); // Even on error, stop the loading spinner
       });
-  }, [dispatch]);
+      setRefreshData(false)
+  }, [dispatch,refreshData]);
 
   if (loading) {
     return (
@@ -44,6 +46,10 @@ const TablePage = () => {
     );
   }
 
+
+  const refreshDataHandler=()=>{
+    setRefreshData(true)
+  }
   return (
     <Box sx={{ margin: "1rem" }}>
       {excelData?.length > 0 ? (
@@ -52,6 +58,7 @@ const TablePage = () => {
           setExcelData={setExcelData}
           deletedColumns={deletedColumns}
           location={location}
+          refreshDataHandler={refreshDataHandler}
         />
       ) : (
         <Box
