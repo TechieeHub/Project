@@ -288,7 +288,7 @@ const TableComponent = ({
           return `${value}%`;
         },
       },
-      { accessorKey: "Anomaly", header: "Anomaly", size: 250 },
+      // { accessorKey: "Anomaly", header: "Anomaly", size: 250 },
     ];
 
     const dynamicColumns = Object.keys(excelData[0] || {})
