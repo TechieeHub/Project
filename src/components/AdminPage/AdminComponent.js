@@ -342,7 +342,7 @@ const AdminComponent = () => {
       {approvedDeletedRowsByAdmin?.length}
     </Typography>
     <Typography sx={{ textAlign: 'center' }}>
-      Row Deletions Approved By Admin
+      Account deletions approved
     </Typography>
   </CardContent>
 </Card>
@@ -355,7 +355,7 @@ const AdminComponent = () => {
        {rejectedDeletedRowsByAdmin?.length}
     </Typography>
     <Typography sx={{ textAlign: 'center' }}>
-      Row Deletions ReJected By Admin
+      Account deletions rejected
     </Typography>
   </CardContent>
 </Card>
@@ -368,7 +368,7 @@ const AdminComponent = () => {
       {approvedDeletedColumnsByAdmin?.length}
     </Typography>
     <Typography sx={{ textAlign: 'center' }}>
-      Column Deletions Approved By Admin
+      Metadata deletions approved
     </Typography>
   </CardContent>
 </Card>
@@ -381,7 +381,7 @@ const AdminComponent = () => {
       {rejectedDeletedColumnsByAdmin?.length}
     </Typography>
     <Typography sx={{ textAlign: 'center' }}>
-      Column Deletions Rejected By Admin
+      Metadata deletions rejected
     </Typography>
   </CardContent>
 </Card>
@@ -407,7 +407,7 @@ const AdminComponent = () => {
                 padding: "20px 0px 0px 15px",
               }}
             >
-              Rows Deleted By User
+              Accounts deleted by user
             </Typography>
             <Button
               variant="contained"
@@ -498,7 +498,7 @@ const AdminComponent = () => {
                 padding: "20px 0px 0px 15px",
               }}
             >
-              Columns Deleted By User
+              Metadata deleted by user
             </Typography>
 
             <Button
