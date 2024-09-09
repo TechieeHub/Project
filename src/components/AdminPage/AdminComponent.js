@@ -25,6 +25,7 @@ import { Bar } from "react-chartjs-2";
 
 const AdminComponent = () => {
   const [excelData, setExcelData] = useState([]);
+  const [modalOpen,setModelOpen]=useState(false)
   const [refreshData, setRefreshData] = useState(false);
   const [deletedColumnData, setDeletedColumnData] = useState([]);
   const [deletedColumnByAdmin, setDeletedColumnByAdmin] = useState([]);
@@ -79,15 +80,17 @@ const AdminComponent = () => {
         <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: 'Roboto' }}>
           <IconButton
             color="success"
-            onClick={() => {
-              if (
-                window.confirm(
-                  "Are you sure you want to approve this row deletion?"
-                )
-              ) {
-                handleApprove(row.original);
-              }
-            }}
+            // onClick={() => {
+            //   if (
+            //     window.confirm(
+            //       "Are you sure you want to approve this row deletion?"
+            //     )
+            //   ) {
+            //     handleApprove(row.original);
+            //   }
+            // }}
+
+            onClick={()=>setModelOpen(true)}
           >
             <CheckCircleIcon />
           </IconButton>
@@ -213,7 +216,7 @@ const AdminComponent = () => {
     enableFullScreenToggle: false,
     enableColumnActions: false,
     enableColumnFilters: false,
-    enableHiding: "false",
+    enableHiding: false,
 
     muiTableHeadCellProps: {
       sx: {
@@ -240,7 +243,7 @@ const AdminComponent = () => {
     enableFilters: false,
     enableColumnActions: false,
     enableColumnFilters: false,
-    enableHiding: "false",
+    enableHiding: false,
     muiTableHeadCellProps: {
       sx: {
         backgroundColor: "#818589",
@@ -329,6 +332,8 @@ const AdminComponent = () => {
     },
   };
 
+
+  console.log('modalOpen',modalOpen)
   return (
     <Box sx={{ margin: "1rem" }}>
       <Box sx={{ display: "flex", gap: "30px" , justifyContent:'center', marginTop:'20px'}}>
@@ -471,6 +476,8 @@ const AdminComponent = () => {
                 paddingBottom: "20px",
                 marginBottom: "15px",
                 borderRadius: "20px",
+                height: "400px", // Fixed height for the table container
+                overflowY: "auto",
               }}
             >
               {/* Content for the first MaterialReactTable */}
@@ -563,10 +570,10 @@ const AdminComponent = () => {
                 paddingBottom: "20px",
                 marginBottom: "15px",
                 borderRadius: "20px",
+                height: "400px", // Fixed height for the table container
+                // overflowY: "auto",
               }}
             >
-              {/* Content for the first MaterialReactTable */}
-              {/* <MaterialReactTable table={tableRow} /> */}
               <MaterialReactTable table={tableColumn} />
             </Box>
             {/* </Box> */}
