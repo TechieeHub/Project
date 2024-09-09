@@ -80,17 +80,17 @@ const AdminComponent = () => {
         <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: 'Roboto' }}>
           <IconButton
             color="success"
-            // onClick={() => {
-            //   if (
-            //     window.confirm(
-            //       "Are you sure you want to approve this row deletion?"
-            //     )
-            //   ) {
-            //     handleApprove(row.original);
-            //   }
-            // }}
+            onClick={() => {
+              if (
+                window.confirm(
+                  "Are you sure you want to approve this row deletion?"
+                )
+              ) {
+                handleApprove(row.original);
+              }
+            }}
 
-            onClick={()=>setModelOpen(true)}
+            // onClick={()=>setModelOpen(true)}
           >
             <CheckCircleIcon />
           </IconButton>
