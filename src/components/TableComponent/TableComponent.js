@@ -47,14 +47,14 @@ const TableComponent = ({
 
   const [contextMenu, setContextMenu] = useState(null);
   const [sliderValue, setSliderValue] = useState(
-    localStorage.getItem("anamolyDataValue")
-      ? parseInt(localStorage.getItem("anamolyDataValue"), 10)
+    localStorage.getItem("anomalyDataValue")
+      ? parseInt(localStorage.getItem("anomalyDataValue"), 10)
       : 10
   );
   const dispatch = useDispatch();
 
   const anamolyValue = useSelector((state) => state.excel.anomalyValue);
-  const anamolyDataValue = anamolyValue ? anamolyValue : sliderValue;
+  const anomalyDataValue = anamolyValue ? anamolyValue : sliderValue;
 
   const handleOpenDialog = () => {
     setTempColumns(editedColumns);
@@ -62,7 +62,7 @@ const TableComponent = ({
   };
   const handleSliderChange = (event, newValue) => {
     setSliderValue(newValue);
-    localStorage.setItem("anamolyDataValue", newValue);
+    localStorage.setItem("anomalyDataValue", newValue);
   };
 
   const handleCloseDialog = () => {
@@ -128,7 +128,6 @@ const TableComponent = ({
       .then((response) => refreshDataHandler(true))
       .catch((error) => alert("Something went wrong"));
   };
-  
 
   const handleEditColumnName = (data) => {
     const apidata = {
@@ -204,7 +203,7 @@ const TableComponent = ({
   };
   const calculateColumns = (data) => {
     const activeColumns = Object.keys(excelData[0] || {}).filter(
-      (key) => !deletedColumns.includes(key) && key.startsWith("EODBalance")
+      (key) => !deletedColumns?.includes(key) && key.startsWith("EODBalance")
     );
 
     return data.map((row) => {
@@ -234,8 +233,8 @@ const TableComponent = ({
         Anomaly:
           deviation5DayToday < 0
             ? "EOD Balance less than 5 day average end of day balance"
-            : deviation5DayToday > anamolyDataValue
-              ? `EOD balance more than 5 day average end of day balance by ${anamolyDataValue}%`
+            : deviation5DayToday > anomalyDataValue
+              ? `EOD balance more than 5 day average end of day balance by ${anomalyDataValue}%`
               : "",
       };
     });
@@ -249,7 +248,7 @@ const TableComponent = ({
 
   const updatedExcelData = useMemo(
     () => calculateColumns(excelData),
-    [excelData, anamolyDataValue]
+    [excelData, anomalyDataValue]
   );
 
   const columns = useMemo(() => {
@@ -319,11 +318,11 @@ const TableComponent = ({
         
         muiTableBodyCellProps: () => ({
           sx: {
-            backgroundColor: deletedColumns.includes(key)
+            backgroundColor: deletedColumns?.includes(key)
               ? "#FFB7C5"
               : "transparent",
-            color: deletedColumns.includes(key) ? "black" : "black",
-            opacity: deletedColumns.includes(key) ? 0.8 : 1,
+            color: deletedColumns?.includes(key) ? "black" : "black",
+            opacity: deletedColumns?.includes(key) ? 0.8 : 1,
           },
         }),
         isVisible: key !== ("_id" && "is_deleted"),
@@ -377,7 +376,7 @@ const TableComponent = ({
 
   const filteredData = useMemo(
     () => updatedExcelData.filter((row) => !row.is_deleted),
-    [excelData, anamolyDataValue]
+    [excelData, anomalyDataValue]
   );
 
   useEffect(() => {
@@ -387,7 +386,7 @@ const TableComponent = ({
   }, [filteredData, dispatch]);
 
   const filteredColumn = columns?.filter(
-    (data) => !deletedColumns.includes(data?.accessorKey)
+    (data) => !deletedColumns?.includes(data?.accessorKey)
   );
   const table = useMaterialReactTable({
     columns: filteredColumn,
@@ -448,7 +447,7 @@ const TableComponent = ({
   const deleteRowHandler = (rowId) => {
     axios
       .delete(`http://localhost:8000/api/create_or_update_record/${rowId}/`)
-      .then((response) =>refreshDataHandler(true))
+      .then((response) =>{ refreshDataHandler(true)})
       .catch((error) => console.log("error", error));
   };
 
@@ -597,7 +596,7 @@ const TableComponent = ({
           <DialogContent>
             {Object.keys(excelData[0] || {})
               .filter((key) => key !== "_id")
-              .filter((key) => !deletedColumns.includes(key))
+              .filter((key) => !deletedColumns?.includes(key))
               .map((key) => (
                 <Box
                   key={key}

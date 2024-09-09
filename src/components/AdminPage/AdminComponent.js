@@ -337,7 +337,7 @@ const AdminComponent = () => {
   <CardContent>
     <Typography
       gutterBottom
-      sx={{ color: "text.secondary", fontSize: '24px', textAlign: 'center' }}
+      sx={{ color: "text.secondary", fontSize: '40px', textAlign: 'center' }}
     >
       {approvedDeletedRowsByAdmin?.length}
     </Typography>
@@ -350,7 +350,7 @@ const AdminComponent = () => {
   <CardContent>
     <Typography
       gutterBottom
-      sx={{ color: "text.secondary", fontSize: '24px', textAlign: 'center' }}
+      sx={{ color: "text.secondary", fontSize: '40px', textAlign: 'center' }}
     >
        {rejectedDeletedRowsByAdmin?.length}
     </Typography>
@@ -363,7 +363,7 @@ const AdminComponent = () => {
   <CardContent>
     <Typography
       gutterBottom
-      sx={{ color: "text.secondary", fontSize: '24px', textAlign: 'center' }}
+      sx={{ color: "text.secondary", fontSize: '40px', textAlign: 'center' }}
     >
       {approvedDeletedColumnsByAdmin?.length}
     </Typography>
@@ -376,7 +376,7 @@ const AdminComponent = () => {
   <CardContent>
     <Typography
       gutterBottom
-      sx={{ color: "text.secondary", fontSize: '24px', textAlign: 'center' }}
+      sx={{ color: "text.secondary", fontSize: '40px', textAlign: 'center' }}
     >
       {rejectedDeletedColumnsByAdmin?.length}
     </Typography>

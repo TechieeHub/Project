@@ -14,8 +14,11 @@ import {
 import BarChartIcon from '@mui/icons-material/BarChart';
 const AnomalieComponent = ({ onView }) => {
   const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
-  const anomalyValue = JSON.parse(localStorage.getItem("anomalyValue")) || [];
+  const anomalyValue = JSON.parse(localStorage.getItem("anomalyDataValue")) || [];
 
+
+
+  console.log('anomalyValue',anomalyValue)
   const handleViewMoreThan5DayAvg = () => {
     const filteredData = excelData.filter((data) =>
       data?.Anomaly.includes(anomalyValue)
