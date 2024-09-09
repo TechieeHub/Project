@@ -9,6 +9,7 @@ import { setTableData } from "../../Store/excelSlice";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import UploadExcel from "../UploadExcelComponent/UploadExcel";
 
 const ChartData = () => {
   const [filteredChartData, setFilteredChartData] = useState(null);
@@ -67,7 +68,7 @@ const ChartData = () => {
   };
 
   return (
-    <Box>
+    <><UploadExcel /><Box>
       <Box
         sx={{
           display: "flex",
@@ -75,29 +76,29 @@ const ChartData = () => {
           marginRight: '1%'
         }}
       >
-       
-<Button
-  variant="contained"
-  sx={{
-    marginTop: "30px",
-    backgroundColor: "grey",
-    width: "12%",
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center', fontFamily: 'Roboto',
-    '& .button-text': {
-      display: 'inline',
-      marginLeft: '8px', // Adds some space between the icon and the text
-    },
-    '&:hover .button-text': {
-      display: 'none',
-    },
-  }}
-  onClick={() => handleExport()}
->
-  <PictureAsPdfIcon />
-  <span className="button-text">Export to PDF</span> {/* Text will only appear on hover */}
-</Button>
+
+        <Button
+          variant="contained"
+          sx={{
+            marginTop: "30px",
+            backgroundColor: "grey",
+            width: "12%",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center', fontFamily: 'Roboto',
+            '& .button-text': {
+              display: 'inline',
+              marginLeft: '8px', // Adds some space between the icon and the text
+            },
+            '&:hover .button-text': {
+              display: 'none',
+            },
+          }}
+          onClick={() => handleExport()}
+        >
+          <PictureAsPdfIcon />
+          <span className="button-text">Export to PDF</span> {/* Text will only appear on hover */}
+        </Button>
       </Box>
       <Box id={"contentToExport"}>  {/* Content to be exported to PDF */}
         <Box
@@ -129,7 +130,7 @@ const ChartData = () => {
           )}
         </Box>
       </Box>
-    </Box>
+    </Box></>
   );
 };
 
