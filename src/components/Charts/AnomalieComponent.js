@@ -69,7 +69,7 @@ const AnomalieComponent = ({ onView }) => {
           <TableRow>
             <TableCell>
               <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
-                EOD balance more than 5 day average end of day balance by <Typography sx={{ fontWeight: "550", fontSize:"20px" }}>{anomalyValue}% </Typography>
+                EOD balance more than <strong> 5 day </strong> average end of day balance by <Typography sx={{ fontWeight: "550", fontSize: "20px" }}>{anomalyValue}% </Typography>
               </Typography>
             </TableCell>
             <TableCell>
@@ -100,8 +100,11 @@ const AnomalieComponent = ({ onView }) => {
           <TableRow>
             <TableCell>
               <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
-                EOD Balance less than 5 day average end of day balance
+                EOD Balance less than
+                <strong> 5 day </strong>
+                average end of day balance
               </Typography>
+
             </TableCell>
             <TableCell>
               <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
