@@ -258,6 +258,7 @@ const TableComponent = ({
         accessorKey: "Projected Balance",
         header: "Projected Balance",
         size: 250,
+        enableEditing: false, // Read-only
         Cell: ({ cell }) => {
           const value = cell.getValue();
           return new Intl.NumberFormat("en-US", {
@@ -266,11 +267,17 @@ const TableComponent = ({
             minimumFractionDigits: 2,
           }).format(value);
         },
+        muiTableBodyCellProps: () => ({
+          sx: {
+            backgroundColor: "#f0f0f0", // Light grey background
+          },
+        }),
       },
       {
         accessorKey: "5-Day average",
         header: "5-Day average",
         size: 250,
+        enableEditing: false, // Read-only
         Cell: ({ cell }) => {
           const value = cell.getValue();
           return new Intl.NumberFormat("en-US", {
@@ -279,19 +286,29 @@ const TableComponent = ({
             minimumFractionDigits: 2,
           }).format(value);
         },
+        muiTableBodyCellProps: () => ({
+          sx: {
+            backgroundColor: "#f0f0f0", // Light grey background
+          },
+        }),
       },
       {
         accessorKey: "5-Day Deviation",
         header: "5-Day Deviation",
         size: 250,
+        enableEditing: false, // Read-only
         Cell: ({ cell }) => {
           const value = cell.getValue();
           return `${value}%`;
         },
+        muiTableBodyCellProps: () => ({
+          sx: {
+            backgroundColor: "#f0f0f0", // Light grey background
+          },
+        }),
       },
-      { accessorKey: "Anomaly", header: "Anomaly", size: 250 },
     ];
-
+  
     const dynamicColumns = Object.keys(excelData[0] || {})
       .filter((key) => key !== "deleted_by_admin")
       .map((key) => ({
@@ -299,6 +316,7 @@ const TableComponent = ({
         header: editedColumns[key] || key,
         size: 250,
         enableEditing: key !== "_id",
+        
         muiTableBodyCellProps: () => ({
           sx: {
             backgroundColor: deletedColumns.includes(key)
@@ -310,10 +328,10 @@ const TableComponent = ({
         }),
         isVisible: key !== ("_id" && "is_deleted"),
       }));
-
+  
     return [...dynamicColumns, ...defaultColumns];
   }, [excelData, editedColumns, deletedColumns]);
-
+  
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
       if (window.confirm("Are you sure you want to delete this row?")) {
