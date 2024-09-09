@@ -15,6 +15,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { setChartDisplayData } from "../../Store/excelSlice";
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
 
 const VisualizationComponent = ({ onView }) => {
   const dispatch = useDispatch();
@@ -54,9 +56,9 @@ const VisualizationComponent = ({ onView }) => {
                 sx={{
                   my: 2,
                   display: 'block',
-                  textDecoration: 'none', 
+                  textDecoration: 'none',
                   '&:hover': {
-                    textDecoration: 'none', 
+                    textDecoration: 'none',
                   },
                 }}
               >
@@ -67,7 +69,14 @@ const VisualizationComponent = ({ onView }) => {
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell><Typography sx={{ fontSize: '20px', fontFamily: 'Roboto' }}>Large run</Typography></TableCell>
+            <TableCell> <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Typography sx={{ fontSize: '20px', fontFamily: 'Roboto' }}>
+                Large run
+              </Typography>
+              <Tooltip title="Large run means this and this...">
+                <InfoIcon sx={{ marginLeft: '8px', fontSize: '20px', cursor: 'pointer' }} />
+              </Tooltip>
+            </div></TableCell>
             <TableCell>
               <Typography sx={{ fontSize: '20px' }}>
                 {excelData?.filter((data) => data.AccountRefresh === "Large run")?.length}
@@ -91,9 +100,14 @@ const VisualizationComponent = ({ onView }) => {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography sx={{ fontSize: '20px' , fontFamily: 'Roboto'}}>
-                Quick run
-              </Typography>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Typography sx={{ fontSize: '20px', fontFamily: 'Roboto' }}>
+                  Quick run
+                </Typography>
+                <Tooltip title="Quick run means this and this...">
+                  <InfoIcon sx={{ marginLeft: '8px', fontSize: '20px', cursor: 'pointer' }} />
+                </Tooltip>
+              </div>
             </TableCell>
             <TableCell>
               <Typography sx={{ fontSize: '20px' }}>
