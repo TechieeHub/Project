@@ -12,6 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import MenuIcon from '@mui/icons-material/Menu';
+ 
 import InfoIcon from '@mui/icons-material/Info';
 import Drawer from '@mui/material/Drawer';
 import { Link, useLocation } from 'react-router-dom';
@@ -78,7 +80,7 @@ const AppHeader = () => {
   return (
     <>
       <AppBar position="static" sx={{ backgroundColor: '#484848', paddingLeft: 0, paddingRight: 0, fontFamily: 'Roboto' }}>
-        <Container maxWidth="xl">
+        <Container maxWidth>
           <Toolbar disableGutters>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {excelData?.length > 0 && (
@@ -111,12 +113,18 @@ const AppHeader = () => {
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
+              <Box sx={{display:'flex', gap:'10px', alignItems:'center'}}>
+
+              <Typography sx={{cursor:'pointer'}}>Welcome</Typography>
               <Tooltip title="Open settings">
-                {/* <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Ishan Gupta" src="/static/images/avatar/2.jpg" />
-                </IconButton> */}
-                <Typography sx={{cursor:'pointer'}}onClick={handleOpenUserMenu}>Welcome User</Typography>
+
+                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Ishan Gupta" >IG</Avatar>
+                </IconButton> 
               </Tooltip>
+
+              </Box>
+
               <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"
@@ -143,7 +151,7 @@ const AppHeader = () => {
 
             {/* Info Icon Button */}
             <IconButton color="inherit" onClick={handleDrawerOpen} sx={{ marginLeft: "1rem" }}>
-              <InfoIcon />
+              <MenuIcon />
             </IconButton>
           </Toolbar>
         </Container>

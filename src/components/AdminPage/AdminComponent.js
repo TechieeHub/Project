@@ -336,9 +336,9 @@ const AdminComponent = () => {
   console.log('modalOpen',modalOpen)
   return (
     <Box sx={{ margin: "1rem" }}>
-      <Box sx={{ display: "flex", gap: "30px" , justifyContent:'center', marginTop:'20px'}}>
+      <Box sx={{ display: "flex", gap: "30px" , justifyContent:'center', margin:'20px 40px'}}>
        
-        <Card variant="outlined" sx={{  borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Card variant="outlined" sx={{  flex:1 ,borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <CardContent>
     <Typography
       gutterBottom
@@ -351,7 +351,7 @@ const AdminComponent = () => {
     </Typography>
   </CardContent>
 </Card>
-<Card variant="outlined" sx={{ borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+<Card variant="outlined" sx={{flex:1 , borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <CardContent>
     <Typography
       gutterBottom
@@ -364,7 +364,7 @@ const AdminComponent = () => {
     </Typography>
   </CardContent>
 </Card>
-<Card variant="outlined" sx={{ borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+<Card variant="outlined" sx={{flex:1 , borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <CardContent>
     <Typography
       gutterBottom
@@ -373,11 +373,11 @@ const AdminComponent = () => {
       {approvedDeletedColumnsByAdmin?.length}
     </Typography>
     <Typography sx={{ textAlign: 'center' }}>
-      Metadata deletions approved
+      Account attribute deletions approved
     </Typography>
   </CardContent>
 </Card>
-<Card variant="outlined" sx={{borderRadius: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+<Card variant="outlined" sx={{flex:1 ,borderRadius: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <CardContent>
     <Typography
       gutterBottom
@@ -386,7 +386,7 @@ const AdminComponent = () => {
       {rejectedDeletedColumnsByAdmin?.length}
     </Typography>
     <Typography sx={{ textAlign: 'center' }}>
-      Metadata deletions rejected
+      Account attribute deletions rejected
     </Typography>
   </CardContent>
 </Card>
@@ -476,12 +476,17 @@ const AdminComponent = () => {
                 paddingBottom: "20px",
                 marginBottom: "15px",
                 borderRadius: "20px",
-                // height: "400px", // Fixed height for the table container
-                // overflowY: "auto",
+                height: "400px", // Fixed height for the table container
+                overflow: "auto",
               }}
             >
-              {/* Content for the first MaterialReactTable */}
-              <MaterialReactTable table={tableRow} />
+              <MaterialReactTable table={tableRow} 
+              
+              sx={{
+                height:'100%'
+              }}
+              
+              />
             </Box>
 
             {/* </Box> */}
@@ -505,7 +510,7 @@ const AdminComponent = () => {
                 padding: "20px 0px 0px 15px",
               }}
             >
-              Metadata deleted by user
+              Account attributes deleted by user
             </Typography>
 
             <Button
