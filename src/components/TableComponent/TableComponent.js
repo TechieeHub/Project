@@ -128,6 +128,7 @@ const TableComponent = ({
       .then((response) => refreshDataHandler(true))
       .catch((error) => alert("Something went wrong"));
   };
+  
 
   const handleEditColumnName = (data) => {
     const apidata = {
@@ -227,7 +228,7 @@ const TableComponent = ({
         ...row,
         "Projected Balance": projectedBalance,
         "5-Day average": Math.round(average5Day * 100) / 100,
-        Deviation_5Day_Today: isNaN(deviation5DayToday)
+        "5-Day Deviation": isNaN(deviation5DayToday)
           ? 0
           : Math.round(deviation5DayToday * 100) / 100,
         Anomaly:
@@ -280,8 +281,8 @@ const TableComponent = ({
         },
       },
       {
-        accessorKey: "Deviation_5Day_Today",
-        header: "Deviation_5Day_Today",
+        accessorKey: "5-Day Deviation",
+        header: "5-Day Deviation",
         size: 250,
         Cell: ({ cell }) => {
           const value = cell.getValue();
@@ -405,6 +406,7 @@ const TableComponent = ({
         )}
       </Box>
     ),
+    positionActionsColumn:'last',
     muiTableHeadCellProps: {
       sx: {
         backgroundColor: "#818589",
@@ -423,7 +425,7 @@ const TableComponent = ({
   const deleteRowHandler = (rowId) => {
     axios
       .delete(`http://localhost:8000/api/create_or_update_record/${rowId}/`)
-      .then((response) => refreshDataHandler(true))
+      .then((response) =>refreshDataHandler(true))
       .catch((error) => console.log("error", error));
   };
 
