@@ -112,9 +112,10 @@ const AppHeader = () => {
 
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Ishan" src="/static/images/avatar/2.jpg" />
-                </IconButton>
+                {/* <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Ishan Gupta" src="/static/images/avatar/2.jpg" />
+                </IconButton> */}
+                <Typography sx={{cursor:'pointer'}}onClick={handleOpenUserMenu}>Welcome User</Typography>
               </Tooltip>
               <Menu
                 sx={{ mt: '45px' }}
