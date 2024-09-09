@@ -22,6 +22,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { Bar } from "react-chartjs-2";
+import ConfirmModal from "./confirmModal";
 
 const AdminComponent = () => {
   const [excelData, setExcelData] = useState([]);
@@ -38,6 +39,16 @@ const AdminComponent = () => {
   );
   const [rejectedDeletedColumnsByAdmin, setRejectedDeletedColumnsByAdmin] =
     useState([]);
+
+    const [openModal, setOpenModal] = useState(false);
+
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
+  const handleConfirm = () => {
+    // Add your confirm action here
+    console.log("Confirmed");
+    setOpenModal(false);
+  };
 
   useEffect(() => {
     axios
@@ -330,6 +341,13 @@ const AdminComponent = () => {
   };
 
   return (
+    <>
+    <ConfirmModal
+        open={openModal}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+      />
+    
     <Box sx={{ margin: "1rem" }}>
       <Box sx={{ display: "flex", gap: "30px" , justifyContent:'center', marginTop:'20px'}}>
        
@@ -585,6 +603,7 @@ const AdminComponent = () => {
         )}
       
     </Box>
+    </>
   );
 };
 
