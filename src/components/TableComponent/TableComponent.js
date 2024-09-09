@@ -552,48 +552,7 @@ const TableComponent = ({
             
             <FileDownloadIcon sx={{ marginRight: "3px", fontSize: "20px" }} />
           </Button>
-          {/* <Box
-            sx={{
-              width: "35%",
-              marginLeft: "5%",
-              marginTop: "30px",
-              display: "flex",
-            }}
-          >
-            <Typography sx={{ marginRight: "10px", fontWeight: "550", fontFamily: 'Roboto' }}>
-              Threshold:
-            </Typography>
-            <Typography sx={{ marginRight: "30px", fontWeight: "550", fontFamily: 'Roboto' }}>
-              {sliderValue}%
-            </Typography>
-
-            <Slider
-              value={sliderValue}
-              onChange={handleSliderChange}
-              min={0}
-              max={100}
-              aria-labelledby="continuous-slider"
-              sx={{ color: "grey" }}
-              marks={[
-                { value: 0, label: "0" },
-                { value: 100, label: "100" },
-              ]}
-            />
-          </Box> */}
-          {/* <Box>
-          <Button
-            onClick={anomalyHandler}
-            variant="contained"
-            sx={{
-              maxHeight: "30px",
-              marginLeft: "20px",
-              marginTop: "30px",
-              backgroundColor: "grey",
-            }}
-          >
-            Set Anomaly
-          </Button>
-        </Box> */}
+          
         </Box>
         {location?.pathname === "/admin" && (
           <Button
