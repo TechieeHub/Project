@@ -12,12 +12,12 @@ import {
   Box,
 } from "@mui/material";
 import BarChartIcon from '@mui/icons-material/BarChart';
-import { useSelector } from "react-redux";  // Import useSelector to access Redux store
+import { useSelector } from "react-redux";
+import Tooltip from '@mui/material/Tooltip';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-const AnomalieComponent = ({ onView }) => {
+const AnomalieComponent = ({ onView, onChartTitleChange }) => {
   const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
-  
-  // Get anomaly value from Redux store
   const anomalyValue = useSelector((state) => state.excel.anomalyValue);
 
   const handleViewMoreThan5DayAvg = () => {
@@ -25,6 +25,7 @@ const AnomalieComponent = ({ onView }) => {
       data?.Anomaly.includes(anomalyValue)
     );
     onView(filteredData);
+    onChartTitleChange(`EOD balance more than 5 day average end of day balance by ${anomalyValue}%`);
   };
 
   const handleViewLessThan5DayAvg = () => {
@@ -32,6 +33,7 @@ const AnomalieComponent = ({ onView }) => {
       (data) => !data?.Anomaly.includes(anomalyValue) && data.Anomaly !== ""
     );
     onView(filteredData);
+    onChartTitleChange("EOD Balance less than 5 day average end of day balance");
   };
 
   return (
@@ -51,7 +53,6 @@ const AnomalieComponent = ({ onView }) => {
       >
         <Box sx={{ marginLeft: "15px", fontFamily: 'Roboto' }}>Anomalies</Box>
       </Typography>
-
       <Table sx={{ "& .MuiTableRow-root": { height: "80px", fontFamily: 'Roboto' } }}>
         <TableHead>
           <TableRow sx={{ height: "20px", fontFamily: 'Roboto' }}>
@@ -65,23 +66,24 @@ const AnomalieComponent = ({ onView }) => {
                 {excelData.filter((item) => item.Anomaly === '')?.length}
               </Typography>
             </TableCell>
-            <TableCell ></TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
             <TableCell>
-              <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
-                EOD balance more than <strong> 5 day </strong> average end of day balance by <Typography sx={{ fontWeight: "550", fontSize: "20px" }}>{anomalyValue}% </Typography>
-              </Typography>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
+                  EOD balance more than <strong>5 day</strong> average end of day balance by <Typography sx={{ fontWeight: "550", fontSize: "20px" }}>{anomalyValue}%</Typography>
+                </Typography>
+                <Tooltip title="Anomaly information for values more than 5 day average">
+                  <InfoOutlinedIcon sx={{ marginLeft: '8px', fontSize: '20px', cursor: 'pointer' }} />
+                </Tooltip>
+              </div>
             </TableCell>
             <TableCell>
               <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
-                {
-                  excelData?.filter((data) =>
-                    data?.Anomaly.includes(anomalyValue)
-                  )?.length
-                }
+                {excelData?.filter((data) => data?.Anomaly.includes(anomalyValue))?.length}
               </Typography>
             </TableCell>
             <TableCell>
@@ -103,19 +105,12 @@ const AnomalieComponent = ({ onView }) => {
           <TableRow>
             <TableCell>
               <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
-                EOD Balance less than
-                <strong> 5 day </strong>
-                average end of day balance
+                EOD Balance less than <strong>5 day</strong> average end of day balance
               </Typography>
             </TableCell>
             <TableCell>
               <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
-                {
-                  excelData?.filter(
-                    (data) =>
-                      !data?.Anomaly?.includes(anomalyValue) && data.Anomaly !== ""
-                  )?.length
-                }
+                {excelData?.filter((data) => !data?.Anomaly.includes(anomalyValue) && data.Anomaly !== "")?.length}
               </Typography>
             </TableCell>
             <TableCell>

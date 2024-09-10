@@ -14,7 +14,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 const ChartData = () => {
   const [filteredChartData, setFilteredChartData] = useState(null);
   const [initialChartData, setInitialChartData] = useState(null);
-  const [chartTitle, setChartTitle] = useState("Account Balance"); // Default title
+  const [chartTitle, setChartTitle] = useState("Account Balance");
 
   const dispatch = useDispatch();
   const excelData = useSelector((state) => state.excel.filteredData)?.filter(
@@ -29,7 +29,7 @@ const ChartData = () => {
         setInitialChartData(response.data.records);
       })
       .catch((error) => console.log("error", error));
-  }, []);
+  }, [dispatch]);
 
   const handleView = (data) => {
     setFilteredChartData(data);
@@ -115,9 +115,8 @@ const ChartData = () => {
               padding: "0.5rem",
             }}
           >
-            {/* Passing onView and onChartTitleChange props */}
             <VisualizationComponent onView={handleView} onChartTitleChange={handleChartTitleChange} />
-            <AnomalieComponent onView={handleView} />
+            <AnomalieComponent onView={handleView} onChartTitleChange={handleChartTitleChange} />
           </Box>
           <Box
             sx={{
@@ -128,7 +127,6 @@ const ChartData = () => {
               marginTop: "30px",
             }}
           >
-            {/* Displaying the dynamic chart title */}
             <h2>{chartTitle}</h2>
             {filteredChartData?.length > 0 ? (
               <ChartComponent data={filteredChartData} />
