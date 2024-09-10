@@ -83,7 +83,6 @@ const AppHeader = () => {
         <Container maxWidth>
           <Toolbar disableGutters>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {excelData?.length > 0 && (
                 <Tabs
                   value={currentTab}
                   textColor="inherit"
@@ -109,7 +108,7 @@ const AppHeader = () => {
                     />
                   ))}
                 </Tabs>
-              )}
+              
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
