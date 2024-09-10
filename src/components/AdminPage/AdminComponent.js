@@ -476,8 +476,8 @@ const AdminComponent = () => {
                 paddingBottom: "20px",
                 marginBottom: "15px",
                 borderRadius: "20px",
-                height: "400px", // Fixed height for the table container
-                overflow: "auto",
+                // height: "400px", // Fixed height for the table container
+                // overflow: "auto",
               }}
             >
               <MaterialReactTable table={tableRow} 
