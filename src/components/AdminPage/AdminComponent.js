@@ -29,7 +29,7 @@ const AdminComponent = () => {
   const [excelData, setExcelData] = useState([]);
   const [modalOpen, setModelOpen] = useState(false);
   const [conformation, setConformation] = useState(false);
-  const [modalDescription, setModalDescription] = useState("Hey how are you");
+  const [modalDescription, setModalDescription] = useState("");
   const [refreshData, setRefreshData] = useState(false);
   const [deletedColumnData, setDeletedColumnData] = useState([]);
   const [deletedColumnByAdmin, setDeletedColumnByAdmin] = useState([]);
