@@ -1,27 +1,25 @@
-import { Box, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Box, Button } from "@mui/material";
 import VisualizationComponent from "./VisualizationComponent";
 import AnomalieComponent from "./AnomalieComponent";
 import ChartComponent from "./ChartComponent";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setTableData } from "../../Store/excelSlice";
+import UploadExcel from "../UploadExcelComponent/UploadExcel";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import UploadExcel from "../UploadExcelComponent/UploadExcel";
 
 const ChartData = () => {
   const [filteredChartData, setFilteredChartData] = useState(null);
   const [initialChartData, setInitialChartData] = useState(null);
+  const [chartTitle, setChartTitle] = useState("Account Balance"); // Default title
 
   const dispatch = useDispatch();
   const excelData = useSelector((state) => state.excel.filteredData)?.filter(
     (data) => data.is_deleted !== true
   );
-
-
-
 
   useEffect(() => {
     axios
@@ -35,7 +33,12 @@ const ChartData = () => {
 
   const handleView = (data) => {
     setFilteredChartData(data);
-  }
+  };
+
+  const handleChartTitleChange = (title) => {
+    setChartTitle(title);
+  };
+
   const handleExport = () => {
     const input = document.getElementById("contentToExport");
 
@@ -49,7 +52,6 @@ const ChartData = () => {
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
 
-      // Number of pages needed
       let heightLeft = imgHeight;
       let position = 0;
 
@@ -68,69 +70,75 @@ const ChartData = () => {
   };
 
   return (
-    <><UploadExcel /><Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginRight: '1%'
-        }}
-      >
-
-        <Button
-          variant="contained"
-          sx={{
-            marginTop: "30px",
-            backgroundColor: "grey",
-            width: "12%",
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center', fontFamily: 'Roboto',
-            '& .button-text': {
-              display: 'inline',
-              marginLeft: '8px', // Adds some space between the icon and the text
-            },
-            '&:hover .button-text': {
-              display: 'none',
-            },
-          }}
-          onClick={() => handleExport()}
-        >
-          <PictureAsPdfIcon />
-          <span className="button-text">Export to PDF</span> {/* Text will only appear on hover */}
-        </Button>
-      </Box>
-      <Box id={"contentToExport"}>  {/* Content to be exported to PDF */}
+    <>
+      <UploadExcel />
+      <Box>
         <Box
           sx={{
             display: "flex",
-            gap: "10px",
-            marginTop: "10px",
-            marginLeft: "5px",
-            marginRight: "5px",
-            padding: "0.5rem",
+            justifyContent: "flex-end",
+            marginRight: '1%'
           }}
         >
-          <VisualizationComponent onView={handleView} />
-          <AnomalieComponent onView={handleView} />
+          <Button
+            variant="contained"
+            sx={{
+              marginTop: "30px",
+              backgroundColor: "grey",
+              width: "12%",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: 'Roboto',
+              '& .button-text': {
+                display: 'inline',
+                marginLeft: '8px', 
+              },
+              '&:hover .button-text': {
+                display: 'none',
+              },
+            }}
+            onClick={handleExport}
+          >
+            <PictureAsPdfIcon />
+            <span className="button-text">Export to PDF</span>
+          </Button>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "10px",
-            marginTop: "30px",
-          }}
-        >
-          {filteredChartData?.length > 0 ? (
-            <ChartComponent data={filteredChartData} />
-          ) : (
-            initialChartData?.length > 0 && <ChartComponent data={excelData} />
-          )}
+        <Box id={"contentToExport"}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "10px",
+              marginTop: "10px",
+              marginLeft: "5px",
+              marginRight: "5px",
+              padding: "0.5rem",
+            }}
+          >
+            {/* Passing onView and onChartTitleChange props */}
+            <VisualizationComponent onView={handleView} onChartTitleChange={handleChartTitleChange} />
+            <AnomalieComponent onView={handleView} />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "10px",
+              marginTop: "30px",
+            }}
+          >
+            {/* Displaying the dynamic chart title */}
+            <h2>{chartTitle}</h2>
+            {filteredChartData?.length > 0 ? (
+              <ChartComponent data={filteredChartData} />
+            ) : (
+              initialChartData?.length > 0 && <ChartComponent data={excelData} />
+            )}
+          </Box>
         </Box>
       </Box>
-    </Box></>
+    </>
   );
 };
 

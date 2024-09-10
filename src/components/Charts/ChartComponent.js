@@ -55,8 +55,7 @@ const generateColorPalette = (numColors) => {
   ];
   return baseColors.slice(0, numColors);
 };
-
-const ChartComponent = ({ data }) => {
+const ChartComponent = ({ data, title }) => {
   const transformedData = transformData(data);
   const transposedData = transposeData(transformedData);
 
@@ -66,53 +65,51 @@ const ChartComponent = ({ data }) => {
     return <div>No data available for charting.</div>;
   }
 
-  // Generating a color for each account ID
   const accountIDs = Object.keys(transposedData[0]).filter(key => key !== 'name');
   const colors = generateColorPalette(accountIDs.length);
 
-  // Preparing data for Chart.js
   const chartData = {
     labels: transposedData.map(item => item.name),
     datasets: [
       ...accountIDs.map((accountID, index) => ({
         label: accountID,
         data: transposedData.map(item => item[accountID]),
-        backgroundColor: colors[index], // Use generated color palette
+        backgroundColor: colors[index],
         type: 'bar',
-        order: 3,  // Bars are rendered first
-        hidden: selectedDataset !== null && selectedDataset !== accountID, // Hide other datasets when one is selected
+        order: 3,
+        hidden: selectedDataset !== null && selectedDataset !== accountID,
       })),
       {
         label: 'Projected',
         data: transformedData.map(item => item.projected),
-        borderColor: '#FF0000', // Explicit color for the line
-        backgroundColor: '#FF0000',  // Solid color for the legend box
-        fill: false,  // No fill to make the line stand out
+        borderColor: '#FF0000',
+        backgroundColor: '#FF0000',
+        fill: false,
         type: 'line',
-        yAxisID: 'y',  // Use the left axis
-        tension: 0.4,  // Adding some curvature to the line
-        pointRadius: 5,  // Increase point size for better visibility
-        pointHoverRadius: 7,  // Increase point hover size
-        order: 1,  // Lines are rendered above bars
-        z: 10,  // Ensure this dataset is on top
+        yAxisID: 'y',
+        tension: 0.4,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        order: 1,
+        z: 10,
       },
       {
         label: '5-Day Average',
         data: transformedData.map(item => item.avg5Day),
-        borderColor: '#0000FF', // Explicit color for the line
-        backgroundColor: '#0000FF',  // Solid color for the legend box
-        fill: false,  // No fill to make the line stand out
+        borderColor: '#0000FF',
+        backgroundColor: '#0000FF',
+        fill: false,
         type: 'line',
-        yAxisID: 'y',  // Use the left axis
-        tension: 0.4,  // Adding some curvature to the line
-        pointRadius: 5,  // Increase point size for better visibility
-        pointHoverRadius: 7,  // Increase point hover size
-        order: 2,  // Lines are rendered above bars
-        z: 10,  // Ensure this dataset is on top
-      }      
-      
+        yAxisID: 'y',
+        tension: 0.4,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        order: 2,
+        z: 10,
+      }
     ]
   };
+
   const options = {
     responsive: true,
     plugins: {
@@ -121,24 +118,24 @@ const ChartComponent = ({ data }) => {
       },
       title: {
         display: true,
-        text: 'Account Balances',
+        text: title, // Dynamic title based on props
       },
       tooltip: {
         mode: 'index',
-        intersect: false, // Ensure that hovering works for both bars and lines
+        intersect: false,
         callbacks: {
           label: (tooltipItem) => {
             let label = tooltipItem.dataset.label || '';
             if (label) {
               label += ': ';
             }
-            label += tooltipItem.raw.toLocaleString();  // Format the number with commas
+            label += tooltipItem.raw.toLocaleString();
             return label;
           }
         }
       }
     },
-    maintainAspectRatio: false, // This allows the chart to fill the container
+    maintainAspectRatio: false,
     scales: {
       y: {
         beginAtZero: true,
@@ -154,17 +151,16 @@ const ChartComponent = ({ data }) => {
       if (activeElements.length > 0) {
         const datasetIndex = activeElements[0].datasetIndex;
         const clickedDatasetLabel = chartData.datasets[datasetIndex].label;
-  
+
         if (selectedDataset === clickedDatasetLabel) {
-          setSelectedDataset(null); // Unselect if the same dataset is clicked again
+          setSelectedDataset(null);
         } else {
-          setSelectedDataset(clickedDatasetLabel); // Select the clicked dataset
+          setSelectedDataset(clickedDatasetLabel);
         }
       }
     }
   };
-  
-  
+
   return (
     <div style={{ width: '90%', height: '700px', paddingBottom: "2rem" }}>
       <Bar data={chartData} options={options} />
