@@ -465,7 +465,7 @@ const TableComponent = ({
   return (
     <>
       <Box sx={{ margin: "1rem" }}>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", marginBottom:"1rem" }}>
           <Button
             variant="contained"
             sx={{
