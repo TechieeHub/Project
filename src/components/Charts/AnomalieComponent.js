@@ -12,13 +12,14 @@ import {
   Box,
 } from "@mui/material";
 import BarChartIcon from '@mui/icons-material/BarChart';
+import { useSelector } from "react-redux";  // Import useSelector to access Redux store
+
 const AnomalieComponent = ({ onView }) => {
   const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
-  const anomalyValue = JSON.parse(localStorage.getItem("anomalyDataValue")) || [];
+  
+  // Get anomaly value from Redux store
+  const anomalyValue = useSelector((state) => state.excel.anomalyValue);
 
-
-
-  console.log('anomalyValue',anomalyValue)
   const handleViewMoreThan5DayAvg = () => {
     const filteredData = excelData.filter((data) =>
       data?.Anomaly.includes(anomalyValue)
@@ -28,13 +29,13 @@ const AnomalieComponent = ({ onView }) => {
 
   const handleViewLessThan5DayAvg = () => {
     const filteredData = excelData.filter(
-      (data) => !data?.Anomaly.includes("10%") && data.Anomaly !== ""
+      (data) => !data?.Anomaly.includes(anomalyValue) && data.Anomaly !== ""
     );
     onView(filteredData);
   };
 
   return (
-    <TableContainer component={Paper} sx={{ height: '100%', fontFamily: 'Roboto' }}> {/* Set font to Roboto */}
+    <TableContainer component={Paper} sx={{ height: '100%', fontFamily: 'Roboto' }}>
       <Typography
         sx={{
           fontSize: "25px",
@@ -45,11 +46,10 @@ const AnomalieComponent = ({ onView }) => {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "0.5rem",
-          fontFamily: 'Roboto',  // Set Roboto for this Typography component
+          fontFamily: 'Roboto',
         }}
       >
         <Box sx={{ marginLeft: "15px", fontFamily: 'Roboto' }}>Anomalies</Box>
-
       </Typography>
 
       <Table sx={{ "& .MuiTableRow-root": { height: "80px", fontFamily: 'Roboto' } }}>
@@ -107,7 +107,6 @@ const AnomalieComponent = ({ onView }) => {
                 <strong> 5 day </strong>
                 average end of day balance
               </Typography>
-
             </TableCell>
             <TableCell>
               <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
