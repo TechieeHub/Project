@@ -28,6 +28,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setAnomalyValue, setFilteredData } from "../../Store/excelSlice";
+import ConfirmModal from "../ModalComponnet/Modal";
 
 const TableComponent = ({
   excelData,
@@ -39,6 +40,9 @@ const TableComponent = ({
   const [open, setOpen] = useState(false);
   const [openAddColumnDialog, setOpenAddColumnDialog] = useState(false);
   const [editedColumns, setEditedColumns] = useState({});
+  const [modalDescription, setModalDescription] = useState("");
+  const [conformation, setConformation] = useState(false);
+
   const [tempColumns, setTempColumns] = useState({});
   const [newColumnName, setNewColumnName] = useState("");
   const [newColumnValue, setNewColumnValue] = useState("");
@@ -46,6 +50,9 @@ const TableComponent = ({
   // const [exportOptionOnRightClick, setExportOptionOnRightClick] = useState(null);
 
   const [contextMenu, setContextMenu] = useState(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+  const handleCloseDeleteModal = () => setOpenDeleteModal(false);
   const [sliderValue, setSliderValue] = useState(
     localStorage.getItem("anomalyDataValue")
       ? parseInt(localStorage.getItem("anomalyDataValue"), 10)
@@ -114,9 +121,13 @@ const TableComponent = ({
   };
 
   const handleDeleteColumn = (columnKey) => {
-    if (window.confirm("Are you sure you want to delete this column?")) {
-      handleSoftDeleteColumn(columnKey);
-    }
+
+    setModalDescription(
+      "Are you sure you want to delete this column?"
+    );
+    setOpenDeleteModal(true);
+    setConformation({ type: "columnDelete", item: columnKey });
+
   };
 
   const handleSoftDeleteColumn = (data) => {
@@ -333,9 +344,18 @@ const TableComponent = ({
   
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
-      if (window.confirm("Are you sure you want to delete this row?")) {
-        deleteRowHandler(row.original._id);
-      }
+
+
+      // if (window.confirm("Are you sure you want to delete this row?")) {
+      //   deleteRowHandler(row.original._id);
+      // }
+
+
+      setModalDescription(
+        "Are you sure you want to delete this row?"
+      );
+      setOpenDeleteModal(true);
+      setConformation({ type: "rowDelete", item: row.original._id });
     } else {
       alert("The Last Record cannot be deleted");
     }
@@ -462,8 +482,47 @@ const TableComponent = ({
       .catch((error) => alert("Something went wrong"));
   };
 
+  const handleConfirm = (confirmed) => {
+
+    if (confirmed === true) {
+      if (conformation?.type === "columnDelete") {
+        handleSoftDeleteColumn(conformation?.item);
+      }
+      if (conformation?.type === "rowDelete") {
+        deleteRowHandler(conformation?.item);
+      }
+    //   if (conformation?.type === "columnApprove") {
+    //     handleApproveColumn(conformation?.item);
+    //   }
+    //   if (conformation?.type === "columnReject") {
+    //     handleRejectColumn(conformation?.item);
+    //   }
+    //   if (conformation?.type === "allRowApprove") {
+    //     handleApproveAllRowDeletions()
+    //   }
+    //   if (conformation?.type === "allRowReject") {
+    //     handleRejectAllRowDeletions()
+    //   }
+    //   if (conformation?.type === "allColumnApprove") {
+    //     handleApproveAllColumnDeletions()
+    //   }
+    //   if (conformation?.type === "allColumnReject") {
+    //     handleRejectAllColumnDeletions()
+    //   }
+
+    }
+    setOpenDeleteModal(false); // Close the modal
+  };
+
   return (
     <>
+          <ConfirmModal
+        open={openDeleteModal}
+        handleClose={handleCloseDeleteModal}
+        handleConfirm={handleConfirm}
+        title={modalDescription}
+      />
+
       <Box sx={{ margin: "1rem" }}>
         <Box sx={{ display: "flex", marginBottom:"1rem" }}>
           <Button
