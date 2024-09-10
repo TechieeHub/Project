@@ -15,7 +15,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { useDispatch } from "react-redux";
 import { setChartDisplayData } from "../../Store/excelSlice";
 import Tooltip from '@mui/material/Tooltip';
-import InfoIcon from '@mui/icons-material/Info';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const VisualizationComponent = ({ onView, onChartTitleChange }) => {
   const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const VisualizationComponent = ({ onView, onChartTitleChange }) => {
                   Large run
                 </Typography>
                 <Tooltip title="Large run means this and this...">
-                  <InfoIcon sx={{ marginLeft: '8px', fontSize: '20px', cursor: 'pointer' }} />
+                  <InfoOutlinedIcon sx={{ marginLeft: '8px', fontSize: '20px', cursor: 'pointer' }} />
                 </Tooltip>
               </div>
             </TableCell>
@@ -105,7 +105,7 @@ const VisualizationComponent = ({ onView, onChartTitleChange }) => {
                   Quick run
                 </Typography>
                 <Tooltip title="Quick run means this and this...">
-                  <InfoIcon sx={{ marginLeft: '8px', fontSize: '20px', cursor: 'pointer' }} />
+                  <InfoOutlinedIcon sx={{ marginLeft: '8px', fontSize: '20px', cursor: 'pointer' }} />
                 </Tooltip>
               </div>
             </TableCell>
