@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useInfiniteQuery } from 'react-query';
 import CancelIcon from "@mui/icons-material/Cancel";
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
@@ -25,7 +26,7 @@ import { Bar } from "react-chartjs-2";
 
 const AdminComponent = () => {
   const [excelData, setExcelData] = useState([]);
-  const [modalOpen,setModelOpen]=useState(false)
+  const [modalOpen, setModelOpen] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
   const [deletedColumnData, setDeletedColumnData] = useState([]);
   const [deletedColumnByAdmin, setDeletedColumnByAdmin] = useState([]);
@@ -77,7 +78,7 @@ const AdminComponent = () => {
       accessorKey: "actions",
       header: "Actions",
       Cell: ({ row }) => (
-        <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: 'Roboto' }}>
+        <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: "Roboto" }}>
           <IconButton
             color="success"
             onClick={() => {
@@ -125,7 +126,7 @@ const AdminComponent = () => {
         accessorKey: "actions",
         header: "Actions",
         Cell: ({ row }) => (
-          <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: 'Roboto' }}>
+          <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: "Roboto" }}>
             <IconButton
               color="success"
               onClick={() => {
@@ -214,6 +215,7 @@ const AdminComponent = () => {
     enableDensityToggle: false,
     enableColumnOrdering: false,
     enableFullScreenToggle: false,
+    enablePagination:false,
     enableColumnActions: false,
     enableColumnFilters: false,
     enableHiding: false,
@@ -223,7 +225,7 @@ const AdminComponent = () => {
         backgroundColor: "#818589",
         color: "#ffffff",
         fontWeight: "bold",
-        fontFamily: 'Roboto',
+        fontFamily: "Roboto",
         height: "10px",
       },
     },
@@ -239,6 +241,7 @@ const AdminComponent = () => {
     enableEditing: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
+    enablePagination:false,
     enableFullScreenToggle: false,
     enableFilters: false,
     enableColumnActions: false,
@@ -248,8 +251,9 @@ const AdminComponent = () => {
       sx: {
         backgroundColor: "#818589",
         color: "#ffffff",
-        fontWeight: "bold", fontFamily: 'Roboto',
-        height:"48px"
+        fontWeight: "bold",
+        fontFamily: "Roboto",
+        height: "48px",
       },
     },
   });
@@ -332,66 +336,121 @@ const AdminComponent = () => {
     },
   };
 
-
-  console.log('modalOpen',modalOpen)
+  console.log("modalOpen", modalOpen);
   return (
     <Box sx={{ margin: "1rem" }}>
-      <Box sx={{ display: "flex", gap: "30px" , justifyContent:'center', margin:'20px 40px'}}>
-       
-        <Card variant="outlined" sx={{  flex:1 ,borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-  <CardContent>
-    <Typography
-      gutterBottom
-      sx={{ color: "text.secondary", fontSize: '40px', textAlign: 'center' }}
-    >
-      {approvedDeletedRowsByAdmin?.length}
-    </Typography>
-    <Typography sx={{ textAlign: 'center' }}>
-      Account deletions approved
-    </Typography>
-  </CardContent>
-</Card>
-<Card variant="outlined" sx={{flex:1 , borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-  <CardContent>
-    <Typography
-      gutterBottom
-      sx={{ color: "text.secondary", fontSize: '40px', textAlign: 'center' }}
-    >
-       {rejectedDeletedRowsByAdmin?.length}
-    </Typography>
-    <Typography sx={{ textAlign: 'center' }}>
-      Account deletions rejected
-    </Typography>
-  </CardContent>
-</Card>
-<Card variant="outlined" sx={{flex:1 , borderRadius: '16px',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-  <CardContent>
-    <Typography
-      gutterBottom
-      sx={{ color: "text.secondary", fontSize: '40px', textAlign: 'center' }}
-    >
-      {approvedDeletedColumnsByAdmin?.length}
-    </Typography>
-    <Typography sx={{ textAlign: 'center' }}>
-      Account attribute deletions approved
-    </Typography>
-  </CardContent>
-</Card>
-<Card variant="outlined" sx={{flex:1 ,borderRadius: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-  <CardContent>
-    <Typography
-      gutterBottom
-      sx={{ color: "text.secondary", fontSize: '40px', textAlign: 'center' }}
-    >
-      {rejectedDeletedColumnsByAdmin?.length}
-    </Typography>
-    <Typography sx={{ textAlign: 'center' }}>
-      Account attribute deletions rejected
-    </Typography>
-  </CardContent>
-</Card>
-
-       
+      <Box
+        sx={{
+          display: "flex",
+          gap: "30px",
+          justifyContent: "center",
+          margin: "20px 40px",
+        }}
+      >
+        <Card
+          variant="outlined"
+          sx={{
+            flex: 1,
+            borderRadius: "16px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CardContent>
+            <Typography
+              gutterBottom
+              sx={{
+                color: "text.secondary",
+                fontSize: "40px",
+                textAlign: "center",
+              }}
+            >
+              {approvedDeletedRowsByAdmin?.length}
+            </Typography>
+            <Typography sx={{ textAlign: "center" }}>
+              Account deletions approved
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card
+          variant="outlined"
+          sx={{
+            flex: 1,
+            borderRadius: "16px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CardContent>
+            <Typography
+              gutterBottom
+              sx={{
+                color: "text.secondary",
+                fontSize: "40px",
+                textAlign: "center",
+              }}
+            >
+              {rejectedDeletedRowsByAdmin?.length}
+            </Typography>
+            <Typography sx={{ textAlign: "center" }}>
+              Account deletions rejected
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card
+          variant="outlined"
+          sx={{
+            flex: 1,
+            borderRadius: "16px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CardContent>
+            <Typography
+              gutterBottom
+              sx={{
+                color: "text.secondary",
+                fontSize: "40px",
+                textAlign: "center",
+              }}
+            >
+              {approvedDeletedColumnsByAdmin?.length}
+            </Typography>
+            <Typography sx={{ textAlign: "center" }}>
+              Account attribute deletions approved
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card
+          variant="outlined"
+          sx={{
+            flex: 1,
+            borderRadius: "16px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CardContent>
+            <Typography
+              gutterBottom
+              sx={{
+                color: "text.secondary",
+                fontSize: "40px",
+                textAlign: "center",
+              }}
+            >
+              {rejectedDeletedColumnsByAdmin?.length}
+            </Typography>
+            <Typography sx={{ textAlign: "center" }}>
+              Account attribute deletions rejected
+            </Typography>
+          </CardContent>
+        </Card>
       </Box>
       <Box sx={{ display: "flex", gap: "20px" }}>
         {filteredData.length > 0 && (
@@ -459,16 +518,7 @@ const AdminComponent = () => {
             >
               Reject All
             </Button>
-            {/* <Box
-             sx={{
-              width: "50%",
-              height: "400px",
-              overflowY: "auto",
-              marginLeft: "10px",
-              marginRight: "30px",
-              marginTop: "10px",
-            }}
-          > */}
+            
             <Box
               sx={{
                 flexGrow: 1,
@@ -480,16 +530,15 @@ const AdminComponent = () => {
                 // overflow: "auto",
               }}
             >
-              <MaterialReactTable table={tableRow} 
-              
-              sx={{
-                height:'100%'
-              }}
-              
+              <MaterialReactTable
+                table={tableRow}
+                
+                sx={{
+                  height: "50%",
+                }}
               />
             </Box>
 
-            {/* </Box> */}
           </Box>
         )}
         {diffArr.length > 0 && (
@@ -591,11 +640,14 @@ const AdminComponent = () => {
         !approvedDeletedColumnsByAdmin &&
         !rejectedDeletedRowsByAdmin &&
         !rejectedDeletedColumnsByAdmin && (
-          <Typography variant="h6" align="center" sx={{ mt: 4 , fontFamily: 'Roboto'}}>
+          <Typography
+            variant="h6"
+            align="center"
+            sx={{ mt: 4, fontFamily: "Roboto" }}
+          >
             No records found
           </Typography>
         )}
-      
     </Box>
   );
 };
