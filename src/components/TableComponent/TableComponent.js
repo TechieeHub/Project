@@ -283,7 +283,7 @@ const TableComponent = ({
           ? "hsl(340, 50%, 50%)" // Soft deleted rows color
           : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
           ? "#FFCDD2"
-          : "transparent", 
+          : "#f0f0f0", 
             
             
             
@@ -312,7 +312,7 @@ const TableComponent = ({
             ? "hsl(340, 50%, 50%)" // Soft deleted rows color
             : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
             ? "#FFCDD2"
-            : "transparent", 
+            : "#f0f0f0", 
             
           },
         }),
@@ -334,7 +334,7 @@ const TableComponent = ({
             ? "hsl(340, 50%, 50%)" // Soft deleted rows color
             : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
             ? "#FFCDD2"
-            : "transparent", 
+            : "#f0f0f0", 
             // Light grey background
             
           },
