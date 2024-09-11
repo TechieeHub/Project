@@ -84,7 +84,7 @@ const AdminComponent = () => {
       accessorKey: "actions",
       header: "Actions",
       Cell: ({ row }) => (
-        <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: "Roboto" }}>
+        <Box sx={{ display: "flex", gap: "0.5rem",height:'30px', fontFamily: "Roboto" }}>
           <IconButton
             color="success"
             onClick={() => {
@@ -95,7 +95,8 @@ const AdminComponent = () => {
               setConformation({ type: "rowApprove", item: row.original });
             }}
           >
-            <CheckCircleIcon />
+            {Object.entries(row.original).length !== 0 && <CheckCircleIcon />}
+            
           </IconButton>
           <IconButton
             color="error"
@@ -107,7 +108,7 @@ const AdminComponent = () => {
               setConformation({ type: "rowReject", item: row.original });
             }}
           >
-            <CancelIcon />
+            {Object.entries(row.original).length !== 0 && <CancelIcon />}
           </IconButton>
         </Box>
       ),
@@ -126,7 +127,7 @@ const AdminComponent = () => {
         accessorKey: "actions",
         header: "Actions",
         Cell: ({ row }) => (
-          <Box sx={{ display: "flex", gap: "0.5rem", fontFamily: "Roboto" }}>
+          <Box sx={{ display: "flex", gap: "0.5rem", height:'30px',fontFamily: "Roboto" }}>
             <IconButton
               color="success"
               
@@ -138,7 +139,7 @@ const AdminComponent = () => {
                 setConformation({ type: "columnApprove", item: row.original });
               }}
             >
-              <CheckCircleIcon />
+             {Object.entries(row.original).length !== 0 && <CheckCircleIcon />}
             </IconButton>
             <IconButton
               color="error"
@@ -151,7 +152,8 @@ const AdminComponent = () => {
               }}
   
             >
-              <CancelIcon />
+              {Object.entries(row.original).length !== 0 && <CancelIcon />}
+              
             </IconButton>
           </Box>
         ),
@@ -209,10 +211,6 @@ const AdminComponent = () => {
     (x) => !deletedColumnByAdmin?.includes(x)
   );
   const maxRowDiff=filteredData?.length>diffArr?.length?filteredData?.length:diffArr?.length
-
-
-  console.log('maxRowDiff',maxRowDiff)
-
 
   const tableRowData=filteredData?.length>maxRowDiff?filteredData:[...filteredData, ...Array.from({ length: maxRowDiff-filteredData?.length}).map(() => ({}))]
 
@@ -355,8 +353,6 @@ const AdminComponent = () => {
 
   // Ishan
   const handleConfirm = (confirmed) => {
-    console.log("lksdnclkds", confirmed, conformation);
-
     if (confirmed === true) {
       if (conformation?.type === "rowApprove") {
         handleApprove(conformation?.item);
