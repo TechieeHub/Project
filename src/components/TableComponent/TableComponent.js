@@ -280,7 +280,7 @@ const TableComponent = ({
           // ? "yellow"
           // : "transparent",
           backgroundColor: row.original.is_deleted
-          ? "#F8C8DC" // Soft deleted rows color
+          ? "hsl(340, 50%, 50%)" // Soft deleted rows color
           : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
           ? "#FFCDD2"
           : "transparent", 
@@ -309,7 +309,7 @@ const TableComponent = ({
             // backgroundColor: "#f0f0f0", // Light grey background
 
             backgroundColor: row.original.is_deleted
-            ? "#F8C8DC" // Soft deleted rows color
+            ? "hsl(340, 50%, 50%)" // Soft deleted rows color
             : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
             ? "#FFCDD2"
             : "transparent", 
@@ -331,7 +331,7 @@ const TableComponent = ({
             // backgroundColor: "#f0f0f0", 
             
             backgroundColor: row.original.is_deleted
-            ? "#F8C8DC" // Soft deleted rows color
+            ? "hsl(340, 50%, 50%)" // Soft deleted rows color
             : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
             ? "#FFCDD2"
             : "transparent", 
@@ -475,10 +475,10 @@ const TableComponent = ({
     muiTableBodyRowProps: ({ row }) => ({
       sx: {
         height: "80px", // Set row height here
-        // backgroundColor: row.original.is_deleted && "#F8C8DC",
+        // backgroundColor: row.original.is_deleted && "hsl(340, 50%, 50%)",
         // zIndex:'1',
         backgroundColor: row.original.is_deleted
-          ? "#F8C8DC" // Soft deleted rows color
+          ? "hsl(340, 50%, 50%)" // Soft deleted rows color
           : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
           ? "#FFCDD2"
           : "transparent", // Default color for other rows
