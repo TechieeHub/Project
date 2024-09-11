@@ -13,14 +13,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import MenuIcon from '@mui/icons-material/Menu';
- 
-import InfoIcon from '@mui/icons-material/Info';
+import CloseIcon from '@mui/icons-material/Close';
 import Drawer from '@mui/material/Drawer';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { setAnomalyValue } from "../../Store/excelSlice";
 import { Slider } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
 
 const pages = [
   { name: 'Dashboard', path: '/' },
@@ -37,14 +35,12 @@ const AppHeader = () => {
     localStorage.getItem("anomalyDataValue")
       ? parseInt(localStorage.getItem("anomalyDataValue"), 10)
       : 10
-  ); // Initialize slider value first
+  );
   const location = useLocation();
 
   const dispatch = useDispatch();
   const anomalyValue = useSelector((state) => state.excel.anomalyValue);
-  const excelData = useSelector((state) => state.excel.data);
 
-  // Update local storage and redux store when slider value changes
   useEffect(() => {
     dispatch(setAnomalyValue(sliderValue));
     localStorage.setItem("anomalyValue", JSON.stringify(sliderValue));
@@ -74,8 +70,13 @@ const AppHeader = () => {
     setDrawerOpen(false);
   };
 
-  // Determine the current tab based on the path
-  const currentTab = pages.findIndex((page) => page.path === location.pathname);
+  // Filter out 'Admin' tab if pathname is not '/admin'
+  const filteredPages = location.pathname === '/admin'
+    ? pages
+    : pages.filter(page => page.path !== '/admin');
+
+  // Determine the current tab based on the filtered pages
+  const currentTab = filteredPages.findIndex((page) => page.path === location.pathname);
 
   return (
     <>
@@ -83,45 +84,41 @@ const AppHeader = () => {
         <Container maxWidth>
           <Toolbar disableGutters>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                <Tabs
-                  value={currentTab}
-                  textColor="inherit"
-                  indicatorColor="secondary"
-                  aria-label="navigation tabs"
-                  sx={{
-                    '& .MuiTabs-indicator': {
-                      backgroundColor: 'white',
+              <Tabs
+                value={currentTab}
+                textColor="inherit"
+                indicatorColor="secondary"
+                aria-label="navigation tabs"
+                sx={{
+                  '& .MuiTabs-indicator': {
+                    backgroundColor: 'white',
+                    fontFamily: 'Roboto'
+                  },
+                }}
+              >
+                {filteredPages.map((page, index) => (
+                  <Tab
+                    key={page.name}
+                    component={Link}
+                    to={page.path}
+                    label={page.name}
+                    sx={{
+                      color: location.pathname === page.path ? 'white' : 'white',
                       fontFamily: 'Roboto'
-                    },
-                  }}
-                >
-                  {pages.map((page, index) => (
-                    <Tab
-                      key={page.name}
-                      component={Link}
-                      to={page.path}
-                      label={page.name}
-                      sx={{
-                        color: location.pathname === page.path ? 'white' : 'white',
-                        fontFamily: 'Roboto'
-                      }}
-                    />
-                  ))}
-                </Tabs>
-              
+                    }}
+                  />
+                ))}
+              </Tabs>
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              <Box sx={{display:'flex', gap:'10px', alignItems:'center'}}>
-
-              <Typography sx={{cursor:'pointer'}}>Welcome</Typography>
-              <Tooltip title="Open settings">
-
-                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Ishan Gupta" >IG</Avatar>
-                </IconButton> 
-              </Tooltip>
-
+              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <Typography sx={{ cursor: 'pointer' }}>Welcome</Typography>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt="Ishan Gupta">IG</Avatar>
+                  </IconButton>
+                </Tooltip>
               </Box>
 
               <Menu
@@ -156,56 +153,48 @@ const AppHeader = () => {
         </Container>
       </AppBar>
 
-      {/* Side Drawer */}
-      <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
-
-          {/* Close Button */}
+      {/* Conditional Side Drawer */}
+     
+        <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
           <IconButton onClick={handleDrawerClose} sx={{ alignSelf: "flex-end" }}>
-           <CloseIcon/>
+            <CloseIcon sx={{margin: "1rem"}} />
           </IconButton>
-      <Box sx={{ marginRight: "15px", fontSize: "15px", color: "grey", fontFamily: 'Roboto', padding:"1rem" }}>
-          Last refresh: {new Date().toLocaleString()}
-        </Box>
-        <Box
-          sx={{
-            width: "350px", // Adjust the width of the drawer
-            height: "auto", // Reduce the height to fit the content
-            padding: "20px", // Add padding for better spacing inside the drawer
-            display: "flex",
-            flexDirection: "column", // Stack the contents vertically
-            alignItems: "flex-start", // Align items to the start of the drawer
-            gap: "20px", // Add gap between the elements
-          }}
-        >
-        
-
-          <Typography sx={{ fontWeight: "550", fontFamily: 'Roboto' }}>
-            Threshold:  {sliderValue}%
-          </Typography>
-
-         
-
-          <Slider
-            value={sliderValue}
-            onChange={handleSliderChange}
-            min={0}
-            max={100}
-            aria-labelledby="continuous-slider"
+          <Box sx={{ marginRight: "15px", fontSize: "15px", color: "grey", fontFamily: 'Roboto', padding: "1rem" }}>
+            Last refresh: {new Date().toLocaleString()}
+          </Box>
+          <Box
             sx={{
-              color: "grey",
-              width: "90%", 
-              marginLeft:"1rem"
+              width: "350px",
+              height: "auto",
+              padding: "20px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "20px",
             }}
-            marks={[
-              { value: 0, label: "0" },
-              { value: 100, label: "100" },
-            ]}
-          />
-        </Box>
-        
-      </Drawer>
-
-
+          >
+            <Typography sx={{ fontWeight: "550", fontFamily: 'Roboto' }}>
+              Threshold: {sliderValue}%
+            </Typography>
+            <Slider
+              value={sliderValue}
+              onChange={handleSliderChange}
+              min={0}
+              max={100}
+              aria-labelledby="continuous-slider"
+              sx={{
+                color: "grey",
+                width: "90%",
+                marginLeft: "1rem"
+              }}
+              marks={[
+                { value: 0, label: "0" },
+                { value: 100, label: "100" },
+              ]}
+            />
+          </Box>
+        </Drawer>
+      
     </>
   );
 };
