@@ -21,9 +21,9 @@ import {
   Slider,
   Menu,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -81,9 +81,9 @@ const TableComponent = ({
     setContextMenu(
       contextMenu === null
         ? {
-          mouseX: event.clientX - 2,
-          mouseY: event.clientY - 4,
-        }
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+          }
         : null
     );
   };
@@ -121,13 +121,9 @@ const TableComponent = ({
   };
 
   const handleDeleteColumn = (columnKey) => {
-
-    setModalDescription(
-      "Are you sure you want to delete this column?"
-    );
+    setModalDescription("Are you sure you want to delete this column?");
     setOpenDeleteModal(true);
     setConformation({ type: "columnDelete", item: columnKey });
-
   };
 
   const handleSoftDeleteColumn = (data) => {
@@ -245,8 +241,8 @@ const TableComponent = ({
           deviation5DayToday < 0
             ? "EOD Balance less than 5 day average end of day balance"
             : deviation5DayToday > anomalyDataValue
-              ? `EOD balance more than 5 day average end of day balance by ${anomalyDataValue}%`
-              : "",
+            ? `EOD balance more than 5 day average end of day balance by ${anomalyDataValue}%`
+            : "",
       };
     });
   };
@@ -277,9 +273,21 @@ const TableComponent = ({
             minimumFractionDigits: 2,
           }).format(value);
         },
-        muiTableBodyCellProps: () => ({
+        muiTableBodyCellProps: ({row}) => ({
           sx: {
-            backgroundColor: "#f0f0f0", // Light grey background
+          //   backgroundColor: row.original["5-Day Deviation"] > anomalyDataValue
+          // ? "#FFCDD2":row.original["5-Day Deviation"] < 0 // Red color for negative deviation
+          // ? "yellow"
+          // : "transparent",
+          backgroundColor: row.original.is_deleted
+          ? "hsl(340, 50%, 50%)" // Soft deleted rows color
+          : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
+          ? "#FFCDD2"
+          : "transparent", 
+            
+            
+            
+            // "#f0f0f0", // Light grey background
           },
         }),
       },
@@ -296,9 +304,16 @@ const TableComponent = ({
             minimumFractionDigits: 2,
           }).format(value);
         },
-        muiTableBodyCellProps: () => ({
+        muiTableBodyCellProps: ({row}) => ({
           sx: {
-            backgroundColor: "#f0f0f0", // Light grey background
+            // backgroundColor: "#f0f0f0", // Light grey background
+
+            backgroundColor: row.original.is_deleted
+            ? "hsl(340, 50%, 50%)" // Soft deleted rows color
+            : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
+            ? "#FFCDD2"
+            : "transparent", 
+            
           },
         }),
       },
@@ -311,14 +326,22 @@ const TableComponent = ({
           const value = cell.getValue();
           return `${value}%`;
         },
-        muiTableBodyCellProps: () => ({
+        muiTableBodyCellProps: ({row}) => ({
           sx: {
-            backgroundColor: "#f0f0f0", // Light grey background
+            // backgroundColor: "#f0f0f0", 
+            
+            backgroundColor: row.original.is_deleted
+            ? "hsl(340, 50%, 50%)" // Soft deleted rows color
+            : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
+            ? "#FFCDD2"
+            : "transparent", 
+            // Light grey background
+            
           },
         }),
       },
     ];
-  
+
     const dynamicColumns = Object.keys(excelData[0] || {})
       .filter((key) => key !== "deleted_by_admin")
       .map((key) => ({
@@ -326,7 +349,7 @@ const TableComponent = ({
         header: editedColumns[key] || key,
         size: 250,
         enableEditing: key !== "_id",
-        
+
         muiTableBodyCellProps: () => ({
           sx: {
             backgroundColor: deletedColumns?.includes(key)
@@ -338,22 +361,17 @@ const TableComponent = ({
         }),
         isVisible: key !== ("_id" && "is_deleted"),
       }));
-  
+
     return [...dynamicColumns, ...defaultColumns];
   }, [excelData, editedColumns, deletedColumns]);
-  
+
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
-
-
       // if (window.confirm("Are you sure you want to delete this row?")) {
       //   deleteRowHandler(row.original._id);
       // }
 
-
-      setModalDescription(
-        "Are you sure you want to delete this row?"
-      );
+      setModalDescription("Are you sure you want to delete this row?");
       setOpenDeleteModal(true);
       setConformation({ type: "rowDelete", item: row.original._id });
     } else {
@@ -443,23 +461,31 @@ const TableComponent = ({
         )}
       </Box>
     ),
-    positionActionsColumn:'last',
+    positionActionsColumn: "last",
     muiTableHeadCellProps: {
       sx: {
         backgroundColor: "#818589",
         color: "#ffffff",
-        fontWeight: "bold", 
-        fontFamily: 'Roboto',
+        fontWeight: "bold",
+        fontFamily: "Roboto",
         height: "20px", // Set heading height here
-        fontSize: "20px"
-
+        fontSize: "20px",
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
       sx: {
         height: "80px", // Set row height here
-        backgroundColor: row.original.is_deleted && "#F8C8DC",
-        opacity: row.original.is_deleted && 0.8,
+        // backgroundColor: row.original.is_deleted && "hsl(340, 50%, 50%)",
+        // zIndex:'1',
+        backgroundColor: row.original.is_deleted
+          ? "hsl(340, 50%, 50%)" // Soft deleted rows color
+          : (row.original["5-Day Deviation"] > anomalyDataValue ||row.original["5-Day Deviation"] < 0)
+          ? "#FFCDD2"
+          : "transparent", // Default color for other rows
+        opacity:
+          (row.original["5-Day Deviation"] > anomalyDataValue ||
+            row.original["5-Day Deviation"] < 0) &&
+          0.7,
       },
     }),
   });
@@ -467,7 +493,9 @@ const TableComponent = ({
   const deleteRowHandler = (rowId) => {
     axios
       .delete(`http://localhost:8000/api/create_or_update_record/${rowId}/`)
-      .then((response) =>{ refreshDataHandler(true)})
+      .then((response) => {
+        refreshDataHandler(true);
+      })
       .catch((error) => console.log("error", error));
   };
 
@@ -483,7 +511,6 @@ const TableComponent = ({
   };
 
   const handleConfirm = (confirmed) => {
-
     if (confirmed === true) {
       if (conformation?.type === "columnDelete") {
         handleSoftDeleteColumn(conformation?.item);
@@ -491,32 +518,33 @@ const TableComponent = ({
       if (conformation?.type === "rowDelete") {
         deleteRowHandler(conformation?.item);
       }
-    //   if (conformation?.type === "columnApprove") {
-    //     handleApproveColumn(conformation?.item);
-    //   }
-    //   if (conformation?.type === "columnReject") {
-    //     handleRejectColumn(conformation?.item);
-    //   }
-    //   if (conformation?.type === "allRowApprove") {
-    //     handleApproveAllRowDeletions()
-    //   }
-    //   if (conformation?.type === "allRowReject") {
-    //     handleRejectAllRowDeletions()
-    //   }
-    //   if (conformation?.type === "allColumnApprove") {
-    //     handleApproveAllColumnDeletions()
-    //   }
-    //   if (conformation?.type === "allColumnReject") {
-    //     handleRejectAllColumnDeletions()
-    //   }
-
+      //   if (conformation?.type === "columnApprove") {
+      //     handleApproveColumn(conformation?.item);
+      //   }
+      //   if (conformation?.type === "columnReject") {
+      //     handleRejectColumn(conformation?.item);
+      //   }
+      //   if (conformation?.type === "allRowApprove") {
+      //     handleApproveAllRowDeletions()
+      //   }
+      //   if (conformation?.type === "allRowReject") {
+      //     handleRejectAllRowDeletions()
+      //   }
+      //   if (conformation?.type === "allColumnApprove") {
+      //     handleApproveAllColumnDeletions()
+      //   }
+      //   if (conformation?.type === "allColumnReject") {
+      //     handleRejectAllColumnDeletions()
+      //   }
     }
     setOpenDeleteModal(false); // Close the modal
   };
 
+
+  console.log('sliderValue',anomalyDataValue)
   return (
     <>
-          <ConfirmModal
+      <ConfirmModal
         open={openDeleteModal}
         handleClose={handleCloseDeleteModal}
         handleConfirm={handleConfirm}
@@ -524,14 +552,15 @@ const TableComponent = ({
       />
 
       <Box sx={{ margin: "1rem" }}>
-        <Box sx={{ display: "flex", marginBottom:"1rem" }}>
+        <Box sx={{ display: "flex", marginBottom: "1rem" }}>
           <Button
             variant="contained"
             sx={{
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey", fontFamily: 'Roboto'
+              backgroundColor: "grey",
+              fontFamily: "Roboto",
             }}
             onClick={handleOpenDialog}
           >
@@ -544,7 +573,8 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey", fontFamily: 'Roboto'
+              backgroundColor: "grey",
+              fontFamily: "Roboto",
             }}
             onClick={handleOpenAddColumnDialog}
           >
@@ -559,12 +589,13 @@ const TableComponent = ({
               marginLeft: "20px",
               marginTop: "30px",
               backgroundColor: "grey",
-              fontFamily: 'Roboto',
+              fontFamily: "Roboto",
               display: "flex", // Ensure flexbox is applied for alignment
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
-            <AddIcon sx={{ marginRight: "3px", fontSize: "20px" }} /> {/* Add the icon with spacing */}
+            <AddIcon sx={{ marginRight: "3px", fontSize: "20px" }} />{" "}
+            {/* Add the icon with spacing */}
             Add Row
           </Button>
 
@@ -581,12 +612,12 @@ const TableComponent = ({
               sx={{
                 fontSize: "14px",
                 lineHeight: "1.2",
-                transform: "translate(14px, 8px) scale(1)", fontFamily: 'Roboto'
+                transform: "translate(14px, 8px) scale(1)",
+                fontFamily: "Roboto",
               }}
               id="export-select-label"
             >
               Export
-
             </InputLabel>
             <Select
               labelId="export-select-label"
@@ -599,7 +630,8 @@ const TableComponent = ({
                 minHeight: "30px",
                 fontSize: "14px",
                 paddingTop: "2px",
-                paddingBottom: "2px", fontFamily: 'Roboto'
+                paddingBottom: "2px",
+                fontFamily: "Roboto",
               }}
               MenuProps={{
                 PaperProps: {
@@ -608,7 +640,8 @@ const TableComponent = ({
                     width: 120,
                     "& .MuiMenuItem-root": {
                       fontSize: "14px",
-                      padding: "4px 8px", fontFamily: 'Roboto'
+                      padding: "4px 8px",
+                      fontFamily: "Roboto",
                     },
                   },
                 },
@@ -632,10 +665,8 @@ const TableComponent = ({
             disabled={!exportOption}
           >
             Export
-            
             <FileDownloadIcon sx={{ marginRight: "3px", fontSize: "20px" }} />
           </Button>
-          
         </Box>
         {location?.pathname === "/admin" && (
           <Button
@@ -644,7 +675,8 @@ const TableComponent = ({
               maxHeight: "30px",
               marginLeft: "20px",
               marginTop: "30px",
-              backgroundColor: "grey", fontFamily: 'Roboto'
+              backgroundColor: "grey",
+              fontFamily: "Roboto",
             }}
           >
             Approve All Deletions
