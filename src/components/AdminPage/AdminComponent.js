@@ -205,11 +205,21 @@ const AdminComponent = () => {
         .catch((error) => console.warn("Something went wrong"));
     }
   };
+  const diffArr = deletedColumnData.filter(
+    (x) => !deletedColumnByAdmin?.includes(x)
+  );
+  const maxRowDiff=filteredData?.length>diffArr?.length?filteredData?.length:diffArr?.length
+
+
+  console.log('maxRowDiff',maxRowDiff)
+
+
+  const tableRowData=filteredData?.length>maxRowDiff?filteredData:[...filteredData, ...Array.from({ length: maxRowDiff-filteredData?.length}).map(() => ({}))]
 
   const tableRow = useMaterialReactTable({
     columns: columns,
     initialState: { columnVisibility: { _id: false, is_deleted: false } },
-    data: filteredData,
+    data: tableRowData,
     enableEditing: false,
     enableFilters: false,
     enableDensityToggle: false,
@@ -230,14 +240,19 @@ const AdminComponent = () => {
       },
     },
   });
-  const diffArr = deletedColumnData.filter(
-    (x) => !deletedColumnByAdmin?.includes(x)
-  );
+  
+
+
+
+  const tableColData=diffArr.map((item) => ({ account_id: item }))
+  
+  const tableColumnData=tableColData?.length>maxRowDiff?tableColData:[...tableColData, ...Array.from({ length: maxRowDiff-tableColData?.length}).map(() => ({}))]
+
 
   const tableColumn = useMaterialReactTable({
     columns: deletedColumnColumns,
     initialState: { columnVisibility: { _id: false, is_deleted: false } },
-    data: diffArr.map((item) => ({ account_id: item })),
+    data: tableColumnData,
     enableEditing: false,
     enableDensityToggle: false,
     enableColumnOrdering: false,
@@ -257,6 +272,8 @@ const AdminComponent = () => {
       },
     },
   });
+
+
 
   const handleApproveAllRowDeletions = () => {
     // const data=filteredData.map()
