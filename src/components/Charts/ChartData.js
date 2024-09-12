@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Button } from "@mui/material";
 import VisualizationComponent from "./VisualizationComponent";
 import AnomalieComponent from "./AnomalieComponent";
@@ -15,11 +15,20 @@ const ChartData = () => {
   const [filteredChartData, setFilteredChartData] = useState(null);
   const [initialChartData, setInitialChartData] = useState(null);
   const [chartTitle, setChartTitle] = useState("Account Balance");
+  const [componentData,setComponentData]=useState(null)
+  const [deletedColumns, setDeletedColumns] = useState(null);
 
   const dispatch = useDispatch();
+  const [sliderValue, setSliderValue] = useState(
+    localStorage.getItem("anomalyDataValue")
+      ? parseInt(localStorage.getItem("anomalyDataValue"), 10)
+      : 10
+  );
   const excelData = useSelector((state) => state.excel.filteredData)?.filter(
     (data) => data.is_deleted !== true
   );
+  const anamolyValue = useSelector((state) => state.excel.anomalyValue);
+  const anomalyDataValue = anamolyValue ? anamolyValue : sliderValue;
 
   useEffect(() => {
     axios
@@ -27,9 +36,14 @@ const ChartData = () => {
       .then((response) => {
         dispatch(setTableData(response.data.records));
         setInitialChartData(response.data.records);
+        setDeletedColumns(response.data.deleted_columns);
+        setComponentData(response.data.records)
       })
       .catch((error) => console.log("error", error));
   }, [dispatch]);
+
+
+
 
   const handleView = (data) => {
     setFilteredChartData(data);
@@ -68,6 +82,101 @@ const ChartData = () => {
       pdf.save('exported-file.pdf');
     });
   };
+  const convertToNumber = (str) => {
+    if (str == null) return 0;
+    const cleanedStr = String(str).replace(/[^0-9.-]+/g, "");
+    const number = parseFloat(cleanedStr);
+    return isNaN(number) ? 0 : number;
+  };
+  // const calculateColumns = (data) => {
+  //   const activeColumns = Object.keys(componentData[0] || {}).filter(
+  //     (key) => !deletedColumns?.includes(key) && key.startsWith("EODBalance")
+  //   );
+
+  //   return data?.map((row) => {
+  //     const projectedBalance =
+  //       convertToNumber(row["Available Balance"] || 0) -
+  //       convertToNumber(row["Scheduled Out Balance"] || 0);
+
+  //     const total = activeColumns.reduce(
+  //       (sum, columnKey) => sum + convertToNumber(row[columnKey] || 0),
+  //       0
+  //     );
+  //     const average5Day =
+  //       activeColumns.length > 0 ? total / activeColumns.length : 0;
+
+  //     const deviation5DayToday =
+  //       average5Day === 0
+  //         ? 0
+  //         : ((projectedBalance - average5Day) / average5Day) * 100;
+
+  //     return {
+  //       ...row,
+  //       "Projected Balance": projectedBalance,
+  //       "5-Day average": Math.round(average5Day * 100) / 100,
+  //       "5-Day Deviation": isNaN(deviation5DayToday)
+  //         ? 0
+  //         : Math.round(deviation5DayToday * 100) / 100,
+  //       Anomaly:
+  //         deviation5DayToday < 0
+  //           ? "EOD Balance less than 5 day average end of day balance"
+  //           : deviation5DayToday > anomalyDataValue
+  //           ? `EOD balance more than 5 day average end of day balance by ${anomalyDataValue}%`
+  //           : "",
+  //     };
+  //   });
+  // };
+
+
+  const calculateColumns = (data) => {
+    if (!componentData || componentData.length === 0) return [];
+  
+    const activeColumns = Object.keys(componentData[0] || {}).filter(
+      (key) => !(deletedColumns || []).includes(key) && key.startsWith("EODBalance")
+    );
+  
+    return data?.map((row) => {
+      const projectedBalance =
+        convertToNumber(row["Available Balance"] || 0) -
+        convertToNumber(row["Scheduled Out Balance"] || 0);
+  
+      const total = activeColumns.reduce(
+        (sum, columnKey) => sum + convertToNumber(row[columnKey] || 0),
+        0
+      );
+      const average5Day =
+        activeColumns.length > 0 ? total / activeColumns.length : 0;
+  
+      const deviation5DayToday =
+        average5Day === 0
+          ? 0
+          : ((projectedBalance - average5Day) / average5Day) * 100;
+  
+      return {
+        ...row,
+        "Projected Balance": projectedBalance,
+        "5-Day average": Math.round(average5Day * 100) / 100,
+        "5-Day Deviation": isNaN(deviation5DayToday)
+          ? 0
+          : Math.round(deviation5DayToday * 100) / 100,
+        Anomaly:
+          deviation5DayToday < 0
+            ? "EOD Balance less than 5 day average end of day balance"
+            : deviation5DayToday > anomalyDataValue
+            ? `EOD balance more than 5 day average end of day balance by ${anomalyDataValue}%`
+            : "",
+      };
+    });
+  };
+  
+  const updatedExcelData = useMemo(
+    () => calculateColumns(componentData),
+    [componentData, anomalyDataValue]
+  );
+  const filteredData = useMemo(
+    () => updatedExcelData?.filter((row) => !row.is_deleted),
+    [componentData, anomalyDataValue]
+  );
 
   return (
     <>
@@ -116,7 +225,7 @@ const ChartData = () => {
             }}
           >
             <VisualizationComponent onView={handleView} onChartTitleChange={handleChartTitleChange} />
-            <AnomalieComponent onView={handleView} onChartTitleChange={handleChartTitleChange} />
+            <AnomalieComponent data={filteredData} onView={handleView} onChartTitleChange={handleChartTitleChange} />
           </Box>
           <Box
             sx={{
@@ -131,7 +240,7 @@ const ChartData = () => {
             {filteredChartData?.length > 0 ? (
               <ChartComponent data={filteredChartData} />
             ) : (
-              initialChartData?.length > 0 && <ChartComponent data={excelData} />
+              initialChartData?.length > 0 && <ChartComponent data={filteredData} />
             )}
           </Box>
         </Box>

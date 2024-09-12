@@ -16,8 +16,10 @@ import { useSelector } from "react-redux";
 import Tooltip from '@mui/material/Tooltip';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-const AnomalieComponent = ({ onView, onChartTitleChange }) => {
-  const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
+const AnomalieComponent = ({ onView, onChartTitleChange ,data}) => {
+  // const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
+
+  const excelData=data;
   const anomalyValue = useSelector((state) => state.excel.anomalyValue);
 
   const handleViewMoreThan5DayAvg = () => {
