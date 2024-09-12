@@ -572,10 +572,10 @@ const AdminComponent = () => {
                   fontSize: "9px",
                   marginLeft: "30px",
                   marginTop: "30px",
-                  backgroundColor: "rgba(144, 238, 144, 0.3)",
+                  backgroundColor: "rgba(144, 238, 144, 0.6)",
                   color: "black", // Adjust the text color for better readability if needed
                   "&:hover": {
-                    backgroundColor: "rgba(144, 238, 144, 0.5)", // slightly darker on hover
+                    backgroundColor: "rgba(144, 238, 144, 0.9)", // slightly darker on hover
                   },
                 }}
                 onClick={() => {
@@ -595,10 +595,10 @@ const AdminComponent = () => {
                   fontSize: "9px",
                   marginLeft: "30px",
                   marginTop: "30px",
-                  backgroundColor: "rgba(255, 0, 0, 0.4)", // light red with 30% opacity
+                  backgroundColor: "rgba(255, 0, 0, 0.5)", // light red with 30% opacity
                   color: "black", // Adjust the text color for better readability if needed
                   '&:hover': {
-                    backgroundColor: "rgba(255, 0, 0, 0.5)", // slightly darker red on hover
+                    backgroundColor: "rgba(255, 0, 0, 0.7)", // slightly darker red on hover
                   }
                 }}
                 // onClick={() => {
@@ -670,10 +670,10 @@ const AdminComponent = () => {
                   fontSize: "9px",
                   marginLeft: "30px",
                   marginTop: "30px",
-                  backgroundColor: "rgba(144, 238, 144, 0.3)",
+                  backgroundColor: "rgba(144, 238, 144, 0.6)",
                   color: "black", // Adjust the text color for better readability if needed
                   "&:hover": {
-                    backgroundColor: "rgba(144, 238, 144, 0.5)", // slightly darker on hover
+                    backgroundColor: "rgba(144, 238, 144, 0.9)", // slightly darker on hover
                   },
                 }}
                 onClick={() => {
@@ -694,10 +694,10 @@ const AdminComponent = () => {
                   marginLeft: "30px",
                   marginTop: "30px",
                   // backgroundColor: "grey",
-                  backgroundColor: "rgba(255, 0, 0, 0.4)", // light red with 30% opacity
+                  backgroundColor: "rgba(255, 0, 0, 0.5)", // light red with 30% opacity
                   color: "black", // Adjust the text color for better readability if needed
                   '&:hover': {
-                    backgroundColor: "rgba(255, 0, 0, 0.5)", // slightly darker red on hover
+                    backgroundColor: "rgba(255, 0, 0, 0.7)", // slightly darker red on hover
                   }
                 }}
                 onClick={() => {

@@ -27,7 +27,7 @@ const AnomalieComponent = ({ onView, onChartTitleChange ,data}) => {
       data?.Anomaly.includes(anomalyValue)
     );
     onView(filteredData);
-    onChartTitleChange(`EOD more than 5 day average end of day balance by ${anomalyValue}%`);
+    onChartTitleChange(`EOD balance more than 5 day average EOD balance by ${anomalyValue}%`);
   };
 
   const handleViewLessThan5DayAvg = () => {
@@ -35,7 +35,7 @@ const AnomalieComponent = ({ onView, onChartTitleChange ,data}) => {
       (data) => !data?.Anomaly.includes(anomalyValue) && data.Anomaly !== ""
     );
     onView(filteredData);
-    onChartTitleChange("EOD less than 5 day average end of day balance");
+    onChartTitleChange("EOD balance less than 5 day average EOD balance");
   };
 
   return (
@@ -78,9 +78,9 @@ const AnomalieComponent = ({ onView, onChartTitleChange ,data}) => {
                 <Typography sx={{ fontSize: "20px", fontFamily: 'Roboto' }}>
                   EOD more than <strong>5 day</strong> average end of day balance by <Typography sx={{ fontWeight: "550", fontSize: "20px" }}>{anomalyValue}%</Typography>
                 </Typography>
-                <Tooltip title="Anomaly information for values more than 5 day average">
+                {/* <Tooltip title="Anomaly information for values more than 5 day average">
                   <InfoOutlinedIcon sx={{ marginLeft: '8px', fontSize: '20px', cursor: 'pointer' }} />
-                </Tooltip>
+                </Tooltip> */}
               </div>
             </TableCell>
             <TableCell>
