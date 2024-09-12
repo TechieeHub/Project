@@ -16,11 +16,11 @@ import { useDispatch } from "react-redux";
 import { setChartDisplayData } from "../../Store/excelSlice";
 import Tooltip from '@mui/material/Tooltip';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-
+import { useNavigate } from "react-router-dom";
 const VisualizationComponent = ({ onView, onChartTitleChange ,data}) => {
   const dispatch = useDispatch();
   const excelData = data?data:JSON.parse(localStorage.getItem("filteredData")) || [];
-
+  const navigate = useNavigate();
   const largeRunViewHandler = () => {
     const data = excelData.filter((data) => data.AccountRefresh === "Large run");
     dispatch(setChartDisplayData(data));
@@ -34,6 +34,10 @@ const VisualizationComponent = ({ onView, onChartTitleChange ,data}) => {
     onView(data);
     onChartTitleChange("Quick Run"); // Update the chart title
   };
+  const addModifyAccountHandler = () => {
+    navigate('/accounts'); // Navigate to /accounts
+  };
+
 
   return (
     <TableContainer component={Paper} sx={{ height: '100%' }}>
@@ -59,6 +63,7 @@ const VisualizationComponent = ({ onView, onChartTitleChange ,data}) => {
                     textDecoration: 'none',
                   },
                 }}
+                onClick={()=>addModifyAccountHandler()}
               >
                 Add/Modify Account ID
               </Button>

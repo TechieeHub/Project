@@ -84,7 +84,14 @@ const AdminComponent = () => {
       accessorKey: "actions",
       header: "Actions",
       Cell: ({ row }) => (
-        <Box sx={{ display: "flex", gap: "0.5rem",height:'30px', fontFamily: "Roboto" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "0.5rem",
+            height: "30px",
+            fontFamily: "Roboto",
+          }}
+        >
           <IconButton
             color="success"
             onClick={() => {
@@ -96,7 +103,6 @@ const AdminComponent = () => {
             }}
           >
             {Object.entries(row.original).length !== 0 && <CheckCircleIcon />}
-            
           </IconButton>
           <IconButton
             color="error"
@@ -127,10 +133,16 @@ const AdminComponent = () => {
         accessorKey: "actions",
         header: "Actions",
         Cell: ({ row }) => (
-          <Box sx={{ display: "flex", gap: "0.5rem", height:'30px',fontFamily: "Roboto" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "0.5rem",
+              height: "30px",
+              fontFamily: "Roboto",
+            }}
+          >
             <IconButton
               color="success"
-              
               onClick={() => {
                 setModalDescription(
                   "Are you sure you want to approve this column deletion?"
@@ -139,7 +151,7 @@ const AdminComponent = () => {
                 setConformation({ type: "columnApprove", item: row.original });
               }}
             >
-             {Object.entries(row.original).length !== 0 && <CheckCircleIcon />}
+              {Object.entries(row.original).length !== 0 && <CheckCircleIcon />}
             </IconButton>
             <IconButton
               color="error"
@@ -150,10 +162,8 @@ const AdminComponent = () => {
                 setOpen(true);
                 setConformation({ type: "columnReject", item: row.original });
               }}
-  
             >
               {Object.entries(row.original).length !== 0 && <CancelIcon />}
-              
             </IconButton>
           </Box>
         ),
@@ -210,9 +220,20 @@ const AdminComponent = () => {
   const diffArr = deletedColumnData.filter(
     (x) => !deletedColumnByAdmin?.includes(x)
   );
-  const maxRowDiff=filteredData?.length>diffArr?.length?filteredData?.length:diffArr?.length
+  const maxRowDiff =
+    filteredData?.length > diffArr?.length
+      ? filteredData?.length
+      : diffArr?.length;
 
-  const tableRowData=filteredData?.length>maxRowDiff?filteredData:[...filteredData, ...Array.from({ length: maxRowDiff-filteredData?.length}).map(() => ({}))]
+  const tableRowData =
+    filteredData?.length > maxRowDiff
+      ? filteredData
+      : [
+          ...filteredData,
+          ...Array.from({ length: maxRowDiff - filteredData?.length }).map(
+            () => ({})
+          ),
+        ];
 
   const tableRow = useMaterialReactTable({
     columns: columns,
@@ -238,14 +259,18 @@ const AdminComponent = () => {
       },
     },
   });
-  
 
+  const tableColData = diffArr.map((item) => ({ account_id: item }));
 
-
-  const tableColData=diffArr.map((item) => ({ account_id: item }))
-  
-  const tableColumnData=tableColData?.length>maxRowDiff?tableColData:[...tableColData, ...Array.from({ length: maxRowDiff-tableColData?.length}).map(() => ({}))]
-
+  const tableColumnData =
+    tableColData?.length > maxRowDiff
+      ? tableColData
+      : [
+          ...tableColData,
+          ...Array.from({ length: maxRowDiff - tableColData?.length }).map(
+            () => ({})
+          ),
+        ];
 
   const tableColumn = useMaterialReactTable({
     columns: deletedColumnColumns,
@@ -270,8 +295,6 @@ const AdminComponent = () => {
       },
     },
   });
-
-
 
   const handleApproveAllRowDeletions = () => {
     // const data=filteredData.map()
@@ -367,16 +390,16 @@ const AdminComponent = () => {
         handleRejectColumn(conformation?.item);
       }
       if (conformation?.type === "allRowApprove") {
-        handleApproveAllRowDeletions()
+        handleApproveAllRowDeletions();
       }
       if (conformation?.type === "allRowReject") {
-        handleRejectAllRowDeletions()
+        handleRejectAllRowDeletions();
       }
       if (conformation?.type === "allColumnApprove") {
-        handleApproveAllColumnDeletions()
+        handleApproveAllColumnDeletions();
       }
       if (conformation?.type === "allColumnReject") {
-        handleRejectAllColumnDeletions()
+        handleRejectAllColumnDeletions();
       }
 
       //   if (conformation?.type === 'row') {
@@ -545,19 +568,12 @@ const AdminComponent = () => {
                   fontSize: "9px",
                   marginLeft: "30px",
                   marginTop: "30px",
-                  backgroundColor: "grey",
+                  backgroundColor: "rgba(144, 238, 144, 0.3)",
+                  color: "black", // Adjust the text color for better readability if needed
+                  "&:hover": {
+                    backgroundColor: "rgba(144, 238, 144, 0.5)", // slightly darker on hover
+                  },
                 }}
-                // onClick={handleApproveAllRowDeletions}
-
-                // onClick={() => {
-                //   if (
-                //     window.confirm(
-                //       "Are you sure you want to approve all row deletions?"
-                //     )
-                //   ) {
-                //     handleApproveAllRowDeletions();
-                //   }
-                // }}
                 onClick={() => {
                   setModalDescription(
                     "Are you sure you want to approve all row deletions?"
@@ -565,8 +581,6 @@ const AdminComponent = () => {
                   setOpen(true);
                   setConformation({ type: "allRowApprove" });
                 }}
-    
-    
               >
                 Approve All
               </Button>
@@ -577,7 +591,11 @@ const AdminComponent = () => {
                   fontSize: "9px",
                   marginLeft: "30px",
                   marginTop: "30px",
-                  backgroundColor: "grey",
+                  backgroundColor: "rgba(255, 0, 0, 0.4)", // light red with 30% opacity
+                  color: "black", // Adjust the text color for better readability if needed
+                  '&:hover': {
+                    backgroundColor: "rgba(255, 0, 0, 0.5)", // slightly darker red on hover
+                  }
                 }}
                 // onClick={() => {
                 //   if (
@@ -596,7 +614,6 @@ const AdminComponent = () => {
                   setOpen(true);
                   setConformation({ type: "allRowReject" });
                 }}
-    
               >
                 Reject All
               </Button>
@@ -649,19 +666,12 @@ const AdminComponent = () => {
                   fontSize: "9px",
                   marginLeft: "30px",
                   marginTop: "30px",
-                  backgroundColor: "grey",
+                  backgroundColor: "rgba(144, 238, 144, 0.3)",
+                  color: "black", // Adjust the text color for better readability if needed
+                  "&:hover": {
+                    backgroundColor: "rgba(144, 238, 144, 0.5)", // slightly darker on hover
+                  },
                 }}
-                // onClick={handleApproveAllColumnDeletions}
-                // onClick={() => {
-                //   if (
-                //     window.confirm(
-                //       "Are you sure you want to approve all column deletions?"
-                //     )
-                //   ) {
-                //     // handleApproveColumn(row.original)
-                //     handleApproveAllColumnDeletions();
-                //   }
-                // }}
                 onClick={() => {
                   setModalDescription(
                     "Are you sure you want to approve all column deletions?"
@@ -679,17 +689,13 @@ const AdminComponent = () => {
                   fontSize: "9px",
                   marginLeft: "30px",
                   marginTop: "30px",
-                  backgroundColor: "grey",
+                  // backgroundColor: "grey",
+                  backgroundColor: "rgba(255, 0, 0, 0.4)", // light red with 30% opacity
+                  color: "black", // Adjust the text color for better readability if needed
+                  '&:hover': {
+                    backgroundColor: "rgba(255, 0, 0, 0.5)", // slightly darker red on hover
+                  }
                 }}
-                // onClick={() => {
-                //   if (
-                //     window.confirm(
-                //       "Are you sure you want to reject all column deletions?"
-                //     )
-                //   ) {
-                //     handleRejectAllColumnDeletions();
-                //   }
-                // }}
                 onClick={() => {
                   setModalDescription(
                     "Are you sure you want to reject all column deletions?"
@@ -700,17 +706,6 @@ const AdminComponent = () => {
               >
                 Reject All
               </Button>
-              {/* <Box
-            sx={{
-              width: "100%",
-              // maxWidth: "500px",
-              marginLeft: "10px",
-              marginRight: "30px",
-              marginTop: "10px",
-              height:'400px',
-              overflowY: 'auto'
-            }}
-          > */}
               <Box
                 sx={{
                   flexGrow: 1,
