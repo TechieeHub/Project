@@ -242,6 +242,8 @@ const AdminComponent = () => {
     enableEditing: false,
     enableFilters: false,
     enableDensityToggle: false,
+    enableTopToolbar: false,
+  // enableBottomToolbar: false,
     enableColumnOrdering: false,
     enableFullScreenToggle: false,
     enablePagination: false,
@@ -278,6 +280,8 @@ const AdminComponent = () => {
     data: tableColumnData,
     enableEditing: false,
     enableDensityToggle: false,
+    enableTopToolbar: false,
+
     enableColumnOrdering: false,
     enablePagination: false,
     enableFullScreenToggle: false,
