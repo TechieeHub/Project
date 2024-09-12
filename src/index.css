@@ -15,7 +15,7 @@ code {
 
 /* For WebKit browsers (Chrome, Safari, etc.) */
 ::-webkit-scrollbar {
-  width: 8px; /* Adjust the width as desired */
+  width: 2px; /* Adjust the width as desired */
 }
 
 ::-webkit-scrollbar-thumb {
@@ -24,12 +24,12 @@ code {
 }
 
 /* For Firefox */
-* {
+::-webkit-scrollbar{
   scrollbar-width: thin;
   scrollbar-color: #888 transparent; /* Thumb color and track color */
 }
 
 /* For IE10+ and Edge */
-.scroll-container {
+::-webkit-scrollbar.scroll-container {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
