@@ -258,6 +258,7 @@ const TableComponent = ({
     [excelData, anomalyDataValue]
   );
 
+
   const columns = useMemo(() => {
     const defaultColumns = [
       {
@@ -363,7 +364,7 @@ const TableComponent = ({
       }));
 
     return [...dynamicColumns, ...defaultColumns];
-  }, [excelData, editedColumns, deletedColumns]);
+  }, [excelData, editedColumns, deletedColumns,anomalyDataValue]);
 
   const openDeleteConfirmModal = (row) => {
     if (excelData.length > 1) {
@@ -541,7 +542,7 @@ const TableComponent = ({
   };
 
 
-  console.log('sliderValue',anomalyDataValue)
+  console.log('sliderValue',anamolyValue)
   return (
     <>
       <ConfirmModal
