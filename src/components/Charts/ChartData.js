@@ -224,7 +224,7 @@ const ChartData = () => {
               padding: "0.5rem",
             }}
           >
-            <VisualizationComponent onView={handleView} onChartTitleChange={handleChartTitleChange} />
+            <VisualizationComponent  data={filteredData} onView={handleView} onChartTitleChange={handleChartTitleChange} />
             <AnomalieComponent data={filteredData} onView={handleView} onChartTitleChange={handleChartTitleChange} />
           </Box>
           <Box

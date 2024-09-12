@@ -17,9 +17,9 @@ import { setChartDisplayData } from "../../Store/excelSlice";
 import Tooltip from '@mui/material/Tooltip';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-const VisualizationComponent = ({ onView, onChartTitleChange }) => {
+const VisualizationComponent = ({ onView, onChartTitleChange ,data}) => {
   const dispatch = useDispatch();
-  const excelData = JSON.parse(localStorage.getItem("filteredData")) || [];
+  const excelData = data?data:JSON.parse(localStorage.getItem("filteredData")) || [];
 
   const largeRunViewHandler = () => {
     const data = excelData.filter((data) => data.AccountRefresh === "Large run");
