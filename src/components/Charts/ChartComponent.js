@@ -16,11 +16,11 @@ const transformData = (data) => {
   return data.map(item => ({
     accountID: item["Account ID"],
     eodBalances: [
-      { date: "EODBalance-14Aug", balance: parseBalance(item["EODBalance-14Aug"]) },
-      { date: "EODBalance-15Aug", balance: parseBalance(item["EODBalance-15Aug"]) },
-      { date: "EODBalance-16Aug", balance: parseBalance(item["EODBalance-16Aug"]) },
-      { date: "EODBalance-17Aug", balance: parseBalance(item["EODBalance-17Aug"]) },
-      { date: "EODBalance-18Aug", balance: parseBalance(item["EODBalance-18Aug"]) },
+      { date: "EODBalance-8Sept", balance: parseBalance(item["EODBalance-8Sept"]) },
+      { date: "EODBalance-9Sept", balance: parseBalance(item["EODBalance-9Sept"]) },
+      { date: "EODBalance-10Sept", balance: parseBalance(item["EODBalance-10Sept"]) },
+      { date: "EODBalance-11Sept", balance: parseBalance(item["EODBalance-11Sept"]) },
+      { date: "EODBalance-12Sept", balance: parseBalance(item["EODBalance-12Sept"]) },
     ],
     projected: item["Projected Balance"] || 0,
     avg5Day: item["5-Day average"] || 0
